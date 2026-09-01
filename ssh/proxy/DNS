@@ -1,4 +1,4 @@
-[ 1. DNS 설정 ( Domain Name : kgitbank.com ) / (Host Name: www(200) ]  
+[ 1. DNS 설정 ( Domain Name : 미정 ) / (Host Name: www(200) ]  
 
 # dnf -y install bind  [ 패키지 설치 ]
 ============================================================
