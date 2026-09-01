@@ -1,1 +1,28 @@
+# dnf -y install bind [ 패키지 다운 ]
 
+# vi /etc/named.conf [ vi 편집기 ]  
+11 [ line ]       listen-on port 53 { any; };  
+19 [ line ]        allow-query     { any; };  
+31 [ line ]        recursion no;
+
+# vi /etc/named.rfc1912.zones  
+
+zone "kgitbank.com" IN {  
+
+        type master;  
+
+        file "kgitbank.zone";  
+
+};  ( 맨 아래에 내용 추가 
+
+# cd /var/named  
+
+# cp named.localhost kgitbank.zone  
+
+# chmod 640 kgitbank.zone  
+
+# chown .named kgitbank.zone  
+
+# ls -l kgitbank.zone   
+
+-rw-r----- 1 root named 152  8월  6 15:13 kgitbank.zone  
