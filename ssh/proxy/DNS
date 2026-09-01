@@ -1,10 +1,13 @@
-# dnf -y install bind [ 패키지 다운 ]
+[ 1. DNS 설정 ( Domain Name : kgitbank.com ) / (Host Name: www(200) ]  
 
-# vi /etc/named.conf [ vi 편집기 ]  
-11 [ line ]       listen-on port 53 { any; };  
-19 [ line ]        allow-query     { any; };  
-31 [ line ]        recursion no;
+# dnf -y install bind  [ 패키지 설치 ]
+============================================================
+# vi /etc/named.conf  
 
+11         listen-on port 53 { any; };  
+19         allow-query     { any; };  
+31         recursion no;  
+============================================================
 # vi /etc/named.rfc1912.zones  
 
 zone "kgitbank.com" IN {  
@@ -13,16 +16,72 @@ zone "kgitbank.com" IN {
 
         file "kgitbank.zone";  
 
-};  ( 맨 아래에 내용 추가 
+};  
+# 해당 문서 최하단에 위 내용 추가로 작성  
+============================================================
+# cd /var/named ( 이동 ) 
 
-# cd /var/named  
+# cp named.localhost kgitbank.zone ( 복사 ) 
 
-# cp named.localhost kgitbank.zone  
+# chmod 640 kgitbank.zone  ( 권한 변경 )
 
-# chmod 640 kgitbank.zone  
+# chown .named kgitbank.zone ( 소유권 변경 )  
 
-# chown .named kgitbank.zone  
-
-# ls -l kgitbank.zone   
+# ls -l kgitbank.zone ( 리스트 확인 )  
 
 -rw-r----- 1 root named 152  8월  6 15:13 kgitbank.zone  
+============================================================
+[ named 안에 존 파일 수정 ]
+# vi kgitbank.zone  
+
+$TTL 1D
+@       IN SOA  ns1.kgitbank.com.       root(
+                                        20260828        ; serial
+                                        60      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+        IN      NS      ns1.kgitbank.com.
+ns1     IN      A       40.40.6.2
+www     IN      A       40.40.2.2  
+============================================================
+[ 방화벽 설정 ]
+# firewall-cmd --permanent --add-service=dns  
+
+# firewall-cmd --reload  
+============================================================
+[ 리스트 결과 ]
+# firewall-cmd --list-all  
+
+public (active)  
+
+  target: default  
+
+  icmp-block-inversion: no  
+
+  interfaces: ens160  
+
+  sources:   
+
+  services: cockpit dhcpv6-client dns ssh  
+
+  ports:   
+
+  protocols:   
+
+  forward: yes  
+
+  masquerade: no  
+
+  forward-ports:   
+
+  source-ports:   
+
+  icmp-blocks:   
+
+  rich rules:   
+============================================================
+[ 시스템 시작 및 자동등록 설정]
+# systemctl start named  ( 시작 )
+
+# systemctl enable named  ( 자동등록 )
