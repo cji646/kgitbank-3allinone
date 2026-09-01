@@ -1,6 +1,6 @@
 from flask import Flask
-
 from routes.auth import auth_bp
+from routes.safety import safety_bp
 
 
 app = Flask(__name__)
@@ -12,7 +12,7 @@ app.json.ensure_ascii = False
 
 # 인증 관련 API 등록
 app.register_blueprint(auth_bp)
-
+app.register_blueprint(safety_bp)
 
 if __name__ == "__main__":
     app.run(
