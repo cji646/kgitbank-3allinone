@@ -1,11 +1,12 @@
 from flask import Flask
 from routes.auth import auth_bp
 from routes.safety import safety_bp
+import os
 
 
 app = Flask(__name__)
 
-app.secret_key = "travel_safe_secret_key"
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 # 한글 JSON 출력
 app.json.ensure_ascii = False
