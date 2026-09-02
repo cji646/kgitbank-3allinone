@@ -17,14 +17,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `travel_safe`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `travel_safe` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci */;
-
-USE `travel_safe`;
-
---
 -- Table structure for table `countries`
 --
 
@@ -44,16 +36,6 @@ CREATE TABLE `countries` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `countries`
---
-
-LOCK TABLES `countries` WRITE;
-/*!40000 ALTER TABLE `countries` DISABLE KEYS */;
-INSERT INTO `countries` VALUES (1,'대한민국','아시아','안전','112 / 119','여행 중 소지품 관리에 주의하고, 응급 상황 발생 시 긴급전화 112 또는 119로 신고하세요.','2026-09-01 15:33:24'),(2,'대한민국','동북아시아','1단계 (여행유의)','경찰 112 / 소방·구급 119','집회·시위 지역 접근 자제, 소매치기 및 절도 주의','2026-09-01 15:48:11'),(3,'일본','동북아시아','1단계 (여행유의)','경찰 110 / 소방·구급 119','지진·쓰나미 등 자연재해 주의, 태풍·폭우 시 기상정보 확인','2026-09-01 15:48:11'),(4,'베트남','동남아시아','1단계 (여행유의)','경찰 113 / 소방 114 / 구급 115','오토바이 교통사고 주의, 소매치기 및 절도 주의','2026-09-01 15:48:11');
-/*!40000 ALTER TABLE `countries` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `users`
 --
 
@@ -70,7 +52,7 @@ CREATE TABLE `users` (
   `role` enum('user','admin') NOT NULL DEFAULT 'user',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -82,4 +64,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-09-01 17:50:01
+-- Dump completed on 2026-09-02 17:37:18
