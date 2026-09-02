@@ -1,1 +1,535 @@
+[ Haproxy 패키지 설치 ]
+# dnf -y install haproxy
 
+=======================================================================
+
+[ haproxy 운영을 위한 작업 디렉터리 파일 생성 ]
+# mkdir /etc/haproxy/certs  
+# mkdir /etc/haproxy/errors  
+# mkdir /var/log/haproxy  
+
+[ error 발생시 표시할 페이지 복사하여 error 디렉터리롤 붙혀넣기 ]
+# cd /usr/share/haproxy/  
+# cp ./*.http /etc/haproxy/errors/  
+# ls -l /etc/haproxy/errors/  
+합계 28  
+-rw-r--r-- 1 root root 188  8월 10 15:38 400.http  
+
+-rw-r--r-- 1 root root 189  8월 10 15:38 403.http  
+
+-rw-r--r-- 1 root root 213  8월 10 15:38 408.http  
+
+-rw-r--r-- 1 root root 205  8월 10 15:38 500.http  
+
+-rw-r--r-- 1 root root 205  8월 10 15:38 502.http  
+
+-rw-r--r-- 1 root root 213  8월 10 15:38 503.http  
+
+-rw-r--r-- 1 root root 195  8월 10 15:38 504.http  
+
+=======================================================================
+ [ haproxy 인증서 , 개인키 설정 ]
+# openssl genrsa -out /etc/haproxy/certs/ha01.key 2048  
+
+# openssl req -new -key /etc/haproxy/certs/ha01.key -out /etc/haproxy/certs/ha01.csr  
+
+You are about to be asked to enter information that will be incorporated  
+
+into your certificate request.  
+
+What you are about to enter is what is called a Distinguished Name or a DN.  
+
+There are quite a few fields but you can leave some blank  
+
+For some fields there will be a default value,  
+
+If you enter '.', the field will be left blank.  
+
+-----  
+
+Country Name (2 letter code) [XX]:KR  
+
+State or Province Name (full name) []:Seoul  
+
+Locality Name (eg, city) [Default City]:Gangnam  
+
+Organization Name (eg, company) [Default Company Ltd]:MyCompany  
+
+Organizational Unit Name (eg, section) []:CloudTeam  
+
+Common Name (eg, your name or your server's hostname) []:www.kgitbank.com  
+
+Email Address []:root@localhost  
+
+   
+
+Please enter the following 'extra' attributes  
+
+to be sent with your certificate request  
+
+A challenge password []: ( 그냥 Enter )  
+
+An optional company name []: ( 그냥 Enter )  
+
+   
+
+# openssl x509 -req -days 365 -in /etc/haproxy/certs/ha01.csr -signkey /etc/haproxy/certs/ha01.key -out /etc/haproxy/certs/ha01.crt  
+
+Certificate request self-signature ok  
+
+subject=C=KR, ST=Seoul, L=Gangnam, O=MyCompany, OU=CloudTeam, CN=www.kgitbank.com, emailAddress=root@localhost  
+
+   
+
+# cd /etc/haproxy/certs/  
+
+# cat ha01.crt ha01.key > ha01_ssl.crt  
+
+# chmod 600 ha01_ssl.crt  
+
+Haproxy는 사이트 인증서와 개인키가 하나의 파일에 합쳐진 형태 ( CRT + KEY )를 요구
+
+=======================================================================
+
+[ 3. "/etc/haproxy/haproxy.cfg" Main 설정파일 편집 ]  
+
+# vi /etc/haproxy/haproxy.cfg ( 기존 내용 전부 삭제 후 아래 내용 붙여넣기 )
+
+#---------------------------------------------------------------------  
+
+# Global settings  
+
+#---------------------------------------------------------------------  
+
+global  
+
+    daemon  
+
+    user        haproxy  
+
+    group       haproxy  
+
+    # Daemon 방식으로 HAproxy 운영  
+
+    # Daemon 프로세스를 실행시킬 사용자 및 그룹지정  
+
+   
+
+    maxconn     4000  
+
+    # HAProxy 전체 최대 동시 연결 수 / Client-Proxy + Proxy-WEB 연결이 합산되는 값이며, TLS 사용 시 메모리 소모가 커지므로 서버 RAM 규모에 맞춰 산정  
+
+    # RAM 1GB당 일반연결(2만개), TLS연결(5천개), http-server-close 모드를 사용할 경우 보다 더욱많은 연결수를 지원할 수 있다.  
+
+      
+
+    ssl-default-bind-ciphers ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256  
+
+    ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets  
+
+    # TLS 1.2 이상만 허용, 안전한 Cipher Suite로 제한  
+
+   
+
+    log         127.0.0.1:514 local0  
+
+    # UDP/514 포트를 이용하여 로컬 rsyslog에 로그 전송  
+
+
+
+#---------------------------------------------------------------------  
+
+# Default settings  
+
+#---------------------------------------------------------------------  
+
+defaults  
+
+    mode                    http  
+
+    # L7(HTTP) 로드밸런싱  
+
+   
+
+    option                  redispatch  
+
+    retries                 3  
+
+    # http 기반 Load Balancing의 경우 클라이언트에서 쿠키값에 지정 된 WEB으로만 접근 시도를 한다. (L7 Load Balancing)  
+
+    # 만약 사용중이던 WEB 서버가 Down이 될 경우 기존 쿠키값을 클라이언트에서 수동을 삭제를 해주어야만 다른 WEB으로 접근이 가능하다.  
+
+    # 이러한 문제를 해결하기 위해 3번 연결에 실패할 경우 기존 쿠키값에 명시된 정보를 무시하고 다른 WEB으로 세션을 재분배하는 설정값을 지정한다.  
+
+   
+
+    log                     global  
+
+    # Global 섹션에서 지정 된 곳으로 Log 전송  
+
+   
+
+    option                  httplog  
+
+    # 주로 httplog 방식을 많이 사용한다.  
+
+   
+
+    option                  dontlognull  
+
+    # Health Check와 같은 기록은 남기지 않도록 설정  
+
+   
+
+    option                  dontlog-normal  
+
+    # 정상적인 200OK 메시지는 로그기록에 남기지 않도록 설정  
+
+   
+
+    option                  http-server-close  
+
+    # 세션 연결종료 유휴대기시간을 갖지 않고, 서버에서 즉시 세션을 종료하여 빠른 새로운 세션 연결을 준비하도록 하는 옵션  
+
+    # Backend 섹션에서 사용 안 함 처리를 따로 진행 할 수 있다.  
+
+   
+
+    option                  forwardfor  
+
+    # 서버의 경우 클라이언트의 직접 접근이아닌 Proxy서버에서 접근하는 형태가 되므로, 로그기록등에 문제가 발생 할 수 있다.  
+
+    # 어떠한 클라이언트에서 접속을 시도했는지 구분하기 위해 http Request에 X-Forwarded-For 헤더를 추가로 기록한다.  
+
+    # X-Forwarded-For 헤더에는 실제 접속을 시도 한 클라이언트의 IP주소 정보가 기록된다.  
+
+    # 서버는 이정보를 바탕으로하여 로그기록을 남길때, 실제 클라이언트의 IP주소 정보를 기록하게 된다.  
+
+    # Apache에서는 X-Forwarded-For Log Format 설정을 추가로 진행한다.  
+
+   
+
+    maxconn                 2000  
+
+    # frontend에서 사용 할 프로세스당 최대 연결 수 기본값 지정 (Global 보다 낮게 설정)  
+
+    # Backend에서 사용 할 최대 연결 수 지정은 Backend영역에서 따로 진행  
+
+   
+
+    timeout connect         10s  
+
+    # Proxy가 Backend에서 동작하는 서버와 TCP연결을 설정할때까지의 대기시간  
+
+   
+
+    timeout http-request    10s  
+
+    # HTTP 요청 타임아웃 시간  
+
+   
+
+    timeout http-keep-alive 10s  
+
+    # 요청 및 응답 완료 후 다음 요청까지의 대기 시간 ( http-request가 선행된다 )  
+
+   
+
+    timeout client          1m  
+
+    timeout server          1m  
+
+    # 클라이언트 및 서버에서 연결 및 데이터 요청,전송 작업에대한 최대 대기시간  
+
+    # TCP 모드에서는 항상 같은 시간값을 설정해야한다.  
+
+   
+
+    timeout queue           1m  
+
+    # 서버연결에서 허용되는 Maxconn에 도달 시 보류상태에서 연결 클라이언트에게 [503]응답을 보낸 후 연결을 끊는데까지의 대기시간  
+
+   
+
+    errorfile 400 /etc/haproxy/errors/400.http  
+
+    errorfile 403 /etc/haproxy/errors/403.http  
+
+    errorfile 408 /etc/haproxy/errors/408.http  
+
+    errorfile 500 /etc/haproxy/errors/500.http  
+
+    errorfile 502 /etc/haproxy/errors/502.http  
+
+    errorfile 503 /etc/haproxy/errors/503.http  
+
+    errorfile 504 /etc/haproxy/errors/504.http  
+
+    # HTTP 상태코드에 따른 Error코드 페이지 파일 경로지정  
+
+   
+
+#---------------------------------------------------------------------  
+
+# Stats 페이지  
+
+#---------------------------------------------------------------------  
+
+listen stats  
+
+    bind *:9000  
+
+    # 상태 페이지 접속 허용 Host 및 Port 지정  
+
+   
+
+    stats enable  
+
+    # 상태 페이지 활성화  
+
+   
+
+    stats realm Haproxy Stats Page  
+
+    # 브라우저에 표시할 타이틀 지정  
+
+    stats uri /  
+
+    # 상태 페이지 uri 주소  
+
+   
+
+    stats auth admin:haproxy1  
+
+    # 상태 페이지 추가인증  
+
+   
+
+#---------------------------------------------------------------------  
+
+# Frontend : HTTP(80) + HTTPS(443) / 클라이언트 → Proxy 연결  
+
+#---------------------------------------------------------------------  
+
+frontend proxy  
+
+    bind *:80  
+
+    bind *:443 ssl crt /etc/haproxy/certs/ha01_ssl.crt  
+
+    # SSL/TLS를 위한 443포트 바인딩 및 위에서 생성한 통합 인증서 파일 경로를 지정  
+
+   
+
+    http-request redirect scheme https code 308 unless { ssl_fc }  
+
+    # HTTP로 들어온 요청은 HTTPS로 308 리다이렉트 (ssl_fc가 아닐 때만 동작 → 리다이렉트 루프 방지)  
+
+      
+
+    default_backend WEB_SRV_list  
+
+    # frontend proxy 영역에서 기본으로 연결하는 backend 영역의 이름을 정의  
+
+   
+
+#---------------------------------------------------------------------  
+
+# Backend : 실제 트래픽을 전달할 웹서버들  
+
+#---------------------------------------------------------------------  
+
+backend WEB_SRV_list  
+
+    balance roundrobin  
+
+    # Load Balancing 방식지정 (roudrobin, leastconn을 주로 사용)  
+
+      
+
+    # [Balance Option]  
+
+    # roundrobin : 순차적으로 분배  
+
+    # static-rr : 서버에 부여된 가중치에 따라서 분배  
+
+    # leastconn : 접속수가 가장 적은 서버로 분배  
+
+    # source : 운영중인 서버의 가중치를 나눠서 접속자 IP 해싱(hashing)해서 분배  
+
+    # uri : 접속하는 URI를 해싱해서 운영중인 서버의 가중치를 나눠서 분배 (URI의 길이 또는 depth로 해싱)  
+
+    # url_param : HTTP GET 요청에 대해서 특정 패턴이 있는지 여부 확인 후 조건에 맞는 서버로 분배 (조건 없는 경우 round_robin으로 처리)  
+
+    # hdr : HTTP 헤더에서 hdr(<name>)으로 지정된 조건이 있는 경우에 대해서만 분배 (조건없는 경우 round robin 으로 처리)  
+
+    # rdp-cookie : TCP 요청에 대한 RDP 쿠키에 따른 분배  
+
+   
+
+    option httpchk HEAD /  
+
+    # 실제 WEB서버와 Health Check를 진행 할 Method, URI, Version등을 지정.  
+
+   
+
+    cookie SRVID insert indirect nocache maxlife 10m  
+
+    # L7 LB를 수행하기위해서는 Cookie에 서버정보를 입력하여 클라이언트에게 전송을 해야함.  
+
+    # Cookie에 서버정보를 바탕으로 처음 맺은 세션에 해당하는 서버로만 접속이 가능해진다.  
+
+    # Cookie의 이름을 SRVID로 지정하며 maxlife에서 최대 유지시간을 설정한다.  
+
+    # insert 아래 server 지시자에 있는 cookie에서 지정 된 이름 포함  
+
+    # indirect: cookie는 재생성하지 않고 유지하며, nocache: 캐시기록은 남기지 않겠다.  
+
+   
+
+    server WEB_01 192.168.1.128:80 maxconn 1000 cookie WEB_01 check inter 3000 fall 5 rise 3  
+
+    server WEB_02 192.168.1.129:80 maxconn 1000 cookie WEB_02 check inter 3000 fall 5 rise 3  
+
+   
+
+    # maxconn Backend 구간에서 사용할 최대 연결 수 지정  
+
+    # 실제 서버의 정보 등록 및 위에서 설정 한 Cookie 정보를 사용하도록 한다  
+
+    # Health Check를 3000ms(3초) 단위로 실행 5번 연속 실패시 LB 그룹에서 제외  
+
+    # 다시 Health Check에 3번 성공 시 LB 그룹에 포함  
+
+=======================================================================
+
+ [ 4. 로그 연동 (rsyslog) 및 로그 로테이션 설정 ]
+
+ # cat > /etc/rsyslog.d/haproxy.conf <<'EOF'  
+$ModLoad imudp  
+$UDPServerAddress 127.0.0.1  
+$UDPServerRun 514  
+local0.*  /var/log/haproxy/haproxy-traffic.log  
+EOF  
+이걸 해줘야 로그를 받고, 그 로그를 받은 애가 쓰기 작업까지 해줌.  
+
+=======================================================================
+
+# systemctl restart rsyslog  
+
+cat > /etc/logrotate.d/haproxy <<'EOF'  
+
+/var/log/haproxy/*.log {  
+
+    daily  
+
+    # 하루에 한번 rotate  
+
+    rotate 30  
+
+    # 30개의 rotate 파일 보관  
+
+    create 0600 root root  
+
+    # 로그 파일 허가권/소유권 정의  
+
+    compress  
+
+    # rotate 로그파일 압축 지원  
+
+    notifempty  
+
+    # 로그 내용이 없으면 rotate 하지 않음  
+
+    missingok  
+
+    # 로그 파일이 없어도 에러 없이 진행  
+
+   
+
+    sharedscripts  
+
+    postrotate  
+
+        /bin/systemctl restart rsyslog.service > /dev/null 2>/dev/null || true  
+
+    endscript  
+
+    # rotate 동작 후 rsyslog 재시작 로그 기록을 실제로 남기는 부분을 재시작 해줘야함.  
+
+이 로그 관리에서 가장 중요한 부분임.  
+
+리눅스 시스템은 파일을 id 가지고 구별한다.  
+
+근데 id 값이 바뀌어서 9999 였다가 1111 되면 로그 기록을 9999에다가 저장해버림.  
+
+그래서 그걸 알려주기 위해서 새로운 곳에서 로그 기록 저장해라~ 라는 걸 알려주는 부분임. 이 구문은 패턴이다. 저 초록색 부분만 바뀐다. 평소에는 똑같다. 
+
+ 
+
+ }  
+
+EOF  
+
+ 
+
+이거는 로그다. 로그 관리 작업을 위한 곳이다.  
+
+예전에는 사람이 수동으로 했음. 근데 이제는 불편해서 그냥 자동으로 해줌.  
+
+그게 로그 로테이트다. 리눅스 기본 기능.
+
+=======================================================================
+
+[ 5. 방화벽 설정 및 서비스 시작 ]  
+# firewall-cmd --permanent --add-service=http  
+
+# firewall-cmd --permanent --add-service=https  
+
+# firewall-cmd --permanent --add-port=9000/tcp  
+
+# firewall-cmd --permanent --add-port=514/udp  
+
+# firewall-cmd --reload
+   
+# firewall-cmd --list-all  
+
+public (active)  
+
+  target: default  
+
+  icmp-block-inversion: no  
+
+  interfaces: ens160  
+
+  sources:   
+
+  services: cockpit dhcpv6-client http https ssh  
+
+  ports: 9000/tcp 514/udp  
+
+  protocols:   
+
+  forward: yes  
+
+  masquerade: no  
+
+  forward-ports:   
+
+  source-ports:   
+
+  icmp-blocks:   
+
+  rich rules:   
+
+=======================================================================
+# haproxy -f /etc/haproxy/haproxy.cfg -c 
+Configuration file is valid  
+
+# systemctl start haproxy
+
+# systemctl enable haproxy
+Created symlink /etc/systemd/system/multi-user.target.wants/haproxy.service → /usr/lib/systemd/system/haproxy.service.
+
+[ Linux_1에서 로그 확인 ]
+tail -f /var/log/httpd/access_log 
