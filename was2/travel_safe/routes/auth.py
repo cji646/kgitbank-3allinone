@@ -1,8 +1,22 @@
 from flask import Blueprint, request, jsonify, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from db.connection import get_db_connection
+import re
+import time
 
 auth_bp = Blueprint("auth", __name__)
+
+
+# =========================
+# 로그인 시도 제한 설정
+# =========================
+
+MAX_LOGIN_ATTEMPTS = 5
+LOGIN_BLOCK_TIME = 300  # 5분
+
+# 로그인 실패 기록
+login_attempts = {}
+
 
 # =========================
 # 회원가입
@@ -26,6 +40,59 @@ def register():
         return jsonify({
             "success": False,
             "message": "이메일, 비밀번호, 이름은 모두 입력해야 합니다."
+        }), 400
+
+    # =========================
+    # 이메일 형식 검사
+    # =========================
+
+    email_pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+
+    if not re.match(email_pattern, email):
+        return jsonify({
+            "success": False,
+            "message": "올바른 이메일 형식이 아닙니다."
+        }), 400
+
+    # =========================
+    # 비밀번호 검사
+    # 최소 8자
+    # 영문 + 숫자 + 특수문자
+    # =========================
+
+    if len(password) < 8:
+        return jsonify({
+            "success": False,
+            "message": "비밀번호는 최소 8자 이상이어야 합니다."
+        }), 400
+
+    if not re.search(r'[A-Za-z]', password):
+        return jsonify({
+            "success": False,
+            "message": "비밀번호에는 영문자가 포함되어야 합니다."
+        }), 400
+
+    if not re.search(r'[0-9]', password):
+        return jsonify({
+            "success": False,
+            "message": "비밀번호에는 숫자가 포함되어야 합니다."
+        }), 400
+
+    if not re.search(r'[^A-Za-z0-9]', password):
+        return jsonify({
+            "success": False,
+            "message": "비밀번호에는 특수문자가 반드시 포함되어야 합니다."
+        }), 400
+
+    # =========================
+    # 이름 길이 검사
+    # 최대 50자
+    # =========================
+
+    if len(name) > 50:
+        return jsonify({
+            "success": False,
+            "message": "이름은 최대 50자까지 입력할 수 있습니다."
         }), 400
 
     conn = None
@@ -116,6 +183,42 @@ def login():
             "message": "이메일과 비밀번호를 입력해야 합니다."
         }), 400
 
+    # =========================
+    # 이메일 형식 검사
+    # =========================
+
+    email_pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+
+    if not re.match(email_pattern, email):
+        return jsonify({
+            "success": False,
+            "message": "올바른 이메일 형식이 아닙니다."
+        }), 400
+
+    # =========================
+    # 로그인 시도 횟수 확인
+    # =========================
+
+    current_time = time.time()
+
+    if email in login_attempts:
+
+        attempt_count = login_attempts[email]["count"]
+        first_attempt = login_attempts[email]["time"]
+
+        # 5분이 지나면 실패 기록 초기화
+        if current_time - first_attempt >= LOGIN_BLOCK_TIME:
+
+            del login_attempts[email]
+
+        # 5회 이상 실패한 경우
+        elif attempt_count >= MAX_LOGIN_ATTEMPTS:
+
+            return jsonify({
+                "success": False,
+                "message": "로그인 시도 횟수를 초과했습니다. 5분 후 다시 시도해주세요."
+            }), 429
+
     conn = None
 
     try:
@@ -133,17 +236,54 @@ def login():
             user = cursor.fetchone()
 
         if not user:
+
+            # 로그인 실패 기록
+            if email not in login_attempts:
+
+                login_attempts[email] = {
+                    "count": 1,
+                    "time": current_time
+                }
+
+            else:
+
+                login_attempts[email]["count"] += 1
+
             return jsonify({
                 "success": False,
                 "message": "이메일 또는 비밀번호가 올바르지 않습니다."
             }), 401
 
+        # =========================
         # 비밀번호 확인
+        # =========================
+
         if not check_password_hash(user["password"], password):
+
+            # 로그인 실패 기록
+            if email not in login_attempts:
+
+                login_attempts[email] = {
+                    "count": 1,
+                    "time": current_time
+                }
+
+            else:
+
+                login_attempts[email]["count"] += 1
+
             return jsonify({
                 "success": False,
                 "message": "이메일 또는 비밀번호가 올바르지 않습니다."
             }), 401
+
+        # =========================
+        # 로그인 성공
+        # =========================
+
+        # 실패 기록 삭제
+        if email in login_attempts:
+            del login_attempts[email]
 
         # 로그인 세션 생성
         session["user_id"] = user["user_id"]
@@ -175,6 +315,9 @@ def login():
             conn.close()
 
 
+# =========================
+# 로그아웃
+# =========================
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
 
@@ -185,7 +328,10 @@ def logout():
         "message": "로그아웃 되었습니다."
     }), 200
 
-# 세션 확인용 
+
+# =========================
+# 세션 확인용
+# =========================
 @auth_bp.route("/me", methods=["GET"])
 def me():
 
@@ -202,3 +348,4 @@ def me():
         "email": session["email"],
         "role": session["role"]
     }), 200
+
