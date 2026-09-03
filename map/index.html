@@ -1,0 +1,4767 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="글로벌 지도 서비스 | Global Map Service">
+<title>글로벌 지도 서비스 | Global Map Service</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#map {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #aad3df;
+}
+
+body {
+  font-family:
+    Arial,
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Apple SD Gothic Neo",
+    sans-serif;
+}
+
+#control-panel {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2000;
+
+  width: 410px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 20px);
+
+  overflow-y: auto;
+
+  padding: 14px 16px;
+
+  background: rgba(255,255,255,.97);
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 2px 10px rgba(0,0,0,.25);
+
+  font-size: 13px;
+
+  backdrop-filter: blur(6px);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+}
+
+.description {
+  display: block;
+  margin-top: 7px;
+  color: #555;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.section-title {
+  margin-top: 13px;
+  color: #222;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.search-box {
+  display: flex;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+#place-search-input {
+  flex: 1;
+  min-width: 0;
+
+  padding: 9px 10px;
+
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  outline: none;
+
+  background: #fff;
+  color: #222;
+
+  font-size: 12px;
+}
+
+#place-search-input:focus {
+  border-color: #3498db;
+
+  box-shadow:
+    0 0 0 2px rgba(52,152,219,.12);
+}
+
+#place-search-button {
+  min-width: 76px;
+
+  padding: 8px 11px;
+
+  border: 1px solid #2980b9;
+  border-radius: 6px;
+
+  background: #3498db;
+  color: #fff;
+
+  cursor: pointer;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+#place-search-button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.mode-select {
+  display: flex;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.mode-btn {
+  flex: 1;
+
+  padding: 8px 3px;
+
+  border: 1px solid #d8dde2;
+  border-radius: 6px;
+
+  background: #fff;
+  color: #333;
+
+  cursor: pointer;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mode-btn:hover {
+  background: #f4f8fb;
+}
+
+.mode-btn.active {
+  border-color: #2980b9;
+  background: #3498db;
+  color: #fff;
+}
+
+#route-info {
+  display: none;
+
+  margin-top: 11px;
+  padding: 10px;
+
+  border: 1px solid #e3e7ea;
+  border-radius: 7px;
+
+  background: #f8f9fa;
+
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+#info-duration {
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+#status {
+  display: none;
+
+  margin-top: 8px;
+  padding: 7px 8px;
+
+  border-radius: 5px;
+
+  background: #fff3cd;
+  color: #856404;
+
+  font-size: 11px;
+  line-height: 1.5;
+
+  white-space: pre-line;
+}
+
+#status.error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+#status.success {
+  background: #d4edda;
+  color: #155724;
+}
+
+#place-search-status {
+  margin-top: 7px;
+  padding: 7px 8px;
+
+  border-radius: 5px;
+
+  background: #eef5ff;
+  color: #24527a;
+
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+#translate-info {
+  display: none;
+
+  margin-top: 5px;
+  padding: 5px 7px;
+
+  border-radius: 4px;
+
+  background: #e8f5e9;
+  color: #2e7d32;
+
+  font-size: 10px;
+}
+
+#place-search-result {
+  display: none;
+
+  margin-top: 7px;
+
+  border: 1px solid #e3e7ea;
+  border-radius: 7px;
+
+  background: #fafbfc;
+
+  overflow: hidden;
+}
+
+.search-result-title {
+  padding: 7px 8px;
+
+  background: #f1f5f9;
+
+  border-bottom: 1px solid #e3e7ea;
+
+  color: #333;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.search-result-count {
+  margin-left: 4px;
+  color: #777;
+  font-weight: 400;
+}
+
+#search-result-list {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  padding: 9px;
+
+  border-bottom: 1px solid #edf0f2;
+
+  background: #fff;
+
+  cursor: pointer;
+}
+
+.search-result-item:hover {
+  background: #f3f7fb;
+}
+
+.search-result-name {
+  color: #222;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  line-height: 1.45;
+}
+
+.search-result-type {
+  margin-top: 3px;
+
+  color: #3498db;
+
+  font-size: 9px;
+}
+
+.search-result-address {
+  margin-top: 3px;
+
+  color: #777;
+
+  font-size: 9px;
+}
+
+.search-result-empty {
+  padding: 10px 8px;
+
+  color: #888;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+.btn-group {
+  position: absolute;
+
+  right: 20px;
+  bottom: 20px;
+
+  z-index: 2000;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  align-items: flex-end;
+}
+
+.action-btn {
+  min-width: 170px;
+
+  padding: 10px 14px;
+
+  border: 2px solid rgba(0,0,0,.2);
+  border-radius: 7px;
+
+  background: #fff;
+
+  box-shadow:
+    0 2px 7px rgba(0,0,0,.25);
+
+  color: #222;
+
+  cursor: pointer;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.action-btn:hover {
+  background: #f4f4f4;
+}
+
+#btn-gps {
+  background: #9b59b6;
+  border-color: #8e44ad;
+  color: #fff;
+}
+
+.marker-base {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50% 50% 50% 0;
+
+  transform: rotate(-45deg);
+
+  box-shadow:
+    0 2px 6px rgba(0,0,0,.35);
+
+  border: 2px solid #fff;
+}
+
+.marker-base span {
+  display: block;
+
+  transform: rotate(45deg);
+
+  font-size: 18px;
+  line-height: 1;
+}
+
+.marker-hospital {
+  background: #e74c3c;
+}
+
+.marker-clinic {
+  background: #ff7043;
+}
+
+.marker-dentist {
+  background: #e91e63;
+}
+
+.marker-pharmacy {
+  background: #1abc9c;
+}
+
+.marker-police {
+  background: #2980b9;
+}
+
+.marker-fire {
+  background: #c0392b;
+}
+
+.marker-airport {
+  background: #f39c12;
+}
+
+.marker-station {
+  background: #16a085;
+}
+
+.marker-school {
+  background: #8e44ad;
+}
+
+.marker-hotel {
+  background: #27ae60;
+}
+
+.marker-mall {
+  background: #d35400;
+}
+
+.marker-restaurant {
+  background: #e67e22;
+}
+
+.marker-default {
+  background: #34495e;
+}
+
+.leaflet-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+@media(max-width:600px) {
+
+  #control-panel {
+    width: calc(100% - 20px);
+    max-width: 410px;
+  }
+
+  .btn-group {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .action-btn {
+    min-width: 145px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="control-panel">
+
+  <div class="title">
+    📍 글로벌 지도 서비스 | Global Map
+  </div>
+
+  <span class="description">
+    • 1번째 클릭 → 출발지<br>
+    • 2번째 클릭 → 도착지<br>
+    • 3번째 클릭 → 경로 초기화<br>
+    • 검색 기준 위치로부터 <b>반경 20km</b> 장소 검색<br>
+    • OSM 국가별 태그 차이 대응<br>
+    • 병원·의원·치과·약국·경찰·파출소·소방·역·학교 등 지원<br>
+    • 한국어·영어·현지 언어 검색 지원
+  </span>
+
+  <div class="section-title">
+    🔎 장소 검색 | Place Search
+  </div>
+
+  <div class="search-box">
+
+    <input
+      type="text"
+      id="place-search-input"
+      placeholder="경찰서 / 병원 / 역 / police / hospital / station..."
+      autocomplete="off"
+      spellcheck="false"
+    >
+
+    <button
+      type="button"
+      id="place-search-button"
+    >
+      검색
+    </button>
+
+  </div>
+
+  <div id="translate-info"></div>
+
+  <div id="place-search-result">
+
+    <div class="search-result-title">
+      🔎 검색 결과
+
+      <span
+        id="search-result-count"
+        class="search-result-count"
+      ></span>
+    </div>
+
+    <div id="search-result-list"></div>
+
+  </div>
+
+  <div class="section-title">
+    이동 수단 | Transport
+  </div>
+
+  <div class="mode-select">
+
+    <button
+      type="button"
+      class="mode-btn active"
+      data-profile="driving"
+    >
+      🚗 자동차
+    </button>
+
+    <button
+      type="button"
+      class="mode-btn"
+      data-profile="foot"
+    >
+      🚶 도보
+    </button>
+
+    <button
+      type="button"
+      class="mode-btn"
+      data-profile="bike"
+    >
+      🚲 자전거
+    </button>
+
+  </div>
+
+  <div id="route-info">
+
+    <div>
+      <b>📏 거리:</b>
+      <span id="info-distance">-</span>
+    </div>
+
+    <div>
+      <b>⏱️ 시간:</b>
+      <span id="info-duration">-</span>
+    </div>
+
+  </div>
+
+  <div id="status"></div>
+
+  <div id="place-search-status">
+    🔎 지도 준비 완료
+  </div>
+
+</div>
+
+<div class="btn-group">
+
+  <button
+    type="button"
+    class="action-btn"
+    id="btn-clear"
+  >
+    🧹 경로·검색 초기화
+  </button>
+
+  <button
+    type="button"
+    class="action-btn"
+    id="btn-gps"
+  >
+    🎯 내 위치 | My GPS
+  </button>
+
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+"use strict";
+
+/* =========================================================
+   MAP
+   ========================================================= */
+
+const map = L.map("map", {
+  center: [37.5665, 126.978],
+  zoom: 14,
+  minZoom: 2,
+  maxZoom: 19,
+  preferCanvas: true,
+  zoomControl: true
+});
+
+L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }
+).addTo(map);
+
+
+/* =========================================================
+   API
+   ========================================================= */
+
+const API = {
+
+  overpass:
+    "./overpass.php",
+
+  nominatim:
+    "https://nominatim.openstreetmap.org/search",
+
+  photon:
+    "https://photon.komoot.io/api",
+
+  translate:
+    "https://api.mymemory.translated.net/get"
+
+};
+
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+const RADIUS = 20000;
+
+const API_TIMEOUT = 15000;
+
+const SEARCH_QUERY_LIMIT = 8;
+
+const MAX_RESULTS = 200;
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let waypoints = [];
+
+let polyline = null;
+
+let routeMarkers = [];
+
+let myLocationMarker = null;
+
+let myLatLng = null;
+
+let userSelectedStart = null;
+
+let currentProfile = "driving";
+
+let searchRequestId = 0;
+
+let routeRequestId = 0;
+
+
+/* =========================================================
+   SEARCH LAYER
+   ========================================================= */
+
+const searchResultGroup =
+  L.layerGroup().addTo(map);
+
+
+/* =========================================================
+   CATEGORIES
+   ========================================================= */
+
+const CATEGORIES = {
+
+  hospital: {
+
+    icon: "🏥",
+
+    name: "병원 | Hospital",
+
+    markerClass: "marker-hospital",
+
+    keywords: [
+      "hospital",
+      "hospitals",
+      "medical center",
+      "medical centre",
+      "general hospital",
+      "university hospital",
+      "health center",
+      "health centre",
+      "병원",
+      "종합병원",
+      "대학병원",
+      "의료원",
+      "의료센터",
+      "病院",
+      "医院",
+      "醫院"
+    ]
+
+  },
+
+
+  clinic: {
+
+    icon: "🏥",
+
+    name: "의원·진료소 | Clinic",
+
+    markerClass: "marker-clinic",
+
+    keywords: [
+      "clinic",
+      "medical clinic",
+      "health clinic",
+      "polyclinic",
+      "doctor",
+      "doctors",
+      "의원",
+      "진료소",
+      "의무실",
+      "診療所",
+      "诊所"
+    ]
+
+  },
+
+
+  dentist: {
+
+    icon: "🦷",
+
+    name: "치과 | Dentist",
+
+    markerClass: "marker-dentist",
+
+    keywords: [
+      "dentist",
+      "dental",
+      "dental clinic",
+      "dentistry",
+      "orthodontist",
+      "dentiste",
+      "zahnarzt",
+      "치과",
+      "치과의원",
+      "치과병원",
+      "歯科",
+      "歯医者",
+      "牙科"
+    ]
+
+  },
+
+
+  pharmacy: {
+
+    icon: "💊",
+
+    name: "약국 | Pharmacy",
+
+    markerClass: "marker-pharmacy",
+
+    keywords: [
+      "pharmacy",
+      "pharmacies",
+      "chemist",
+      "drugstore",
+      "apotheke",
+      "pharmacie",
+      "farmacia",
+      "약국",
+      "조제약국",
+      "드럭스토어",
+      "薬局",
+      "药房",
+      "药店"
+    ]
+
+  },
+
+
+  police: {
+
+    icon: "🚔",
+
+    name: "경찰시설 | Police",
+
+    markerClass: "marker-police",
+
+    keywords: [
+
+      "police",
+      "police station",
+      "police post",
+      "police office",
+      "police department",
+      "police headquarters",
+      "police checkpoint",
+      "gendarmerie",
+
+      "polizeiwache",
+      "polizeistation",
+
+      "comisaria",
+      "comisaría",
+      "comissariat",
+
+      "경찰",
+      "경찰서",
+      "파출소",
+      "지구대",
+      "치안센터",
+      "치안지구대",
+      "경찰초소",
+      "경찰지서",
+
+      "派出所",
+      "警察署",
+      "警察局",
+      "公安局"
+
+    ]
+
+  },
+
+
+  fire: {
+
+    icon: "🚒",
+
+    name: "소방시설 | Fire",
+
+    markerClass: "marker-fire",
+
+    keywords: [
+      "fire station",
+      "fire brigade",
+      "fire department",
+      "firehouse",
+      "feuerwache",
+      "caserne de pompiers",
+      "소방서",
+      "소방",
+      "消防署"
+    ]
+
+  },
+
+
+  station: {
+
+    icon: "🚉",
+
+    name: "역·터미널 | Station",
+
+    markerClass: "marker-station",
+
+    keywords: [
+      "station",
+      "train station",
+      "railway station",
+      "subway station",
+      "metro station",
+      "tram station",
+      "light rail station",
+      "bus station",
+      "terminal",
+      "gare",
+      "bahnhof",
+      "역",
+      "기차역",
+      "철도역",
+      "지하철역",
+      "전철역",
+      "버스터미널",
+      "터미널",
+      "駅",
+      "车站",
+      "站"
+    ]
+
+  },
+
+
+  school: {
+
+    icon: "🏫",
+
+    name: "학교 | School",
+
+    markerClass: "marker-school",
+
+    keywords: [
+      "school",
+      "university",
+      "college",
+      "academy",
+      "école",
+      "universität",
+      "schule",
+      "학교",
+      "대학교",
+      "대학",
+      "초등학교",
+      "중학교",
+      "고등학교",
+      "学校",
+      "大学"
+    ]
+
+  },
+
+
+  airport: {
+
+    icon: "✈️",
+
+    name: "공항 | Airport",
+
+    markerClass: "marker-airport",
+
+    keywords: [
+      "airport",
+      "aerodrome",
+      "airfield",
+      "aéroport",
+      "flughafen",
+      "공항",
+      "비행장",
+      "空港",
+      "机场"
+    ]
+
+  },
+
+
+  hotel: {
+
+    icon: "🏨",
+
+    name: "호텔 | Hotel",
+
+    markerClass: "marker-hotel",
+
+    keywords: [
+      "hotel",
+      "motel",
+      "hostel",
+      "guesthouse",
+      "guest house",
+      "auberge",
+      "호텔",
+      "모텔",
+      "旅馆"
+    ]
+
+  },
+
+
+  mall: {
+
+    icon: "🛍️",
+
+    name: "쇼핑 | Shopping",
+
+    markerClass: "marker-mall",
+
+    keywords: [
+      "mall",
+      "shopping center",
+      "shopping centre",
+      "department store",
+      "supermarket",
+      "market",
+      "centre commercial",
+      "einkaufszentrum",
+      "쇼핑몰",
+      "백화점",
+      "마트",
+      "시장",
+      "商场",
+      "百貨店"
+    ]
+
+  },
+
+
+  restaurant: {
+
+    icon: "🍽️",
+
+    name: "식당 | Restaurant",
+
+    markerClass: "marker-restaurant",
+
+    keywords: [
+      "restaurant",
+      "restaurants",
+      "cafe",
+      "café",
+      "coffee",
+      "bistro",
+      "식당",
+      "음식점",
+      "레스토랑",
+      "카페",
+      "餐厅",
+      "食堂"
+    ]
+
+  }
+
+};
+
+
+/* =========================================================
+   EXACT CATEGORY MAP
+   ========================================================= */
+
+const EXACT_CATEGORY_MAP = {
+
+  "역": "station",
+  "기차역": "station",
+  "철도역": "station",
+  "지하철역": "station",
+  "전철역": "station",
+  "버스터미널": "station",
+  "터미널": "station",
+
+  "station": "station",
+  "train station": "station",
+  "railway station": "station",
+  "subway station": "station",
+  "metro station": "station",
+  "bus station": "station",
+
+  "병원": "hospital",
+  "종합병원": "hospital",
+  "병원시설": "hospital",
+  "hospital": "hospital",
+  "hospitals": "hospital",
+
+  "의원": "clinic",
+  "진료소": "clinic",
+  "clinic": "clinic",
+  "medical clinic": "clinic",
+
+  "치과": "dentist",
+  "dentist": "dentist",
+  "dental": "dentist",
+  "dental clinic": "dentist",
+
+  "약국": "pharmacy",
+  "pharmacy": "pharmacy",
+  "chemist": "pharmacy",
+  "drugstore": "pharmacy",
+
+  "경찰": "police",
+  "경찰서": "police",
+  "파출소": "police",
+  "지구대": "police",
+  "치안센터": "police",
+  "치안지구대": "police",
+  "경찰초소": "police",
+  "경찰지서": "police",
+
+  "police": "police",
+  "police station": "police",
+  "police post": "police",
+  "police office": "police",
+  "police department": "police",
+  "police headquarters": "police",
+  "gendarmerie": "police",
+
+  "소방서": "fire",
+  "소방": "fire",
+  "fire station": "fire",
+  "fire department": "fire",
+  "fire brigade": "fire",
+
+  "학교": "school",
+  "대학교": "school",
+  "대학": "school",
+  "school": "school",
+  "university": "school",
+  "college": "school",
+
+  "공항": "airport",
+  "비행장": "airport",
+  "airport": "airport",
+  "aerodrome": "airport",
+
+  "호텔": "hotel",
+  "모텔": "hotel",
+  "hotel": "hotel",
+  "motel": "hotel",
+  "hostel": "hotel",
+
+  "쇼핑몰": "mall",
+  "백화점": "mall",
+  "마트": "mall",
+  "시장": "mall",
+  "mall": "mall",
+  "shopping center": "mall",
+  "shopping centre": "mall",
+
+  "식당": "restaurant",
+  "음식점": "restaurant",
+  "레스토랑": "restaurant",
+  "카페": "restaurant",
+  "restaurant": "restaurant",
+  "cafe": "restaurant",
+  "café": "restaurant"
+
+};
+
+
+/* =========================================================
+   CATEGORY ALIASES
+   ========================================================= */
+
+const CATEGORY_ALIASES = {};
+
+function normalizeKey(value) {
+
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+
+}
+
+for (const category of Object.keys(CATEGORIES)) {
+
+  for (const word of CATEGORIES[category].keywords) {
+
+    CATEGORY_ALIASES[
+      normalizeKey(word)
+    ] = category;
+
+  }
+
+}
+
+
+/* =========================================================
+   BASIC UTIL
+   ========================================================= */
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+function showStatus(message, type = "") {
+
+  const el = document.getElementById("status");
+
+  el.textContent = message;
+
+  el.className = type;
+
+  el.style.display = "block";
+
+}
+
+
+function hideStatus() {
+
+  document.getElementById("status").style.display = "none";
+
+}
+
+
+function showPlaceStatus(message) {
+
+  document.getElementById(
+    "place-search-status"
+  ).textContent = message;
+
+}
+
+
+function showTranslate(message) {
+
+  const el =
+    document.getElementById("translate-info");
+
+  el.textContent = message;
+
+  el.style.display =
+    message ? "block" : "none";
+
+}
+
+
+function formatDistance(meters) {
+
+  return meters >= 1000
+    ? `${(meters / 1000).toFixed(1)} km`
+    : `${Math.round(meters)} m`;
+
+}
+
+
+function formatDuration(seconds) {
+
+  const minutes =
+    Math.max(0, Math.round(seconds / 60));
+
+  const hours =
+    Math.floor(minutes / 60);
+
+  const remain =
+    minutes % 60;
+
+  return hours
+    ? `${hours}시간 ${remain}분`
+    : `${remain}분`;
+
+}
+
+
+/* =========================================================
+   FETCH
+   ========================================================= */
+
+async function fetchJson(
+  url,
+  options = {},
+  timeout = API_TIMEOUT
+) {
+
+  const controller =
+    new AbortController();
+
+  const timer =
+    setTimeout(
+      () => controller.abort(),
+      timeout
+    );
+
+  try {
+
+    const response =
+      await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        cache: "no-store"
+      });
+
+    if (!response.ok) {
+
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+
+    }
+
+    return await response.json();
+
+  } finally {
+
+    clearTimeout(timer);
+
+  }
+
+}
+
+
+/* =========================================================
+   SEARCH CENTER
+   ========================================================= */
+
+function getSearchCenter() {
+
+  if (userSelectedStart) {
+
+    return L.latLng(
+      userSelectedStart.lat,
+      userSelectedStart.lng
+    );
+
+  }
+
+  if (myLatLng) {
+
+    return L.latLng(
+      myLatLng.lat,
+      myLatLng.lng
+    );
+
+  }
+
+  return map.getCenter();
+
+}
+
+
+function getNavigationStart() {
+
+  return getSearchCenter();
+
+}
+
+
+/* =========================================================
+   CATEGORY DETECTION
+   ========================================================= */
+
+function detectCategory(text) {
+
+  const value =
+    normalizeKey(text);
+
+  if (!value) {
+    return null;
+  }
+
+  if (EXACT_CATEGORY_MAP[value]) {
+
+    return EXACT_CATEGORY_MAP[value];
+
+  }
+
+  const exactAlias =
+    CATEGORY_ALIASES[value];
+
+  if (exactAlias) {
+    return exactAlias;
+  }
+
+  const aliases =
+    Object.keys(CATEGORY_ALIASES)
+      .sort(
+        (a, b) =>
+          b.length - a.length
+      );
+
+  for (const alias of aliases) {
+
+    if (value.includes(alias)) {
+
+      return CATEGORY_ALIASES[alias];
+
+    }
+
+  }
+
+  return null;
+
+}
+
+
+/* =========================================================
+   OSM CATEGORY
+   ========================================================= */
+
+function detectOsmCategory(tags = {}) {
+
+  const amenity =
+    normalizeKey(tags.amenity);
+
+  const healthcare =
+    normalizeKey(tags.healthcare);
+
+  const police =
+    normalizeKey(tags.police);
+
+  const emergency =
+    normalizeKey(tags.emergency);
+
+  const security =
+    normalizeKey(tags.security);
+
+  const building =
+    normalizeKey(tags.building);
+
+  const railway =
+    normalizeKey(tags.railway);
+
+  const station =
+    normalizeKey(tags.station);
+
+  const publicTransport =
+    normalizeKey(tags.public_transport);
+
+  const aeroway =
+    normalizeKey(tags.aeroway);
+
+  const tourism =
+    normalizeKey(tags.tourism);
+
+  const shop =
+    normalizeKey(tags.shop);
+
+
+  if (
+    amenity === "hospital" ||
+    healthcare === "hospital"
+  ) {
+
+    return "hospital";
+
+  }
+
+
+  if (
+    amenity === "clinic" ||
+    amenity === "doctors" ||
+    [
+      "clinic",
+      "doctor",
+      "centre",
+      "center",
+      "polyclinic"
+    ].includes(healthcare)
+  ) {
+
+    return "clinic";
+
+  }
+
+
+  if (
+    amenity === "dentist" ||
+    ["dentist", "dental"].includes(
+      healthcare
+    )
+  ) {
+
+    return "dentist";
+
+  }
+
+
+  if (
+    amenity === "pharmacy" ||
+    healthcare === "pharmacy" ||
+    ["chemist", "drugstore"].includes(shop)
+  ) {
+
+    return "pharmacy";
+
+  }
+
+
+  /*
+   * 경찰:
+   *
+   * amenity=police
+   * police=*
+   * emergency=police
+   * security=police
+   * building=police
+   * building=police_station
+   */
+
+  if (
+    amenity === "police" ||
+    Boolean(police) ||
+    emergency === "police" ||
+    security === "police" ||
+    building === "police" ||
+    building === "police_station"
+  ) {
+
+    return "police";
+
+  }
+
+
+  if (
+    amenity === "fire_station"
+  ) {
+
+    return "fire";
+
+  }
+
+
+  if (
+    ["station", "halt", "stop"]
+      .includes(railway) ||
+
+    ["subway", "light_rail", "train"]
+      .includes(station) ||
+
+    ["station", "stop_position"]
+      .includes(publicTransport) ||
+
+    amenity === "bus_station"
+  ) {
+
+    return "station";
+
+  }
+
+
+  if (
+    [
+      "school",
+      "college",
+      "university",
+      "kindergarten"
+    ].includes(amenity)
+  ) {
+
+    return "school";
+
+  }
+
+
+  if (
+    [
+      "aerodrome",
+      "airport",
+      "heliport"
+    ].includes(aeroway)
+  ) {
+
+    return "airport";
+
+  }
+
+
+  if (
+    [
+      "hotel",
+      "motel",
+      "hostel",
+      "guest_house"
+    ].includes(tourism)
+  ) {
+
+    return "hotel";
+
+  }
+
+
+  if (
+    [
+      "mall",
+      "department_store",
+      "supermarket"
+    ].includes(shop) ||
+
+    amenity === "marketplace"
+  ) {
+
+    return "mall";
+
+  }
+
+
+  if (
+    [
+      "restaurant",
+      "cafe",
+      "fast_food"
+    ].includes(amenity)
+  ) {
+
+    return "restaurant";
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================================
+   OVERPASS COORDINATES
+   ========================================================= */
+
+function extractOsmCoordinates(element) {
+
+  if (
+    Number.isFinite(element.lat) &&
+    Number.isFinite(element.lon)
+  ) {
+
+    return {
+      lat: element.lat,
+      lon: element.lon
+    };
+
+  }
+
+
+  if (
+    element.center &&
+    Number.isFinite(element.center.lat) &&
+    Number.isFinite(element.center.lon)
+  ) {
+
+    return {
+      lat: element.center.lat,
+      lon: element.center.lon
+    };
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================================
+   ADDRESS
+   ========================================================= */
+
+function buildAddress(tags = {}) {
+
+  if (tags["addr:full"]) {
+
+    return tags["addr:full"];
+
+  }
+
+  if (tags["contact:address"]) {
+
+    return tags["contact:address"];
+
+  }
+
+
+  return [
+
+    tags["addr:country"],
+    tags["addr:state"],
+    tags["addr:city"],
+    tags["addr:town"],
+    tags["addr:district"],
+    tags["addr:suburb"],
+    tags["addr:street"],
+    tags["addr:housenumber"]
+
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+}
+
+
+/* =========================================================
+   NORMALIZE OVERPASS
+   ========================================================= */
+
+function normalizeOverpassElement(
+  element,
+  forcedCategory = null
+) {
+
+  const coords =
+    extractOsmCoordinates(element);
+
+  if (!coords) {
+    return null;
+  }
+
+  const tags =
+    element.tags || {};
+
+  const category =
+    forcedCategory ||
+    detectOsmCategory(tags);
+
+  if (
+    !category ||
+    !CATEGORIES[category]
+  ) {
+
+    return null;
+
+  }
+
+  const info =
+    CATEGORIES[category];
+
+  const name =
+    tags["name:ko"] ||
+    tags.name ||
+    tags["name:en"] ||
+    tags.int_name ||
+    tags.operator ||
+    tags.brand ||
+    "이름 없음";
+
+
+  return {
+
+    key:
+      `osm_${element.type}_${element.id}`,
+
+    name,
+
+    lat:
+      coords.lat,
+
+    lon:
+      coords.lon,
+
+    address:
+      buildAddress(tags),
+
+    categoryKey:
+      category,
+
+    icon:
+      info.icon,
+
+    typeName:
+      info.name,
+
+    markerClass:
+      info.markerClass,
+
+    tags
+
+  };
+
+}
+
+
+/* =========================================================
+   NORMALIZE NOMINATIM
+   ========================================================= */
+
+function normalizeNominatim(
+  item,
+  forcedCategory = null
+) {
+
+  const lat =
+    parseFloat(item.lat);
+
+  const lon =
+    parseFloat(item.lon);
+
+  if (
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lon)
+  ) {
+
+    return null;
+
+  }
+
+
+  const namedText = [
+
+    item.name,
+    item.display_name,
+    item.type,
+    item.class,
+    item.namedetails?.name,
+    item.namedetails?.name_en,
+    item.namedetails?.name_ko
+
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+
+  const tags =
+    item.extratags || {};
+
+
+  let category =
+    forcedCategory ||
+    detectOsmCategory(tags) ||
+    detectCategory(namedText);
+
+
+  if (
+    !category &&
+    (
+      normalizeKey(item.class)
+        === "amenity" ||
+
+      normalizeKey(item.type)
+        === "police"
+    )
+  ) {
+
+    category =
+      detectCategory(item.type);
+
+  }
+
+
+  const info =
+    category
+      ? CATEGORIES[category]
+      : null;
+
+
+  return {
+
+    key:
+      `nom_${
+        item.place_id ||
+        `${lat}_${lon}`
+      }`,
+
+    name:
+      item.namedetails?.name_ko ||
+      item.name ||
+      item.namedetails?.name ||
+      item.display_name
+        ?.split(",")[0] ||
+      "이름 없음",
+
+    lat,
+
+    lon,
+
+    address:
+      item.display_name || "",
+
+    categoryKey:
+      category,
+
+    icon:
+      info?.icon || "📍",
+
+    typeName:
+      info?.name ||
+      `${item.type || item.class || "장소"} | Place`,
+
+    markerClass:
+      info?.markerClass ||
+      "marker-default",
+
+    tags
+
+  };
+
+}
+
+
+/* =========================================================
+   NORMALIZE PHOTON
+   ========================================================= */
+
+function normalizePhoton(
+  feature,
+  forcedCategory = null
+) {
+
+  const coords =
+    feature?.geometry?.coordinates;
+
+  if (
+    !Array.isArray(coords) ||
+    coords.length < 2
+  ) {
+
+    return null;
+
+  }
+
+
+  const lon =
+    Number(coords[0]);
+
+  const lat =
+    Number(coords[1]);
+
+  const p =
+    feature.properties || {};
+
+
+  if (
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lon)
+  ) {
+
+    return null;
+
+  }
+
+
+  const namedText = [
+
+    p.name,
+    p.type,
+    p.osm_value,
+    p.osm_key,
+    p.street,
+    p.city
+
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+
+  const category =
+    forcedCategory ||
+    detectCategory(namedText);
+
+
+  const info =
+    category
+      ? CATEGORIES[category]
+      : null;
+
+
+  return {
+
+    key:
+      `ph_${
+        p.osm_id ||
+        `${lat}_${lon}_${p.name || ""}`
+      }`,
+
+    name:
+      p.name || "이름 없음",
+
+    lat,
+
+    lon,
+
+    address: [
+
+      p.street,
+      p.housenumber,
+      p.city,
+      p.state,
+      p.country
+
+    ]
+      .filter(Boolean)
+      .join(", "),
+
+    categoryKey:
+      category,
+
+    icon:
+      info?.icon || "📍",
+
+    typeName:
+      info?.name ||
+      `${p.type || "장소"} | Place`,
+
+    markerClass:
+      info?.markerClass ||
+      "marker-default",
+
+    tags:
+      p
+
+  };
+
+}
+
+
+/* =========================================================
+   DEDUPE
+   ========================================================= */
+
+function dedupePlaces(items) {
+
+  const result = [];
+
+  const seen = new Map();
+
+
+  for (const place of items) {
+
+    if (
+      !place ||
+      !Number.isFinite(place.lat) ||
+      !Number.isFinite(place.lon)
+    ) {
+
+      continue;
+
+    }
+
+
+    const category =
+      place.categoryKey ||
+      "place";
+
+
+    const key =
+      `${category}|` +
+      `${Math.round(place.lat * 100000)}|` +
+      `${Math.round(place.lon * 100000)}`;
+
+
+    let duplicate = false;
+
+
+    for (
+      const existing of seen.values()
+    ) {
+
+      if (
+        (
+          existing.categoryKey ||
+          "place"
+        ) !== category
+      ) {
+
+        continue;
+
+      }
+
+
+      if (
+        map.distance(
+          [
+            existing.lat,
+            existing.lon
+          ],
+          [
+            place.lat,
+            place.lon
+          ]
+        ) < 15
+      ) {
+
+        duplicate = true;
+        break;
+
+      }
+
+    }
+
+
+    if (!duplicate) {
+
+      seen.set(
+        key,
+        place
+      );
+
+      result.push(place);
+
+    }
+
+  }
+
+
+  return result;
+
+}
+
+
+/* =========================================================
+   OVERPASS QUERY
+   ========================================================= */
+
+function buildCategoryQuery(
+  category,
+  center
+) {
+
+  const lat =
+    Number(center.lat)
+      .toFixed(6);
+
+  const lon =
+    Number(center.lng)
+      .toFixed(6);
+
+
+  const around =
+    `(around:${RADIUS},${lat},${lon})`;
+
+
+  const groups = {
+
+    hospital: `
+      nwr${around}["amenity"="hospital"];
+      nwr${around}["healthcare"="hospital"];
+    `,
+
+
+    clinic: `
+      nwr${around}["amenity"="clinic"];
+      nwr${around}["amenity"="doctors"];
+      nwr${around}["healthcare"~"^(clinic|doctor|centre|center|polyclinic)$"];
+    `,
+
+
+    dentist: `
+      nwr${around}["amenity"="dentist"];
+      nwr${around}["healthcare"~"^(dentist|dental)$"];
+    `,
+
+
+    pharmacy: `
+      nwr${around}["amenity"="pharmacy"];
+      nwr${around}["healthcare"="pharmacy"];
+      nwr${around}["shop"~"^(chemist|drugstore)$"];
+    `,
+
+
+    /*
+     * 경찰은 언어가 아니라 OSM 태그로 검색
+     */
+    police: `
+      nwr${around}["amenity"="police"];
+      nwr${around}["police"];
+      nwr${around}["emergency"="police"];
+      nwr${around}["security"="police"];
+      nwr${around}["building"~"^(police|police_station)$"];
+    `,
+
+
+    fire: `
+      nwr${around}["amenity"="fire_station"];
+    `,
+
+
+    station: `
+      nwr${around}["railway"~"^(station|halt|stop)$"];
+      nwr${around}["public_transport"~"^(station|stop_position)$"];
+      nwr${around}["amenity"="bus_station"];
+      nwr${around}["station"~"^(subway|light_rail|train)$"];
+    `,
+
+
+    school: `
+      nwr${around}["amenity"~"^(school|college|university|kindergarten)$"];
+    `,
+
+
+    airport: `
+      nwr${around}["aeroway"~"^(aerodrome|airport|heliport)$"];
+    `,
+
+
+    hotel: `
+      nwr${around}["tourism"~"^(hotel|motel|hostel|guest_house)$"];
+    `,
+
+
+    mall: `
+      nwr${around}["shop"~"^(mall|department_store|supermarket)$"];
+      nwr${around}["amenity"="marketplace"];
+    `,
+
+
+    restaurant: `
+      nwr${around}["amenity"~"^(restaurant|cafe|fast_food)$"];
+    `
+
+  };
+
+
+  return `
+    [out:json][timeout:45];
+
+    (
+      ${groups[category] || ""}
+    );
+
+    out center tags;
+  `;
+
+}
+
+
+/* =========================================================
+   OVERPASS FETCH
+   ========================================================= */
+
+async function fetchOverpassCategory(
+  category,
+  center
+) {
+
+  const query =
+    buildCategoryQuery(
+      category,
+      center
+    );
+
+
+  const data =
+    await fetchJson(
+
+      API.overpass,
+
+      {
+        method: "POST",
+
+        headers: {
+
+          "Content-Type":
+            "application/json",
+
+          "Accept":
+            "application/json"
+
+        },
+
+        body:
+          JSON.stringify({
+            query
+          })
+
+      },
+
+      60000
+
+    );
+
+
+  return (data.elements || [])
+
+    .map(item =>
+      normalizeOverpassElement(
+        item,
+        category
+      )
+    )
+
+    .filter(Boolean);
+
+}
+
+
+/* =========================================================
+   CATEGORY SEARCH TERMS
+   ========================================================= */
+
+function buildCategorySearchTerms(
+  category,
+  originalQuery
+) {
+
+  const base = {
+
+    hospital: [
+      "hospital",
+      "hospital near me",
+      "병원",
+      "general hospital",
+      "medical center"
+    ],
+
+
+    clinic: [
+      "clinic",
+      "medical clinic",
+      "doctor",
+      "의원",
+      "진료소"
+    ],
+
+
+    dentist: [
+      "dentist",
+      "dental clinic",
+      "dental",
+      "치과"
+    ],
+
+
+    pharmacy: [
+      "pharmacy",
+      "chemist",
+      "drugstore",
+      "약국"
+    ],
+
+
+    /*
+     * 경찰 검색은 영어를 먼저 넣는다.
+     *
+     * "경찰서" 입력이어도
+     * police / police station 검색이 반드시 실행됨.
+     */
+    police: [
+
+      "police",
+      "police station",
+      "police post",
+      "police office",
+      "police department",
+      "gendarmerie",
+
+      "경찰서",
+      "경찰",
+      "파출소",
+      "지구대",
+      "치안센터",
+
+      "派出所",
+      "警察署"
+
+    ],
+
+
+    fire: [
+      "fire station",
+      "fire department",
+      "fire brigade",
+      "소방서",
+      "소방"
+    ],
+
+
+    station: [
+      "station",
+      "train station",
+      "railway station",
+      "subway station",
+      "역",
+      "기차역",
+      "지하철역"
+    ],
+
+
+    school: [
+      "school",
+      "university",
+      "college",
+      "학교",
+      "대학교"
+    ],
+
+
+    airport: [
+      "airport",
+      "aerodrome",
+      "공항",
+      "비행장"
+    ],
+
+
+    hotel: [
+      "hotel",
+      "motel",
+      "hostel",
+      "호텔",
+      "모텔"
+    ],
+
+
+    mall: [
+      "mall",
+      "shopping center",
+      "shopping centre",
+      "department store",
+      "쇼핑몰",
+      "백화점",
+      "마트"
+    ],
+
+
+    restaurant: [
+      "restaurant",
+      "cafe",
+      "food",
+      "식당",
+      "음식점",
+      "카페"
+    ]
+
+  };
+
+
+  const values = [
+
+    originalQuery,
+
+    ...(base[category] ||
+      CATEGORIES[category]?.keywords ||
+      [])
+
+  ];
+
+
+  return Array.from(
+
+    new Set(
+
+      values
+
+        .map(normalizeKey)
+
+        .filter(Boolean)
+
+    )
+
+  ).slice(
+    0,
+    SEARCH_QUERY_LIMIT
+  );
+
+}
+
+
+/* =========================================================
+   GEOCODING
+   ========================================================= */
+
+async function geocodeQuery(
+  query,
+  center,
+  forcedCategory = null
+) {
+
+  const lat =
+    Number(center.lat);
+
+  const lon =
+    Number(center.lng);
+
+
+  const deltaLat =
+    RADIUS / 111000;
+
+
+  const deltaLon =
+    RADIUS /
+    (
+      111000 *
+      Math.max(
+        0.15,
+        Math.cos(
+          lat * Math.PI / 180
+        )
+      )
+    );
+
+
+  const params =
+    new URLSearchParams({
+
+      q:
+        query,
+
+      format:
+        "jsonv2",
+
+      addressdetails:
+        "1",
+
+      namedetails:
+        "1",
+
+      extratags:
+        "1",
+
+      limit:
+        "50",
+
+      dedupe:
+        "1",
+
+      "accept-language":
+        "ko,en"
+
+    });
+
+
+  /*
+   * 중요:
+   * bounded=1 사용하지 않는다.
+   *
+   * viewbox는 참고 영역만 제공한다.
+   */
+  params.set(
+    "viewbox",
+    [
+      lon - deltaLon,
+      lat + deltaLat,
+      lon + deltaLon,
+      lat - deltaLat
+    ].join(",")
+  );
+
+
+  const places = [];
+
+
+  /*
+   * NOMINATIM
+   */
+
+  try {
+
+    const nominatim =
+      await fetchJson(
+
+        `${API.nominatim}?${params.toString()}`,
+
+        {},
+
+        15000
+
+      );
+
+
+    if (
+      Array.isArray(nominatim)
+    ) {
+
+      places.push(
+
+        ...nominatim
+
+          .map(item =>
+            normalizeNominatim(
+              item,
+              forcedCategory
+            )
+          )
+
+          .filter(Boolean)
+
+      );
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "Nominatim 실패:",
+      query,
+      error
+    );
+
+  }
+
+
+  /*
+   * PHOTON
+   */
+
+  try {
+
+    const photonParams =
+      new URLSearchParams({
+
+        q:
+          query,
+
+        lat:
+          lat.toFixed(6),
+
+        lon:
+          lon.toFixed(6),
+
+        limit:
+          "50",
+
+        lang:
+          "en"
+
+      });
+
+
+    const photon =
+      await fetchJson(
+
+        `${API.photon}?${photonParams.toString()}`,
+
+        {},
+
+        15000
+
+      );
+
+
+    if (
+      Array.isArray(
+        photon.features
+      )
+    ) {
+
+      places.push(
+
+        ...photon.features
+
+          .map(feature =>
+            normalizePhoton(
+              feature,
+              forcedCategory
+            )
+          )
+
+          .filter(Boolean)
+
+      );
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "Photon 실패:",
+      query,
+      error
+    );
+
+  }
+
+
+  return places;
+
+}
+
+
+/* =========================================================
+   TRANSLATION
+   ========================================================= */
+
+async function translateText(
+  query,
+  targetLanguage
+) {
+
+  try {
+
+    const params =
+      new URLSearchParams({
+
+        q:
+          query,
+
+        langpair:
+          `autodetect|${targetLanguage}`
+
+      });
+
+
+    const data =
+      await fetchJson(
+
+        `${API.translate}?${params.toString()}`,
+
+        {},
+
+        8000
+
+      );
+
+
+    return (
+      data?.responseData?.translatedText ||
+      query
+    );
+
+  } catch (error) {
+
+    return query;
+
+  }
+
+}
+
+
+/* =========================================================
+   GENERAL SEARCH
+   ========================================================= */
+
+async function searchGeneralQuery(
+  query,
+  center,
+  category
+) {
+
+  const results = [];
+
+  const translated =
+    new Set([query]);
+
+
+  /*
+   * 카테고리가 명확하면
+   * 번역 API를 굳이 거치지 않고
+   * 내부 다국어 검색어를 사용한다.
+   *
+   * 특히 경찰서 검색에서
+   * 한국어 -> 영어 번역 결과만 기다리는
+   * 기존 문제를 차단한다.
+   */
+  if (!category) {
+
+    const [
+      en,
+      ko
+    ] =
+      await Promise.all([
+
+        translateText(
+          query,
+          "en"
+        ),
+
+        translateText(
+          query,
+          "ko"
+        )
+
+      ]);
+
+
+    translated.add(en);
+
+    translated.add(ko);
+
+
+    if (
+      normalizeKey(en) !==
+      normalizeKey(query)
+    ) {
+
+      showTranslate(
+        `🌐 번역 보조: ${query} → ${en}`
+      );
+
+    }
+
+  }
+
+
+  const terms =
+    category
+
+      ? buildCategorySearchTerms(
+          category,
+          query
+        )
+
+      : Array.from(translated)
+          .filter(Boolean)
+          .slice(0, 6);
+
+
+  /*
+   * 검색 요청을 순차 처리하여
+   * 공용 API 과부하 및 브라우저 동시 연결 문제를 줄인다.
+   */
+  for (const term of terms) {
+
+    if (!term) {
+      continue;
+    }
+
+
+    try {
+
+      results.push(
+
+        ...await geocodeQuery(
+          term,
+          center,
+          category
+        )
+
+      );
+
+    } catch (error) {
+
+      console.warn(
+        "검색어 실패:",
+        term,
+        error
+      );
+
+    }
+
+  }
+
+
+  return results;
+
+}
+
+
+/* =========================================================
+   MARKER
+   ========================================================= */
+
+function createMarker(place) {
+
+  const icon =
+    L.divIcon({
+
+      className: "",
+
+      html:
+        `
+        <div
+          class="marker-base ${
+            place.markerClass ||
+            "marker-default"
+          }"
+        >
+          <span>
+            ${place.icon || "📍"}
+          </span>
+        </div>
+        `,
+
+      iconSize:
+        [36, 36],
+
+      iconAnchor:
+        [18, 36],
+
+      popupAnchor:
+        [0, -32]
+
+    });
+
+
+  const marker =
+    L.marker(
+
+      [
+        place.lat,
+        place.lon
+      ],
+
+      {
+
+        icon,
+
+        title:
+          place.name,
+
+        riseOnHover:
+          true,
+
+        zIndexOffset:
+          500
+
+      }
+
+    );
+
+
+  const tags =
+    place.tags || {};
+
+
+  const phone =
+    tags.phone ||
+    tags["contact:phone"] ||
+    "";
+
+
+  const website =
+    tags.website ||
+    tags["contact:website"] ||
+    "";
+
+
+  const openingHours =
+    tags.opening_hours ||
+    "";
+
+
+  let extra = "";
+
+
+  if (phone) {
+
+    extra +=
+      `
+      <div
+        style="
+          margin-top:4px;
+          font-size:11px
+        "
+      >
+        ☎️ ${escapeHtml(phone)}
+      </div>
+      `;
+
+  }
+
+
+  if (openingHours) {
+
+    extra +=
+      `
+      <div
+        style="
+          margin-top:4px;
+          font-size:11px
+        "
+      >
+        🕒 ${escapeHtml(openingHours)}
+      </div>
+      `;
+
+  }
+
+
+  if (website) {
+
+    let url =
+      String(website).trim();
+
+
+    if (
+      !/^https?:\/\//i.test(url)
+    ) {
+
+      url =
+        `https://${url}`;
+
+    }
+
+
+    extra +=
+      `
+      <div
+        style="
+          margin-top:5px;
+          font-size:11px
+        "
+      >
+        🌐
+        <a
+          href="${escapeHtml(url)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          웹사이트
+        </a>
+      </div>
+      `;
+
+  }
+
+
+  marker.bindPopup(
+
+    `
+    <div
+      style="
+        min-width:240px;
+        max-width:310px
+      "
+    >
+
+      <div
+        style="
+          font-size:15px;
+          font-weight:700;
+          margin-bottom:6px
+        "
+      >
+        ${place.icon || "📍"}
+        ${escapeHtml(place.name)}
+      </div>
+
+
+      <div
+        style="
+          font-size:11px;
+          color:#3498db;
+          margin-bottom:6px
+        "
+      >
+        ${escapeHtml(
+          place.typeName ||
+          "장소 | Place"
+        )}
+      </div>
+
+
+      ${
+        place.address
+          ?
+
+          `
+          <div
+            style="
+              font-size:11px;
+              line-height:1.45;
+              margin-bottom:6px
+            "
+          >
+            📍
+            ${escapeHtml(place.address)}
+          </div>
+          `
+
+          : ""
+      }
+
+
+      ${extra}
+
+
+      <div
+        style="
+          margin-top:7px;
+          padding-top:5px;
+          border-top:1px solid #eee;
+          font-size:10px;
+          color:#888
+        "
+      >
+        ${place.lat.toFixed(6)},
+        ${place.lon.toFixed(6)}
+      </div>
+
+    </div>
+    `
+
+  );
+
+
+  return marker;
+
+}
+
+
+/* =========================================================
+   SEARCH RESULT
+   ========================================================= */
+
+function renderSearchResults(
+  results
+) {
+
+  const box =
+    document.getElementById(
+      "place-search-result"
+    );
+
+
+  const list =
+    document.getElementById(
+      "search-result-list"
+    );
+
+
+  const count =
+    document.getElementById(
+      "search-result-count"
+    );
+
+
+  box.style.display =
+    "block";
+
+
+  list.innerHTML =
+    "";
+
+
+  count.textContent =
+    results.length
+      ? `(${results.length})`
+      : "";
+
+
+  if (!results.length) {
+
+    list.innerHTML =
+      `
+      <div class="search-result-empty">
+        ❌ 검색 결과가 없습니다.
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  const center =
+    getSearchCenter();
+
+
+  results.forEach(place => {
+
+    const item =
+      document.createElement(
+        "div"
+      );
+
+
+    item.className =
+      "search-result-item";
+
+
+    item.innerHTML =
+      `
+      <div class="search-result-name">
+
+        ${place.icon || "📍"}
+
+        ${escapeHtml(
+          place.name
+        )}
+
+      </div>
+
+
+      <div class="search-result-type">
+
+        ${escapeHtml(
+          place.typeName ||
+          "장소 | Place"
+        )}
+
+        ·
+
+        ${formatDistance(
+          map.distance(
+            center,
+            [
+              place.lat,
+              place.lon
+            ]
+          )
+        )}
+
+      </div>
+
+
+      ${
+        place.address
+
+          ?
+
+          `
+          <div class="search-result-address">
+
+            📍
+
+            ${escapeHtml(
+              place.address
+            )}
+
+          </div>
+          `
+
+          : ""
+      }
+      `;
+
+
+    item.onclick =
+      () => selectSearchResult(
+        place
+      );
+
+
+    list.appendChild(
+      item
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   SELECT SEARCH RESULT
+   ========================================================= */
+
+function selectSearchResult(
+  place
+) {
+
+  searchResultGroup.clearLayers();
+
+
+  const marker =
+    createMarker(place)
+      .addTo(
+        searchResultGroup
+      );
+
+
+  const start =
+    getNavigationStart();
+
+
+  const end =
+    L.latLng(
+      place.lat,
+      place.lon
+    );
+
+
+  waypoints = [
+    start,
+    end
+  ];
+
+
+  setRouteMarkers(
+    start,
+    end
+  );
+
+
+  map.setView(
+    end,
+    Math.max(
+      map.getZoom(),
+      16
+    )
+  );
+
+
+  setTimeout(
+    () => marker.openPopup(),
+    200
+  );
+
+
+  drawRoute(
+    start,
+    end
+  );
+
+}
+
+
+/* =========================================================
+   ROUTE MARKERS
+   ========================================================= */
+
+function setRouteMarkers(
+  start,
+  end
+) {
+
+  routeMarkers.forEach(
+    marker =>
+      map.removeLayer(marker)
+  );
+
+
+  routeMarkers = [
+
+    L.circleMarker(
+      start,
+      {
+
+        radius:
+          8,
+
+        fillColor:
+          "#2ecc71",
+
+        color:
+          "#fff",
+
+        weight:
+          2,
+
+        fillOpacity:
+          1,
+
+        interactive:
+          false
+
+      }
+    ).addTo(map),
+
+
+    L.circleMarker(
+      end,
+      {
+
+        radius:
+          8,
+
+        fillColor:
+          "#e67e22",
+
+        color:
+          "#fff",
+
+        weight:
+          2,
+
+        fillOpacity:
+          1,
+
+        interactive:
+          false
+
+      }
+    ).addTo(map)
+
+  ];
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+async function searchPlace() {
+
+  const input =
+    document.getElementById(
+      "place-search-input"
+    );
+
+
+  const query =
+    input.value.trim();
+
+
+  if (!query) {
+
+    showStatus(
+      "검색어를 입력해 주세요.",
+      "error"
+    );
+
+    input.focus();
+
+    return;
+
+  }
+
+
+  const requestId =
+    ++searchRequestId;
+
+
+  const button =
+    document.getElementById(
+      "place-search-button"
+    );
+
+
+  const resultBox =
+    document.getElementById(
+      "place-search-result"
+    );
+
+
+  const resultList =
+    document.getElementById(
+      "search-result-list"
+    );
+
+
+  const center =
+    getSearchCenter();
+
+
+  /*
+   * 반드시 카테고리부터 판단.
+   *
+   * "경찰서"
+   * "police"
+   * "police station"
+   *
+   * 모두 police 카테고리로 들어간다.
+   */
+  const category =
+    detectCategory(query);
+
+
+  button.disabled =
+    true;
+
+
+  resultBox.style.display =
+    "block";
+
+
+  resultList.innerHTML =
+    `
+    <div class="search-result-empty">
+      🔎
+      "${escapeHtml(query)}"
+      검색 중...
+    </div>
+    `;
+
+
+  showTranslate("");
+
+
+  if (category) {
+
+    showStatus(
+      `🔎 ${CATEGORIES[category].name} 검색 중...`
+    );
+
+  } else {
+
+    showStatus(
+      `🔎 "${query}" 검색 중...`
+    );
+
+  }
+
+
+  try {
+
+    let results = [];
+
+
+    /*
+     * 1순위:
+     * 서버 측 Overpass
+     *
+     * 한국어/영어와 무관하게
+     * OSM 태그로 검색한다.
+     */
+    if (category) {
+
+      try {
+
+        results.push(
+
+          ...await fetchOverpassCategory(
+            category,
+            center
+          )
+
+        );
+
+      } catch (error) {
+
+        console.warn(
+          "Overpass 카테고리 검색 실패:",
+          error
+        );
+
+      }
+
+
+      if (
+        requestId !==
+        searchRequestId
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+       * 2순위:
+       * Nominatim + Photon
+       */
+
+      results.push(
+
+        ...await searchGeneralQuery(
+          query,
+          center,
+          category
+        )
+
+      );
+
+    } else {
+
+      /*
+       * 일반 장소 검색
+       */
+
+      results.push(
+
+        ...await searchGeneralQuery(
+          query,
+          center,
+          null
+        )
+
+      );
+
+    }
+
+
+    if (
+      requestId !==
+      searchRequestId
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+     * 반경 20km
+     */
+
+    results =
+      results
+
+        .filter(place =>
+
+          map.distance(
+
+            center,
+
+            [
+              place.lat,
+              place.lon
+            ]
+
+          ) <= RADIUS
+
+        );
+
+
+    /*
+     * 카테고리 검색이면
+     * 해당 카테고리만 유지.
+     */
+    if (category) {
+
+      results =
+        results.filter(
+          place =>
+            place.categoryKey ===
+            category
+        );
+
+    }
+
+
+    /*
+     * 경찰 강제 분류
+     */
+    if (category === "police") {
+
+      results =
+        results.map(place => {
+
+          place.categoryKey =
+            "police";
+
+          place.icon =
+            CATEGORIES.police.icon;
+
+          place.typeName =
+            CATEGORIES.police.name;
+
+          place.markerClass =
+            CATEGORIES.police.markerClass;
+
+          return place;
+
+        });
+
+    }
+
+
+    /*
+     * 중복 제거
+     */
+
+    results =
+      dedupePlaces(results);
+
+
+    /*
+     * 거리순
+     */
+
+    results.sort(
+      (a, b) =>
+
+        map.distance(
+          center,
+          [
+            a.lat,
+            a.lon
+          ]
+        )
+
+        -
+
+        map.distance(
+          center,
+          [
+            b.lat,
+            b.lon
+          ]
+        )
+
+    );
+
+
+    /*
+     * 최대 200개
+     */
+
+    results =
+      results.slice(
+        0,
+        MAX_RESULTS
+      );
+
+
+    if (
+      requestId !==
+      searchRequestId
+    ) {
+
+      return;
+
+    }
+
+
+    renderSearchResults(
+      results
+    );
+
+
+    if (results.length) {
+
+      showPlaceStatus(
+        `✅ ${
+          category
+            ? CATEGORIES[category].name
+            : "장소"
+        } ${results.length}개 · 반경 20km`
+      );
+
+
+      showStatus(
+        `✅ 검색 완료: ${results.length}개`,
+        "success"
+      );
+
+    } else {
+
+      showPlaceStatus(
+        `⚠️ "${query}" · 반경 20km 결과 없음`
+      );
+
+
+      showStatus(
+        `❌ "${query}" 검색 결과가 없습니다.`,
+        "error"
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "검색 실패:",
+      error
+    );
+
+
+    if (
+      requestId ===
+      searchRequestId
+    ) {
+
+      renderSearchResults([]);
+
+      showStatus(
+        "❌ 검색 실패. 잠시 후 다시 시도해 주세요.",
+        "error"
+      );
+
+    }
+
+  } finally {
+
+    if (
+      requestId ===
+      searchRequestId
+    ) {
+
+      button.disabled =
+        false;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   ROUTING
+   ========================================================= */
+
+async function fetchRoute(
+  start,
+  end
+) {
+
+  const servers = {
+
+    driving: [
+
+      "https://router.project-osrm.org/route/v1/driving/",
+
+      "https://routing.openstreetmap.de/routed-car/route/v1/driving/"
+
+    ],
+
+
+    foot: [
+
+      "https://routing.openstreetmap.de/routed-foot/route/v1/driving/"
+
+    ],
+
+
+    bike: [
+
+      "https://routing.openstreetmap.de/routed-bike/route/v1/driving/"
+
+    ]
+
+  }[currentProfile] || [];
+
+
+  let lastError =
+    null;
+
+
+  for (
+    const base of servers
+  ) {
+
+    try {
+
+      return await fetchJson(
+
+        `${
+          base
+        }${
+          start.lng
+        },${
+          start.lat
+        };${
+          end.lng
+        },${
+          end.lat
+        }?overview=full&geometries=geojson&steps=true`,
+
+        {},
+
+        15000
+
+      );
+
+    } catch (error) {
+
+      lastError =
+        error;
+
+    }
+
+  }
+
+
+  throw (
+    lastError ||
+    new Error("route failed")
+  );
+
+}
+
+
+/* =========================================================
+   DRAW ROUTE
+   ========================================================= */
+
+async function drawRoute(
+  start,
+  end
+) {
+
+  const requestId =
+    ++routeRequestId;
+
+
+  if (polyline) {
+
+    map.removeLayer(
+      polyline
+    );
+
+    polyline =
+      null;
+
+  }
+
+
+  document.getElementById(
+    "route-info"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "info-distance"
+  ).textContent =
+    "계산 중...";
+
+
+  document.getElementById(
+    "info-duration"
+  ).textContent =
+    "계산 중...";
+
+
+  try {
+
+    const data =
+      await fetchRoute(
+        start,
+        end
+      );
+
+
+    if (
+      requestId !==
+      routeRequestId
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      !data.routes ||
+      !data.routes.length
+    ) {
+
+      throw new Error(
+        "no route"
+      );
+
+    }
+
+
+    const route =
+      data.routes[0];
+
+
+    const points =
+      route.geometry.coordinates
+        .map(
+          coord => [
+            coord[1],
+            coord[0]
+          ]
+        );
+
+
+    const lineColor =
+      currentProfile === "foot"
+        ? "#2ecc71"
+
+        :
+
+      currentProfile === "bike"
+        ? "#f39c12"
+
+        :
+
+      "#e74c3c";
+
+
+    polyline =
+      L.polyline(
+        points,
+        {
+
+          color:
+            lineColor,
+
+          weight:
+            6,
+
+          opacity:
+            .85,
+
+          dashArray:
+            currentProfile ===
+            "driving"
+
+              ? null
+
+              : "8,8",
+
+          lineJoin:
+            "round",
+
+          lineCap:
+            "round"
+
+        }
+      ).addTo(map);
+
+
+    document.getElementById(
+      "info-distance"
+    ).textContent =
+      formatDistance(
+        route.distance
+      );
+
+
+    document.getElementById(
+      "info-duration"
+    ).textContent =
+      formatDuration(
+        route.duration
+      );
+
+
+    map.fitBounds(
+      polyline.getBounds(),
+      {
+        padding:
+          [60, 60]
+      }
+    );
+
+
+    showStatus(
+      "✅ 실제 도로 기준 경로 안내 완료",
+      "success"
+    );
+
+  } catch (error) {
+
+    if (
+      requestId !==
+      routeRequestId
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+     * 도로 라우팅 실패 시
+     * 직선거리 fallback
+     */
+
+    const directDistance =
+      map.distance(
+        start,
+        end
+      );
+
+
+    const speedKmH =
+      currentProfile === "foot"
+
+        ? 4.5
+
+        :
+
+      currentProfile === "bike"
+
+        ? 15
+
+        :
+
+      40;
+
+
+    polyline =
+      L.polyline(
+
+        [
+          [
+            start.lat,
+            start.lng
+          ],
+
+          [
+            end.lat,
+            end.lng
+          ]
+        ],
+
+        {
+
+          color:
+            "#3388ff",
+
+          weight:
+            4,
+
+          dashArray:
+            "7,9",
+
+          opacity:
+            .85
+
+        }
+
+      ).addTo(map);
+
+
+    document.getElementById(
+      "info-distance"
+    ).textContent =
+      formatDistance(
+        directDistance
+      );
+
+
+    document.getElementById(
+      "info-duration"
+    ).textContent =
+      formatDuration(
+        (
+          directDistance /
+          1000
+        ) /
+        speedKmH *
+        3600
+      );
+
+
+    map.fitBounds(
+      polyline.getBounds(),
+      {
+        padding:
+          [60, 60]
+      }
+    );
+
+
+    showStatus(
+      "⚠️ 도로 경로 서버 실패 → 직선거리로 표시합니다.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   GPS
+   ========================================================= */
+
+function locateUser() {
+
+  if (
+    !navigator.geolocation
+  ) {
+
+    showStatus(
+      "⚠️ 이 브라우저는 GPS를 지원하지 않습니다.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  showStatus(
+    "📡 현재 위치 확인 중..."
+  );
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    position => {
+
+      const {
+        latitude,
+        longitude
+      } = position.coords;
+
+
+      myLatLng =
+        L.latLng(
+          latitude,
+          longitude
+        );
+
+
+      userSelectedStart =
+        null;
+
+
+      map.setView(
+        [
+          latitude,
+          longitude
+        ],
+        15
+      );
+
+
+      if (myLocationMarker) {
+
+        map.removeLayer(
+          myLocationMarker
+        );
+
+      }
+
+
+      myLocationMarker =
+        L.circleMarker(
+
+          [
+            latitude,
+            longitude
+          ],
+
+          {
+
+            radius:
+              9,
+
+            fillColor:
+              "#9b59b6",
+
+            color:
+              "#fff",
+
+            weight:
+              3,
+
+            fillOpacity:
+              1
+
+          }
+
+        )
+
+        .addTo(map)
+
+        .bindPopup(
+
+          `
+          <b>📍 현재 GPS 위치</b>
+
+          <br>
+
+          위도:
+          ${latitude.toFixed(6)}
+
+          <br>
+
+          경도:
+          ${longitude.toFixed(6)}
+
+          <br><br>
+
+          검색 반경:
+          20km
+          `
+
+        );
+
+
+      showPlaceStatus(
+        "📍 GPS 위치를 검색 기준으로 사용합니다."
+      );
+
+
+      showStatus(
+        "✅ GPS 위치 확인 완료",
+        "success"
+      );
+
+    },
+
+
+    error => {
+
+      console.warn(
+        "GPS 실패:",
+        error
+      );
+
+
+      showStatus(
+        "⚠️ GPS 위치를 확인하지 못했습니다. 지도 클릭 위치를 사용할 수 있습니다.",
+        "error"
+      );
+
+    },
+
+
+    {
+
+      enableHighAccuracy:
+        true,
+
+      timeout:
+        15000,
+
+      maximumAge:
+        0
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   CLEAR
+   ========================================================= */
+
+function clearEverything() {
+
+  ++searchRequestId;
+
+  ++routeRequestId;
+
+
+  waypoints =
+    [];
+
+
+  userSelectedStart =
+    null;
+
+
+  if (polyline) {
+
+    map.removeLayer(
+      polyline
+    );
+
+    polyline =
+      null;
+
+  }
+
+
+  routeMarkers.forEach(
+    marker =>
+      map.removeLayer(marker)
+  );
+
+
+  routeMarkers =
+    [];
+
+
+  searchResultGroup.clearLayers();
+
+
+  document.getElementById(
+    "route-info"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "place-search-result"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "place-search-input"
+  ).value =
+    "";
+
+
+  showTranslate("");
+
+  hideStatus();
+
+
+  showPlaceStatus(
+    "🔎 검색 기준 위치: 지도 중심 · 반경 20km"
+  );
+
+}
+
+
+/* =========================================================
+   MAP CLICK
+   ========================================================= */
+
+function handleMapClick(
+  event
+) {
+
+  /*
+   * 세 번째 클릭:
+   * 경로 전체 초기화
+   */
+
+  if (
+    waypoints.length >= 2
+  ) {
+
+    waypoints =
+      [];
+
+
+    userSelectedStart =
+      null;
+
+
+    if (polyline) {
+
+      map.removeLayer(
+        polyline
+      );
+
+      polyline =
+        null;
+
+    }
+
+
+    routeMarkers.forEach(
+      marker =>
+        map.removeLayer(
+          marker
+        )
+    );
+
+
+    routeMarkers =
+      [];
+
+
+    searchResultGroup.clearLayers();
+
+
+    document.getElementById(
+      "route-info"
+    ).style.display =
+      "none";
+
+
+    hideStatus();
+
+
+    showStatus(
+      "📍 경로가 초기화되었습니다. 출발지를 다시 클릭하세요.",
+      "success"
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+   * 첫 번째 클릭:
+   * 출발지
+   */
+
+  waypoints.push(
+    event.latlng
+  );
+
+
+  if (
+    waypoints.length === 1
+  ) {
+
+    userSelectedStart = {
+
+      lat:
+        event.latlng.lat,
+
+      lng:
+        event.latlng.lng
+
+    };
+
+
+    const marker =
+      L.circleMarker(
+
+        event.latlng,
+
+        {
+
+          radius:
+            8,
+
+          fillColor:
+            "#2ecc71",
+
+          color:
+            "#fff",
+
+          weight:
+            2,
+
+          fillOpacity:
+            1
+
+        }
+
+      )
+
+      .addTo(map)
+
+      .bindPopup(
+
+        `
+        <b>📍 출발지</b>
+
+        <br>
+
+        위도:
+        ${event.latlng.lat.toFixed(6)}
+
+        <br>
+
+        경도:
+        ${event.latlng.lng.toFixed(6)}
+
+        <br><br>
+
+        검색 범위:
+        20km
+        `
+
+      )
+
+      .openPopup();
+
+
+    routeMarkers.push(
+      marker
+    );
+
+
+    showPlaceStatus(
+      "📍 출발지를 검색 기준으로 사용합니다."
+    );
+
+
+    showStatus(
+      "✅ 출발지 설정 완료\n📍 도착지를 클릭하세요.",
+      "success"
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+   * 두 번째 클릭:
+   * 도착지
+   */
+
+  const marker =
+    L.circleMarker(
+
+      event.latlng,
+
+      {
+
+        radius:
+          8,
+
+        fillColor:
+          "#e67e22",
+
+        color:
+          "#fff",
+
+        weight:
+          2,
+
+        fillOpacity:
+          1
+
+      }
+
+    )
+
+    .addTo(map)
+
+    .bindPopup(
+
+      `
+      <b>📍 도착지</b>
+
+      <br>
+
+      위도:
+      ${event.latlng.lat.toFixed(6)}
+
+      <br>
+
+      경도:
+      ${event.latlng.lng.toFixed(6)}
+      `
+
+    )
+
+    .openPopup();
+
+
+  routeMarkers.push(
+    marker
+  );
+
+
+  showStatus(
+    "🧭 실제 도로 경로 계산 중..."
+  );
+
+
+  drawRoute(
+    waypoints[0],
+    waypoints[1]
+  );
+
+}
+
+
+/* =========================================================
+   EVENT
+   ========================================================= */
+
+document
+
+  .getElementById(
+    "place-search-button"
+  )
+
+  .addEventListener(
+    "click",
+    searchPlace
+  );
+
+
+document
+
+  .getElementById(
+    "place-search-input"
+  )
+
+  .addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        event.preventDefault();
+
+        searchPlace();
+
+      }
+
+    }
+  );
+
+
+document
+
+  .getElementById(
+    "btn-gps"
+  )
+
+  .addEventListener(
+    "click",
+    locateUser
+  );
+
+
+document
+
+  .getElementById(
+    "btn-clear"
+  )
+
+  .addEventListener(
+    "click",
+    clearEverything
+  );
+
+
+map.on(
+  "click",
+  handleMapClick
+);
+
+
+/*
+ * 지도 이동 시 자동 검색하지 않는다.
+ */
+
+map.on(
+  "moveend",
+  () => {
+
+    if (
+      !waypoints.length
+    ) {
+
+      showPlaceStatus(
+        "🔎 검색 기준 위치: 지도 중심 · 반경 20km"
+      );
+
+    }
+
+  }
+);
+
+
+map.on(
+  "zoomend",
+  () => {
+
+    if (
+      !waypoints.length
+    ) {
+
+      showPlaceStatus(
+        "🔎 검색 기준 위치: 지도 중심 · 반경 20km"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   TRANSPORT MODE
+   ========================================================= */
+
+document
+
+  .querySelectorAll(
+    ".mode-btn"
+  )
+
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        currentProfile =
+          button.dataset.profile;
+
+
+        document
+
+          .querySelectorAll(
+            ".mode-btn"
+          )
+
+          .forEach(item => {
+
+            item.classList.remove(
+              "active"
+            );
+
+          });
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        if (
+          waypoints.length === 2
+        ) {
+
+          drawRoute(
+            waypoints[0],
+            waypoints[1]
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+showPlaceStatus(
+  "🔎 지도 준비 완료 · 검색어를 입력하세요."
+);
+
+</script>
+
+</body>
+</html>
