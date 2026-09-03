@@ -11,11 +11,17 @@
 
     <title>대한민국 여행 안전정보</title>
 
-
+    <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
         rel="stylesheet">
 
+    <!-- Leaflet CSS -->
+
+<!-- Leaflet CSS -->
+<link
+    rel="stylesheet"
+    href="/css/leaflet.css">
 
     <style>
 
@@ -368,10 +374,102 @@
             .hero h1 {
 
                 font-size: 32px;
+}
 
-            }
+}
+    /* 지도 확대 */
+    #map-wrapper.map-expanded {
+    position: fixed !important;
+    top: 20px !important;
+    left: 20px !important;
+    right: 20px !important;
+    bottom: 20px !important;
 
+    width: auto !important;
+    height: auto !important;
+
+    z-index: 99999 !important;
+
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#map-wrapper.map-expanded #map {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#gps-btn {
+    position: absolute !important;
+    right: 12px !important;
+    bottom: 12px !important;
+
+    width: 42px !important;
+    height: 42px !important;
+
+    display: block !important;
+
+    background: white !important;
+    color: #222 !important;
+
+    border: 1px solid #999 !important;
+    border-radius: 8px !important;
+
+    font-size: 24px !important;
+    line-height: 38px !important;
+
+    cursor: pointer !important;
+    z-index: 10000 !important;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+#gps-btn:hover {
+    background: #f5f5f5;
         }
+
+#map-search {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+
+    width: 70%;
+    max-width: 450px;
+
+    z-index: 10000;
+}
+
+#search-input {
+    flex: 1;
+    height: 42px;
+
+    padding: 0 12px;
+
+    border: 1px solid #aaa;
+    border-right: none;
+
+    border-radius: 8px 0 0 8px;
+
+    background: white;
+
+    font-size: 14px;
+}
+
+#search-btn {
+    width: 65px;
+    height: 42px;
+
+    border: 1px solid #aaa;
+
+    border-radius: 0 8px 8px 0;
+
+    background: white;
+
+    cursor: pointer;
+}
 
     </style>
 
@@ -667,7 +765,7 @@
 
 <section
     class="section"
-    id="map">
+    id="map-section">
 
 
     <h2 data-i18n="safetyMap">
@@ -685,22 +783,44 @@
 
     </p>
 
-
     <div
+    	id="map-wrapper"
+    	style="
+        	position:relative;
+		height:300px;
+        	border-radius:20px;
+        	overflow:hidden;
+		cursor:pointer;
+    "
+>
+    <!-- 실제 지도 -->
+    <div
+        id="map"
         style="
-            height:300px;
-            background:#dbe8f4;
-            border-radius:20px;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-        "
-        data-i18n="googleMapPlaceholder">
-
-        Google Maps 연동 예정
-
+            width:100%;
+            height:100%;
+        ">
     </div>
 
+    <!-- 지도 위 검색창 -->
+<div id="map-search">
+
+    <input
+        id="search-input"
+        type="text"
+        placeholder="장소 검색"
+    >
+
+    <button id="search-btn" type="button">
+        검색
+    </button>
+</div>
+
+
+    <!-- GPS 버튼 -->
+    <button id="gps-btn" type="button">⌖</button>
+
+</div>
 </section>
 
 
@@ -785,6 +905,169 @@
 
 
 <script src="js/language.js"></script>
+
+<!-- Leaflet JavaScript -->
+<script src="/js/leaflet.js"></script>
+
+<script>
+"use strict";
+
+const map = L.map("map", {
+    center: [37.5665, 126.9780],
+    zoom: 14,
+    minZoom: 2,
+    maxZoom: 19,
+    preferCanvas: true,
+    zoomControl: true,
+    doubleClickZoom: false
+});
+
+L.tileLayer(
+      "/tile.php?z={z}&x={x}&y={y}",
+	{
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+    }
+).addTo(map);
+
+
+/* =========================
+   GPS 현재 위치
+========================= */
+
+document.getElementById("gps-btn").addEventListener("click", function () {
+
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            map.setView([lat, lon], 16);
+
+            L.marker([lat, lon])
+                .addTo(map)
+                .bindPopup("현재 위치")
+                .openPopup();
+        },
+
+        function (error) {
+            alert("현재 위치를 가져올 수 없습니다.");
+        }
+    );
+
+});
+
+/* =========================
+   지도 확대/축소
+========================= */
+
+const mapWrapper = document.getElementById("map-wrapper");
+
+mapWrapper.addEventListener("dblclick", function () {
+
+    if (!mapWrapper.classList.contains("map-expanded")) {
+
+        mapWrapper.classList.add("map-expanded");
+
+        mapWrapper.style.position = "fixed";
+        mapWrapper.style.top = "20px";
+        mapWrapper.style.left = "20px";
+        mapWrapper.style.right = "20px";
+        mapWrapper.style.bottom = "20px";
+        mapWrapper.style.width = "auto";
+        mapWrapper.style.height = "auto";
+        mapWrapper.style.zIndex = "999999";
+        mapWrapper.style.background = "white";
+
+    } else {
+
+        mapWrapper.classList.remove("map-expanded");
+
+        mapWrapper.style.position = "relative";
+        mapWrapper.style.top = "";
+        mapWrapper.style.left = "";
+        mapWrapper.style.right = "";
+        mapWrapper.style.bottom = "";
+        mapWrapper.style.width = "100%";
+        mapWrapper.style.height = "300px";
+        mapWrapper.style.zIndex = "";
+        mapWrapper.style.background = "";
+
+    }
+
+    setTimeout(function () {
+        map.invalidateSize();
+    }, 100);
+
+});
+
+let searchMarker = null;
+
+function searchPlace() {
+
+    const input = document.getElementById("search-input");
+    const query = input.value.trim();
+
+    if (!query) {
+        alert("검색어를 입력해주세요.");
+        return;
+    }
+
+    fetch("/search.php?q=" + encodeURIComponent(query))
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+
+            if (!data || data.length === 0) {
+                alert("검색 결과가 없습니다.");
+                return;
+            }
+
+            const result = data[0];
+
+            const lat = parseFloat(result.lat);
+            const lon = parseFloat(result.lon);
+
+            map.setView([lat, lon], 16);
+
+            if (searchMarker) {
+                map.removeLayer(searchMarker);
+            }
+
+            searchMarker = L.marker([lat, lon])
+                .addTo(map)
+                .bindPopup(result.display_name)
+                .openPopup();
+        })
+        .catch(function (error) {
+
+            console.log(error);
+
+            alert("검색 중 오류가 발생했습니다.");
+        });
+}
+
+document.getElementById("search-btn")
+    .addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+        searchPlace();
+    });
+
+document.getElementById("search-input")
+    .addEventListener("keydown", function (e) {
+
+        e.stopPropagation();
+
+        if (e.key === "Enter") {
+            searchPlace();
+        }
+    });
+
+</script>
 
 </body>
 

@@ -16,6 +16,10 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
         rel="stylesheet">
 
+    <!-- Leaflet 지도 CSS -->
+    <link
+    rel="stylesheet"
+    href="/css/leaflet.css">
 
     <style>
 
@@ -385,7 +389,7 @@
 
 <section
     class="section"
-    id="map">
+    id="map-section">
 
     <h2 data-i18n="safetyMap">
         지역별 안전지도
@@ -395,25 +399,21 @@
         class="section-description"
         data-i18n="mapDescription">
 
-        Google Maps API를 연동하여 주변 병원, 경찰서, 대사관 등의 정보를 제공합니다.
+	지도를 통해 주변 병원, 경찰서, 대사관 등의 정보를 제공합니다.
 
     </p>
 
 
     <div
+        id="map"
         style="
-            height:300px;
-            background:#eadfd3;
-            border-radius:20px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-        "
-        data-i18n="googleMapPlaceholder">
-
-        Google Maps 연동 예정
+                height:300px;
+                border-radius:20px;
+                overflow:hidden;
+        ">
 
     </div>
+
 
 </section>
 
@@ -482,6 +482,32 @@
 
 
 <script src="js/language.js"></script>
+
+
+<!-- Leaflet JavaScript -->
+<script src="/js/leaflet.js"></script>
+
+<script>
+"use strict";
+
+const map = L.map("map", {
+    center: [21.0278, 105.8342],
+    zoom: 14,
+    minZoom: 2,
+    maxZoom: 19,
+    preferCanvas: true,
+    zoomControl: true
+});
+
+L.tileLayer(
+  "/tile.php?z={z}&x={x}&y={y}",
+    {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+    }
+).addTo(map);
+
+</script>
 
 </body>
 
