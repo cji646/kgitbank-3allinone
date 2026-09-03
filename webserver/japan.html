@@ -16,6 +16,9 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
         rel="stylesheet">
 
+    <link
+    rel="stylesheet"
+    href="/css/leaflet.css">
 
     <style>
 
@@ -385,7 +388,7 @@
 
 <section
     class="section"
-    id="map">
+    id="map-section">
 
     <h2 data-i18n="safetyMap">
         지역별 안전지도
@@ -400,18 +403,14 @@
     </p>
 
 
-    <div
-        style="
-            height:300px;
-            background:#f9dfe5;
-            border-radius:20px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-        "
-        data-i18n="googleMapPlaceholder">
 
-        Google Maps 연동 예정
+    <div
+        id="map"
+        style="
+                height:300px;
+                border-radius:20px;
+                overflow:hidden;
+        ">
 
     </div>
 
@@ -482,6 +481,31 @@
 
 
 <script src="js/language.js"></script>
+
+<!-- Leaflet JavaScript -->
+<script src="/js/leaflet.js"></script>
+
+<script>
+"use strict";
+
+const map = L.map("map", {
+    center: [35.6762, 139.6503],
+    zoom: 14,
+    minZoom: 2,
+    maxZoom: 19,
+    preferCanvas: true,
+    zoomControl: true
+});
+
+L.tileLayer(
+  "/tile.php?z={z}&x={x}&y={y}",
+    {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+    }
+).addTo(map);
+
+</script>
 
 </body>
 
