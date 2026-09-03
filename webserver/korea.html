@@ -5,44 +5,27 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <title>대한민국 안전정보 | Tourist Emergency Button</title>
-
-
-    <!-- Google Font -->
-
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
+    <title>대한민국 여행 안전정보</title>
 
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
 
 
     <style>
 
-        /* ===============================
-           기본 설정
-        =============================== */
-
         * {
 
             margin: 0;
+
             padding: 0;
+
             box-sizing: border-box;
-
-        }
-
-
-        html {
-
-            scroll-behavior: smooth;
 
         }
 
@@ -50,28 +33,20 @@
         body {
 
             font-family:
+                "Montserrat",
                 "Noto Sans KR",
                 sans-serif;
 
-            background:
-                #f5f9fd;
+            background: #f4f8fc;
 
-            color:
-                #222;
+            color: #25374a;
 
         }
 
 
-
-        /* ===============================
-           상단 헤더
-        =============================== */
-
         header {
 
-            width: 100%;
-
-            height: 85px;
+            height: 78px;
 
             display: flex;
 
@@ -79,1047 +54,320 @@
 
             justify-content: space-between;
 
-            padding:
-                0 7%;
+            padding: 0 7%;
 
-            background:
-                white;
-
-            border-bottom:
-                1px solid #e5edf5;
+            background: white;
 
         }
 
-
-
-        /* 사이트 제목 */
 
         .site-title {
 
-            font-family:
-                "Montserrat",
-                sans-serif;
+            font-size: 22px;
 
-            font-size:
-                25px;
+            font-weight: 800;
 
-            font-weight:
-                800;
+            color: #31557a;
 
-            color:
-                #1677c8;
+            cursor: pointer;
 
         }
 
-
-        .site-title span {
-
-            color:
-                #0a4778;
-
-        }
-
-
-
-        /* 오른쪽 버튼 */
 
         .header-menu {
 
-            display:
-                flex;
+            display: flex;
 
-            align-items:
-                center;
+            gap: 10px;
 
-            gap:
-                10px;
+            align-items: center;
 
         }
 
 
-        .header-menu select {
+        .language-select {
 
-            padding:
-                10px 15px;
+            padding: 10px;
 
             border:
-                1px solid #d8e2eb;
+                1px solid #d8dfe8;
 
-            border-radius:
-                8px;
+            border-radius: 9px;
 
-            background:
-                white;
-
-            cursor:
-                pointer;
+            background: white;
 
         }
 
 
         .header-button {
 
-            padding:
-                11px 18px;
+            border: none;
 
-            border:
-                none;
+            padding: 10px 16px;
 
-            border-radius:
-                8px;
+            border-radius: 9px;
 
-            background:
-                #eef6fd;
+            cursor: pointer;
 
-            color:
-                #126db7;
+            background: #e9f1fa;
 
-            font-size:
-                14px;
+            color: #31557a;
 
-            font-weight:
-                700;
-
-            cursor:
-                pointer;
-
-            transition:
-                0.25s;
-
-            text-decoration:
-                none;
+            font-weight: 700;
 
         }
 
 
-        .header-button:hover {
+        .login-btn {
 
-            transform:
-                translateY(-2px);
+            background: #315f95;
 
-            background:
-                #1677c8;
-
-            color:
-                white;
-
-            box-shadow:
-                0 5px 15px
-                rgba(22,119,200,0.25);
+            color: white;
 
         }
 
-
-
-        /* ===============================
-           네비게이션
-        =============================== */
 
         nav {
 
-            background:
-                #ffffff;
+            display: flex;
 
-            border-bottom:
-                1px solid #e5edf5;
+            justify-content: center;
 
-            display:
-                flex;
+            gap: 55px;
 
-            justify-content:
-                center;
+            padding: 20px;
 
-            gap:
-                50px;
+            background: white;
+
+            border-top:
+                1px solid #eeeeee;
 
         }
 
 
         nav a {
 
-            text-decoration:
-                none;
+            text-decoration: none;
 
-            color:
-                #555;
+            color: #33485c;
 
-            padding:
-                20px 10px;
-
-            font-size:
-                15px;
-
-            font-weight:
-                600;
-
-            position:
-                relative;
-
-            transition:
-                0.2s;
+            font-weight: 600;
 
         }
 
 
-        nav a:hover {
+        .hero {
 
-            color:
-                #1677c8;
+            padding: 110px 20px;
 
-        }
+            text-align: center;
 
-
-        nav a::after {
-
-            content:
-                "";
-
-            position:
-                absolute;
-
-            left:
-                0;
-
-            bottom:
-                0;
-
-            width:
-                0;
-
-            height:
-                3px;
-
-            background:
-                #1677c8;
-
-            transition:
-                0.25s;
-
-        }
-
-
-        nav a:hover::after {
-
-            width:
-                100%;
-
-        }
-
-
-
-        /* ===============================
-           메인 국가 영역
-        =============================== */
-
-        .country-hero {
-
-            min-height:
-                430px;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            text-align:
-                center;
-
-            padding:
-                80px 20px;
-
-            color:
-                white;
+            color: white;
 
             background:
 
                 linear-gradient(
-                    rgba(0, 50, 100, 0.55),
-                    rgba(0, 70, 130, 0.7)
+                    rgba(35,76,112,0.8),
+                    rgba(58,111,155,0.75)
                 ),
 
-                url(
-                    "https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=1920&q=85"
-                );
+                url("https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=1920&q=85");
 
-            background-size:
-                cover;
+            background-size: cover;
 
-            background-position:
-                center;
+            background-position: center;
 
         }
 
 
-        .country-hero h1 {
+        .hero h1 {
 
-            font-size:
-                55px;
+            font-size: 44px;
 
-            font-weight:
-                800;
-
-            margin-bottom:
-                20px;
-
-            text-shadow:
-                0 5px 20px
-                rgba(0,0,0,0.4);
+            margin-bottom: 20px;
 
         }
 
 
-        .country-hero p {
+        .hero p {
 
-            font-size:
-                19px;
+            font-size: 18px;
 
-            line-height:
-                1.8;
+            line-height: 1.8;
 
         }
 
-
-
-        /* ===============================
-           안전등급 영역
-        =============================== */
 
         .section {
 
-            max-width:
-                1200px;
+            max-width: 1100px;
 
-            margin:
-                auto;
+            margin: auto;
 
-            padding:
-                90px 25px;
+            padding: 90px 25px;
+
+            text-align: center;
 
         }
 
 
-        .section-title {
+        .section h2 {
 
-            text-align:
-                center;
+            font-size: 32px;
 
-            font-size:
-                32px;
-
-            font-weight:
-                800;
-
-            margin-bottom:
-                15px;
+            margin-bottom: 15px;
 
         }
 
 
         .section-description {
 
-            text-align:
-                center;
+            color: #708090;
 
-            color:
-                #777;
-
-            margin-bottom:
-                50px;
+            margin-bottom: 45px;
 
         }
 
 
+        .level-grid {
 
-        /* ===============================
-           안전 등급 카드
-        =============================== */
-
-        .safety-grid {
-
-            display:
-                grid;
+            display: grid;
 
             grid-template-columns:
                 repeat(4, 1fr);
 
-            gap:
-                20px;
+            gap: 18px;
 
         }
 
 
-        .safety-card {
+        .level-card {
 
-            padding:
-                30px 20px;
+            background: white;
 
-            background:
-                white;
+            padding: 35px 20px;
 
-            border-radius:
-                15px;
-
-            text-align:
-                center;
-
-            border:
-                1px solid #e5edf5;
-
-            transition:
-                0.3s;
-
-        }
-
-
-        .safety-card:hover {
-
-            transform:
-                translateY(-7px);
+            border-radius: 18px;
 
             box-shadow:
-                0 15px 30px
+                0 8px 25px
                 rgba(0,0,0,0.08);
 
         }
 
 
-        .level-number {
+        .level-card h3 {
 
-            width:
-                55px;
+            color: #376fa9;
 
-            height:
-                55px;
+            font-size: 24px;
 
-            margin:
-                auto;
-
-            margin-bottom:
-                15px;
-
-            border-radius:
-                50%;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            font-size:
-                20px;
-
-            font-weight:
-                800;
+            margin-bottom: 15px;
 
         }
 
-
-        .level1 {
-
-            background:
-                #dff5e8;
-
-            color:
-                #2a9c60;
-
-        }
-
-
-        .level2 {
-
-            background:
-                #e5f1ff;
-
-            color:
-                #287ac4;
-
-        }
-
-
-        .level3 {
-
-            background:
-                #fff0d9;
-
-            color:
-                #d67a10;
-
-        }
-
-
-        .level4 {
-
-            background:
-                #ffe2e2;
-
-            color:
-                #d94444;
-
-        }
-
-
-        .safety-card h3 {
-
-            margin-bottom:
-                10px;
-
-        }
-
-
-        .safety-card p {
-
-            font-size:
-                13px;
-
-            color:
-                #777;
-
-            line-height:
-                1.7;
-
-        }
-
-
-
-        /* ===============================
-           현재 국가 정보
-        =============================== */
 
         .info-grid {
 
-            display:
-                grid;
+            display: grid;
 
             grid-template-columns:
-                1fr 1fr;
+                repeat(3, 1fr);
 
-            gap:
-                25px;
+            gap: 20px;
 
         }
 
 
         .info-card {
 
-            background:
-                white;
+            background: white;
 
-            padding:
-                35px;
+            padding: 30px;
 
-            border-radius:
-                18px;
+            border-radius: 18px;
 
-            border:
-                1px solid #e3eaf0;
+            text-align: left;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,0.07);
 
         }
 
 
         .info-card h3 {
 
-            font-size:
-                21px;
+            margin-bottom: 15px;
 
-            margin-bottom:
-                20px;
-
-            color:
-                #126db7;
-
-        }
-
-
-        .weather {
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            gap:
-                20px;
-
-        }
-
-
-        .temperature {
-
-            font-size:
-                45px;
-
-            font-weight:
-                800;
-
-            color:
-                #1677c8;
-
-        }
-
-
-        .disaster-item {
-
-            padding:
-                15px;
-
-            margin-bottom:
-                10px;
-
-            border-radius:
-                10px;
-
-            background:
-                #f7fafc;
-
-            border-left:
-                4px solid #1677c8;
-
-        }
-
-
-
-        /* ===============================
-           페이지 소개
-        =============================== */
-
-        .intro-section {
-
-            background:
-                white;
-
-        }
-
-
-        .intro-content {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap:
-                60px;
-
-            align-items:
-                center;
-
-        }
-
-
-        .intro-text h2 {
-
-            font-size:
-                35px;
-
-            margin-bottom:
-                30px;
-
-            color:
-                #0a4778;
-
-        }
-
-
-        .intro-text p {
-
-            font-size:
-                16px;
-
-            line-height:
-                2;
-
-            color:
-                #555;
-
-        }
-
-
-        .intro-image {
-
-            min-height:
-                300px;
-
-            border-radius:
-                20px;
-
-            background:
-
-                url(
-                    "https://images.unsplash.com/photo-1538485399081-7c8979a0f305?auto=format&fit=crop&w=1000&q=80"
-                );
-
-            background-size:
-                cover;
-
-            background-position:
-                center;
-
-        }
-
-
-
-        /* ===============================
-           긴급 연락처
-        =============================== */
-
-        .emergency-section {
-
-            background:
-                #edf6fc;
+            color: #315f95;
 
         }
 
 
         .emergency-grid {
 
-            display:
-                grid;
+            display: grid;
 
             grid-template-columns:
                 repeat(3, 1fr);
 
-            gap:
-                20px;
+            gap: 20px;
 
         }
 
 
         .emergency-card {
 
-            background:
-                white;
+            background: white;
 
-            border-radius:
-                15px;
+            padding: 30px;
 
-            padding:
-                30px;
-
-            text-align:
-                center;
-
-            transition:
-                0.25s;
-
-        }
-
-
-        .emergency-card:hover {
-
-            transform:
-                translateY(-5px);
+            border-radius: 18px;
 
             box-shadow:
-                0 15px 30px
-                rgba(0,0,0,0.08);
+                0 8px 20px
+                rgba(0,0,0,0.07);
 
         }
 
-
-        .emergency-card h3 {
-
-            margin-bottom:
-                15px;
-
-            color:
-                #126db7;
-
-        }
-
-
-        .phone-number {
-
-            font-size:
-                25px;
-
-            font-weight:
-                800;
-
-            color:
-                #333;
-
-        }
-
-
-
-        /* ===============================
-           지도 영역
-        =============================== */
-
-        .map-box {
-
-            width:
-                100%;
-
-            height:
-                500px;
-
-            border-radius:
-                20px;
-
-            overflow:
-                hidden;
-
-            background:
-                #eeeeee;
-
-        }
-
-
-        #map {
-
-            width:
-                100%;
-
-            height:
-                100%;
-
-        }
-
-
-
-        /* ===============================
-           Q&A
-        =============================== */
-
-        .qa-list {
-
-            max-width:
-                900px;
-
-            margin:
-                auto;
-
-        }
-
-
-        .question {
-
-            background:
-                white;
-
-            padding:
-                22px;
-
-            margin-bottom:
-                10px;
-
-            border:
-                1px solid #e5e5e5;
-
-            border-radius:
-                10px;
-
-            cursor:
-                pointer;
-
-            font-weight:
-                700;
-
-            transition:
-                0.2s;
-
-        }
-
-
-        .question:hover {
-
-            border-color:
-                #1677c8;
-
-            color:
-                #1677c8;
-
-        }
-
-
-        .answer {
-
-            display:
-                none;
-
-            padding:
-                20px;
-
-            margin-bottom:
-                15px;
-
-            background:
-                #f6faff;
-
-            border-radius:
-                10px;
-
-            color:
-                #555;
-
-            line-height:
-                1.8;
-
-        }
-
-
-
-        /* ===============================
-           질문 버튼
-        =============================== */
-
-        .question-button {
-
-            display:
-                block;
-
-            margin:
-                40px auto 0;
-
-            padding:
-                15px 35px;
-
-            border:
-                none;
-
-            border-radius:
-                30px;
-
-            background:
-                #1677c8;
-
-            color:
-                white;
-
-            font-size:
-                16px;
-
-            font-weight:
-                700;
-
-            cursor:
-                pointer;
-
-        }
-
-
-
-        /* ===============================
-           Footer
-        =============================== */
 
         footer {
 
-            background:
-                #0a4778;
+            padding: 35px;
 
-            color:
-                white;
+            text-align: center;
 
-            text-align:
-                center;
+            background: #1f3347;
 
-            padding:
-                35px;
-
-            font-size:
-                13px;
+            color: white;
 
         }
 
 
+        @media (max-width: 800px) {
 
-        /* ===============================
-           반응형
-        =============================== */
-
-        @media (max-width: 900px) {
-
-
-            .safety-grid {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-
-            }
-
-
+            .level-grid,
             .info-grid,
-            .intro-content {
-
-                grid-template-columns:
-                    1fr;
-
-            }
-
-
             .emergency-grid {
 
-                grid-template-columns:
-                    1fr;
+                grid-template-columns: 1fr;
 
             }
 
 
             nav {
 
-                gap:
-                    15px;
+                gap: 15px;
 
-            }
-
-        }
-
-
-        @media (max-width: 600px) {
-
-
-            header {
-
-                height:
-                    auto;
-
-                padding:
-                    20px;
-
-                flex-direction:
-                    column;
-
-                gap:
-                    20px;
+                flex-wrap: wrap;
 
             }
 
 
-            .header-menu {
+            .hero h1 {
 
-                flex-wrap:
-                    wrap;
-
-                justify-content:
-                    center;
-
-            }
-
-
-            .country-hero h1 {
-
-                font-size:
-                    38px;
-
-            }
-
-
-            .safety-grid {
-
-                grid-template-columns:
-                    1fr;
+                font-size: 32px;
 
             }
 
@@ -1130,73 +378,65 @@
 </head>
 
 
-
 <body>
 
-
-
-<!-- ===============================
-     상단 헤더
-=============================== -->
 
 <header>
 
 
-    <div class="site-title">
+    <div
+        class="site-title"
+        onclick="location.href='index.html'"
+        data-i18n="siteTitle">
 
-        Tourist
-        <span>Emergency Button</span>
+        Tourist Emergency Button
 
     </div>
-
 
 
     <div class="header-menu">
 
 
-        <!-- 언어 선택 -->
+        <select
+            class="language-select"
+            onchange="changeLanguage(this.value)">
 
-        <select>
-
-            <option>
+            <option value="ko">
                 한국어
             </option>
 
-            <option>
+            <option value="en">
                 English
             </option>
 
-            <option>
+            <option value="ja">
                 日本語
             </option>
 
-            <option>
+            <option value="zh">
                 中文
             </option>
 
         </select>
 
 
+	<button
+	class="header-button"
+	onclick="setFavoriteCountry('korea.html')"
+	data-i18n="favoriteRegister">
 
-        <!-- 관심 국가 -->
+	♡ 관심 국가 등록
 
-        <button class="header-button">
+</button>
 
-            ☆ 관심 국가 등록
-
-        </button>
-
-
-
-        <!-- 로그인 -->
-
-        <a
-            href="login.html"
-            class="header-button">
+        <button
+            class="header-button login-btn"
+            onclick="location.href='login.html'"
+            data-i18n="login">
 
             로그인
 
-        </a>
+        </button>
 
 
     </div>
@@ -1206,193 +446,154 @@
 
 
 
-<!-- ===============================
-     메뉴
-=============================== -->
-
 <nav>
 
-
-    <a href="#intro">
+    <a
+        href="#intro"
+        data-i18n="pageIntro">
 
         페이지 소개
 
     </a>
 
 
-    <a href="#emergency">
+    <a
+        href="#emergency"
+        data-i18n="emergencyContact">
 
         국가 긴급 연락처
 
     </a>
 
 
-    <a href="#map-section">
+    <a
+        href="#map"
+        data-i18n="safetyMap">
 
         지역별 안전지도
 
     </a>
 
 
-    <a href="#qa">
+    <a
+        href="#qa"
+        data-i18n="qa">
 
         Q&A
 
     </a>
 
-
 </nav>
 
 
 
-<!-- ===============================
-     국가 메인 화면
-=============================== -->
+<section class="hero">
 
-<section class="country-hero">
+    <h1 data-i18n="koreaPageTitle">
 
+        대한민국 여행 안전정보
 
-    <div>
-
-
-        <h1>
-
-            대한민국 여행 안전정보
-
-        </h1>
+    </h1>
 
 
-        <p>
+    <p data-i18n="koreaHeroDescription">
 
-            안전한 대한민국 여행을 위한<br>
+        안전한 대한민국 여행을 위한<br>
+        국가별 안전정보와 긴급 정보를 제공합니다.
 
-            국가별 안전정보와 긴급 정보를 제공합니다.
-
-        </p>
-
-
-    </div>
-
+    </p>
 
 </section>
 
 
 
-<!-- ===============================
-     외교부 안전 등급
-=============================== -->
-
-<section class="section">
+<section
+    class="section"
+    id="intro">
 
 
-    <h2 class="section-title">
+    <h2 data-i18n="travelSafetyLevel">
 
         여행경보 4단계 안전등급
 
     </h2>
 
 
-    <p class="section-description">
+    <p
+        class="section-description"
+        data-i18n="safetyLevelDescription">
 
         외교부 여행경보 기준에 따라 국가 및 지역별 안전정보를 제공합니다.
 
     </p>
 
 
+    <div class="level-grid">
 
-    <div class="safety-grid">
 
+        <div class="level-card">
 
-        <div class="safety-card">
+            <h3 data-i18n="level1">
 
-            <div class="level-number level1">
+                1단계
 
-                1
+            </h3>
 
-            </div>
-
-            <h3>
+            <p data-i18n="level1Text">
 
                 여행유의
 
-            </h3>
-
-            <p>
-
-                신변 안전에 특별히 유의하며 여행합니다.
-
             </p>
 
         </div>
 
 
+        <div class="level-card">
 
-        <div class="safety-card">
+            <h3 data-i18n="level2">
 
-            <div class="level-number level2">
+                2단계
 
-                2
+            </h3>
 
-            </div>
-
-            <h3>
+            <p data-i18n="level2Text">
 
                 여행자제
 
-            </h3>
-
-            <p>
-
-                불필요한 여행을 자제합니다.
-
             </p>
 
         </div>
 
 
+        <div class="level-card">
 
-        <div class="safety-card">
+            <h3 data-i18n="level3">
 
-            <div class="level-number level3">
+                3단계
 
-                3
+            </h3>
 
-            </div>
-
-            <h3>
+            <p data-i18n="level3Text">
 
                 출국권고
 
-            </h3>
-
-            <p>
-
-                해당 지역에 체류 중인 경우 출국을 권고합니다.
-
             </p>
 
         </div>
 
 
+        <div class="level-card">
 
-        <div class="safety-card">
+            <h3 data-i18n="level4">
 
-            <div class="level-number level4">
+                4단계
 
-                4
+            </h3>
 
-            </div>
-
-            <h3>
+            <p data-i18n="level4Text">
 
                 여행금지
 
-            </h3>
-
-            <p>
-
-                해당 지역으로의 여행을 금지합니다.
-
             </p>
 
         </div>
@@ -1400,185 +601,20 @@
 
     </div>
 
-
 </section>
 
 
-
-<!-- ===============================
-     실시간 정보
-=============================== -->
-
-<section class="section">
-
-
-    <div class="info-grid">
-
-
-        <!-- 날씨 -->
-
-        <div class="info-card">
-
-
-            <h3>
-
-                현재 날씨
-
-            </h3>
-
-
-            <div class="weather">
-
-
-                <div class="temperature">
-
-                    24°C
-
-                </div>
-
-
-                <div>
-
-                    <strong>
-                        대한민국 서울
-                    </strong>
-
-                    <br>
-
-                    맑음
-
-                    <br>
-
-                    습도 60%
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- 재난 정보 -->
-
-        <div class="info-card">
-
-
-            <h3>
-
-                재난 · 안전 정보
-
-            </h3>
-
-
-            <div class="disaster-item">
-
-                현재 등록된 주요 재난 정보가 없습니다.
-
-            </div>
-
-
-            <div class="disaster-item">
-
-                실시간 재난 정보 API 연동 예정
-
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-</section>
-
-
-
-<!-- ===============================
-     페이지 소개
-=============================== -->
 
 <section
-    class="section intro-section"
-    id="intro">
-
-
-    <div class="intro-content">
-
-
-        <div class="intro-text">
-
-
-            <h2>
-
-                페이지 소개
-
-            </h2>
-
-
-            <p>
-
-                해외여행객은 국가별 안전정보,
-                긴급전화, 대사관·병원·경찰서 정보를
-                각각 개별적으로 탐색해야 하며,
-                이는 긴급 상황에서 초동 대응을
-                지연시키는 요인이 될 수 있습니다.
-
-                <br><br>
-
-                이에 국가별 안전정보,
-                긴급 연락처,
-                대사관,
-                병원,
-                경찰서 등의 정보를
-                하나의 웹서비스에서 확인할 수 있는
-                글로벌 여행 안전정보 서비스를
-                구축하고 제공하기 위해 만들었습니다.
-
-            </p>
-
-
-        </div>
-
-
-
-        <div class="intro-image">
-
-        </div>
-
-
-    </div>
-
-
-</section>
-
-
-
-<!-- ===============================
-     긴급 연락처
-=============================== -->
-
-<section
-    class="section emergency-section"
+    class="section"
     id="emergency">
 
 
-    <h2 class="section-title">
+    <h2 data-i18n="emergencyContact">
 
-        대한민국 긴급 연락처
+        국가 긴급 연락처
 
     </h2>
-
-
-    <p class="section-description">
-
-        긴급 상황 발생 시 아래 연락처를 이용하세요.
-
-    </p>
-
 
 
     <div class="emergency-grid">
@@ -1586,339 +622,169 @@
 
         <div class="emergency-card">
 
-            <h3>
+            <h3 data-i18n="police">
 
-                경찰 신고
+                경찰
 
             </h3>
 
-            <div class="phone-number">
-
-                112
-
-            </div>
+            <p>112</p>
 
         </div>
 
 
-
         <div class="emergency-card">
 
-            <h3>
+            <h3 data-i18n="fireEmergency">
 
-                구급 · 화재 신고
+                화재 · 구급
 
             </h3>
 
-            <div class="phone-number">
-
-                119
-
-            </div>
+            <p>119</p>
 
         </div>
 
 
-
         <div class="emergency-card">
 
-            <h3>
+            <h3 data-i18n="touristHelp">
 
                 관광 안내
 
             </h3>
 
-            <div class="phone-number">
-
-                1330
-
-            </div>
-
-        </div>
-
-
-
-        <div class="emergency-card">
-
-            <h3>
-
-                외교부 영사콜센터
-
-            </h3>
-
-            <div class="phone-number">
-
-                02-3210-0404
-
-            </div>
-
-        </div>
-
-
-
-        <div class="emergency-card">
-
-            <h3>
-
-                응급의료 상담
-
-            </h3>
-
-            <div class="phone-number">
-
-                129
-
-            </div>
-
-        </div>
-
-
-
-        <div class="emergency-card">
-
-            <h3>
-
-                실종 · 범죄 신고
-
-            </h3>
-
-            <div class="phone-number">
-
-                182
-
-            </div>
+            <p>1330</p>
 
         </div>
 
 
     </div>
 
-
 </section>
 
 
 
-<!-- ===============================
-     지역별 안전 지도
-=============================== -->
-
 <section
     class="section"
-    id="map-section">
+    id="map">
 
 
-    <h2 class="section-title">
+    <h2 data-i18n="safetyMap">
 
         지역별 안전지도
 
     </h2>
 
 
-    <p class="section-description">
+    <p
+        class="section-description"
+        data-i18n="mapDescription">
 
-        Google Maps를 통해 주변 병원, 경찰서,
-        대사관 등의 위치를 확인할 수 있습니다.
+        Google Maps API를 연동하여 주변 병원, 경찰서, 대사관 등의 정보를 제공합니다.
 
     </p>
 
 
-    <div class="map-box">
+    <div
+        style="
+            height:300px;
+            background:#dbe8f4;
+            border-radius:20px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        "
+        data-i18n="googleMapPlaceholder">
 
-
-        <!--
-        Google Maps API를 연결하면
-        이 부분에 실제 지도가 표시됩니다.
-        -->
-
-        <div id="map">
-
-        </div>
-
+        Google Maps 연동 예정
 
     </div>
-
 
 </section>
 
 
-
-<!-- ===============================
-     Q&A
-=============================== -->
 
 <section
     class="section"
     id="qa">
 
 
-    <h2 class="section-title">
+    <h2 data-i18n="qa">
 
-        자주 묻는 질문
+        Q&A
 
     </h2>
 
 
-    <div class="qa-list">
+    <div class="info-grid">
 
 
-        <div
-            class="question"
-            onclick="toggleAnswer(1)">
+        <div class="info-card">
 
-            Q. 여행 전 어떤 안전정보를 확인해야 하나요?
+            <h3 data-i18n="questionExample">
 
-        </div>
+                질문
 
+            </h3>
 
-        <div
-            class="answer"
-            id="answer1">
+            <p data-i18n="qaExampleText">
 
-            A. 방문 국가의 여행경보 단계,
-            현지 치안 상황, 자연재해 정보 및
-            긴급 연락처를 미리 확인하는 것이 좋습니다.
+                여행 전 어떤 안전정보를 확인해야 하나요?
+
+            </p>
 
         </div>
 
 
+        <div class="info-card">
 
-        <div
-            class="question"
-            onclick="toggleAnswer(2)">
+            <h3 data-i18n="weather">
 
-            Q. 긴급 상황에서는 어디로 연락해야 하나요?
+                실시간 날씨
 
-        </div>
+            </h3>
 
+            <p data-i18n="weatherDescription">
 
-        <div
-            class="answer"
-            id="answer2">
+                날씨 API와 연동하여 실시간 정보를 제공합니다.
 
-            A. 경찰, 구급, 화재 등 상황에 따라
-            해당 국가의 긴급 신고번호로 연락하세요.
+            </p>
 
         </div>
 
 
+        <div class="info-card">
 
-        <div
-            class="question"
-            onclick="toggleAnswer(3)">
+            <h3 data-i18n="disaster">
 
-            Q. 주변 병원이나 경찰서는 어떻게 찾나요?
+                재난 정보
 
-        </div>
+            </h3>
 
+            <p data-i18n="disasterDescription">
 
-        <div
-            class="answer"
-            id="answer3">
+                재난 및 안전 관련 공지를 확인할 수 있습니다.
 
-            A. 지역별 안전지도 서비스를 통해
-            현재 위치 주변의 병원, 경찰서 및
-            기타 안전시설을 확인할 수 있습니다.
+            </p>
 
         </div>
 
 
     </div>
 
-
-
-    <button class="question-button">
-
-        질문하기
-
-    </button>
-
-
 </section>
 
 
-
-<!-- ===============================
-     Footer
-=============================== -->
 
 <footer>
 
     © 2026 Tourist Emergency Button
 
-    <br><br>
-
-    Global Travel Safety Information Service
-
 </footer>
 
 
-
-<!-- ===============================
-     JavaScript
-=============================== -->
-
-<script>
-
-
-    function toggleAnswer(number) {
-
-
-        const answer =
-            document.getElementById(
-                "answer" + number
-            );
-
-
-        if (
-            answer.style.display === "block"
-        ) {
-
-            answer.style.display =
-                "none";
-
-        }
-
-        else {
-
-            answer.style.display =
-                "block";
-
-        }
-
-
-    }
-
-
-    /*
-    Google Maps API 연결 시
-
-    function initMap() {
-
-        const location = {
-            lat: 37.5665,
-            lng: 126.9780
-        };
-
-
-        const map =
-            new google.maps.Map(
-
-                document.getElementById("map"),
-
-                {
-                    zoom: 12,
-                    center: location
-                }
-
-            );
-
-    }
-
-    */
-
-
-</script>
-
+<script src="js/language.js"></script>
 
 </body>
 

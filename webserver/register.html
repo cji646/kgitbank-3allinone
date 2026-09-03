@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>회원가입</title>
+
+<style>
+
+* {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+body {
+
+    font-family:
+    Arial,
+    "Noto Sans KR",
+    sans-serif;
+
+    background:
+    #f6f7fb;
+
+}
+
+
+header {
+
+    height:
+    75px;
+
+    background:
+    white;
+
+    border-bottom:
+    1px solid #e5e5e5;
+
+    display:
+    flex;
+
+    align-items:
+    center;
+
+    justify-content:
+    space-between;
+
+    padding:
+    0 7%;
+
+}
+
+
+.site-title {
+
+    font-size:
+    20px;
+
+    font-weight:
+    700;
+
+    color:
+    #2f5f9f;
+
+    cursor:
+    pointer;
+
+}
+
+
+.language-select {
+
+    padding:
+    10px 15px;
+
+    border:
+    1px solid #ddd;
+
+    border-radius:
+    8px;
+
+}
+
+
+.register-container {
+
+    width:
+    100%;
+
+    max-width:
+    500px;
+
+    margin:
+    70px auto;
+
+    background:
+    white;
+
+    padding:
+    45px;
+
+    border-radius:
+    20px;
+
+    box-shadow:
+    0 10px 40px
+    rgba(0,0,0,0.08);
+
+}
+
+
+.register-container h1 {
+
+    text-align:
+    center;
+
+    margin-bottom:
+    40px;
+
+    color:
+    #2f5f9f;
+
+}
+
+
+.form-group {
+
+    margin-bottom:
+    22px;
+
+}
+
+
+.form-group label {
+
+    display:
+    block;
+
+    margin-bottom:
+    8px;
+
+    font-weight:
+    600;
+
+}
+
+
+.form-group input,
+
+.form-group select {
+
+    width:
+    100%;
+
+    padding:
+    15px;
+
+    border:
+    1px solid #ddd;
+
+    border-radius:
+    10px;
+
+}
+
+
+.id-box {
+
+    display:
+    flex;
+
+    gap:
+    10px;
+
+}
+
+
+.id-box input {
+
+    flex:
+    1;
+
+}
+
+
+.check-button {
+
+    padding:
+    0 15px;
+
+    border:
+    none;
+
+    border-radius:
+    10px;
+
+    background:
+    #2f6fbd;
+
+    color:
+    white;
+
+    cursor:
+    pointer;
+
+    white-space:
+    nowrap;
+
+}
+
+
+.register-button {
+
+    width:
+    100%;
+
+    padding:
+    17px;
+
+    border:
+    none;
+
+    border-radius:
+    10px;
+
+    background:
+    #2f6fbd;
+
+    color:
+    white;
+
+    font-size:
+    16px;
+
+    font-weight:
+    700;
+
+    cursor:
+    pointer;
+
+}
+
+
+.message {
+
+    margin-top:
+    8px;
+
+    font-size:
+    13px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+
+<div
+class="site-title"
+onclick="location.href='index.html'"
+data-i18n="siteTitle">
+
+Tourist Emergency Button
+
+</div>
+
+
+
+<select
+class="language-select"
+onchange="changeLanguage(this.value)">
+
+<option value="ko">
+한국어
+</option>
+
+<option value="en">
+English
+</option>
+
+<option value="ja">
+日本語
+</option>
+
+<option value="zh">
+中文
+</option>
+
+</select>
+
+
+</header>
+
+
+
+<div class="register-container">
+
+
+<h1 data-i18n="register">
+
+회원가입
+
+</h1>
+
+
+
+<form
+onsubmit="registerUser(event)">
+
+
+
+<div class="form-group">
+
+<label data-i18n="username">
+
+아이디
+
+</label>
+
+
+<div class="id-box">
+
+
+<input
+type="text"
+id="username"
+data-i18n-placeholder="usernamePlaceholder"
+placeholder="아이디를 입력하세요"
+required>
+
+
+<button
+type="button"
+class="check-button"
+onclick="checkDuplicate()"
+data-i18n="duplicateCheck">
+
+중복 확인
+
+</button>
+
+
+</div>
+
+
+<div
+id="duplicateMessage"
+class="message">
+
+</div>
+
+
+</div>
+
+
+
+<div class="form-group">
+
+
+<label data-i18n="password">
+
+비밀번호
+
+</label>
+
+
+<input
+type="password"
+id="password"
+data-i18n-placeholder="passwordPlaceholder"
+placeholder="비밀번호를 입력하세요"
+required>
+
+
+</div>
+
+
+
+<div class="form-group">
+
+
+<label data-i18n="email">
+
+이메일
+
+</label>
+
+
+<input
+type="email"
+id="email"
+data-i18n-placeholder="emailPlaceholder"
+placeholder="이메일을 입력하세요"
+required>
+
+
+</div>
+
+
+
+<div class="form-group">
+
+
+<label data-i18n="nationality">
+
+국적
+
+</label>
+
+
+<select id="nationality">
+
+
+<option
+value="korea"
+data-i18n="korea">
+
+대한민국
+
+</option>
+
+
+<option
+value="japan"
+data-i18n="japan">
+
+일본
+
+</option>
+
+
+<option
+value="vietnam"
+data-i18n="vietnam">
+
+베트남
+
+</option>
+
+
+<option
+value="usa"
+data-i18n="usa">
+
+미국
+
+</option>
+
+
+<option
+value="china"
+data-i18n="china">
+
+중국
+
+</option>
+
+
+<option
+value="other"
+data-i18n="other">
+
+기타
+
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+<button
+type="submit"
+class="register-button"
+data-i18n="signupButton">
+
+회원가입
+
+</button>
+
+
+</form>
+
+
+</div>
+
+
+
+<script src="js/language.js"></script>
+
+
+<script>
+
+let idChecked = false;
+
+
+function checkDuplicate() {
+
+
+    const username =
+
+    document
+    .getElementById("username")
+    .value;
+
+
+    const message =
+
+    document
+    .getElementById(
+        "duplicateMessage"
+    );
+
+
+    const lang =
+
+    localStorage.getItem(
+        "selectedLanguage"
+    ) || "ko";
+
+
+    if (
+        username.trim() === ""
+    ) {
+
+        message.innerText =
+
+        translations[lang]
+        .enterUsername;
+
+        message.style.color =
+        "red";
+
+        return;
+
+    }
+
+
+    const users =
+
+    JSON.parse(
+        localStorage.getItem("users")
+    ) || [];
+
+
+    const exists =
+
+    users.some(
+        user =>
+        user.username === username
+    );
+
+
+    if (exists) {
+
+
+        message.innerText =
+
+        translations[lang]
+        .usernameExists;
+
+
+        message.style.color =
+        "red";
+
+
+        idChecked = false;
+
+
+    }
+
+    else {
+
+
+        message.innerText =
+
+        translations[lang]
+        .usernameAvailable;
+
+
+        message.style.color =
+        "green";
+
+
+        idChecked = true;
+
+
+    }
+
+}
+
+
+
+function registerUser(event) {
+
+
+    event.preventDefault();
+
+
+    const lang =
+
+    localStorage.getItem(
+        "selectedLanguage"
+    ) || "ko";
+
+
+    if (!idChecked) {
+
+
+        alert(
+
+            translations[lang]
+            .duplicateRequired
+
+        );
+
+
+        return;
+
+    }
+
+
+    const username =
+
+    document
+    .getElementById("username")
+    .value;
+
+
+    const password =
+
+    document
+    .getElementById("password")
+    .value;
+
+
+    const email =
+
+    document
+    .getElementById("email")
+    .value;
+
+
+    const nationality =
+
+    document
+    .getElementById("nationality")
+    .value;
+
+
+    const users =
+
+    JSON.parse(
+        localStorage.getItem("users")
+    ) || [];
+
+
+    users.push({
+
+        username:
+        username,
+
+        password:
+        password,
+
+        email:
+        email,
+
+        nationality:
+        nationality
+
+    });
+
+
+    localStorage.setItem(
+
+        "users",
+
+        JSON.stringify(users)
+
+    );
+
+
+    alert(
+
+        translations[lang]
+        .registerComplete
+
+    );
+
+
+    location.href =
+    "login.html";
+
+
+}
+
+</script>
+
+
+</body>
+
+</html>

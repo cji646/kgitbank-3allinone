@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+header {
+    background: white;
+}
+
+.login-btn {
+    background: #1d72e8;
+    color: white;
+}

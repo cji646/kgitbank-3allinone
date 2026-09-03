@@ -3,22 +3,27 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Tourist Emergency Button</title>
 
-    <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
 
     <style>
-
-        /* =========================
-           기본 설정
-        ========================= */
 
         * {
             margin: 0;
@@ -26,514 +31,435 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
 
         body {
-            font-family: "Noto Sans KR", sans-serif;
-            background: #ffffff;
+
+            font-family:
+                "Montserrat",
+                "Noto Sans KR",
+                sans-serif;
+
+            background: #f7f8fa;
+
             color: #222;
         }
 
 
-        /* =========================
-           헤더
-        ========================= */
+        /* ======================
+           HEADER
+        ====================== */
 
         header {
-            width: 100%;
-            height: 85px;
+
+            height: 78px;
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
             padding: 0 7%;
 
             background: white;
 
-            border-bottom: 1px solid #eeeeee;
+            border-bottom:
+                1px solid #e8e8e8;
 
-            position: relative;
-            z-index: 10;
         }
 
 
-        /* =========================
-           왼쪽 로고
-        ========================= */
-
         .logo {
+
             display: flex;
+
             align-items: center;
+
             gap: 10px;
 
-            font-family: "Montserrat", sans-serif;
-
-            font-size: 15px;
             font-weight: 800;
 
-            color: #1b3c73;
+            color: #26456c;
 
-            cursor: pointer;
         }
 
 
         .logo-mark {
+
             width: 38px;
+
             height: 38px;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
-            border-radius: 12px;
+            border-radius: 11px;
 
-            background: #1d72e8;
+            background: #2d6cc0;
 
             color: white;
 
-            font-size: 18px;
+            font-size: 22px;
 
-            box-shadow: 0 5px 15px rgba(29, 114, 232, 0.25);
+            box-shadow:
+                0 5px 15px
+                rgba(45,108,192,0.3);
+
         }
 
 
-        /* =========================
-           가운데 사이트 제목
-        ========================= */
+        .site-title {
 
-        .main-title {
             position: absolute;
 
             left: 50%;
+
             transform: translateX(-50%);
 
-            font-family: "Montserrat", sans-serif;
+            font-size: 24px;
 
-            font-size: 25px;
             font-weight: 800;
 
-            letter-spacing: -0.5px;
+            color: #294366;
 
-            color: #1d3f72;
-
-            white-space: nowrap;
         }
 
-
-        /* =========================
-           오른쪽 메뉴
-        ========================= */
 
         .header-right {
+
             display: flex;
+
             align-items: center;
-            gap: 12px;
+
+            gap: 10px;
+
         }
 
 
-        /* 언어 선택 */
-
         .language-select {
-            border: 1px solid #dddddd;
 
-            border-radius: 8px;
+            padding: 10px 15px;
 
-            padding: 9px 12px;
+            border-radius: 10px;
+
+            border:
+                1px solid #dddddd;
 
             background: white;
-
-            font-family: "Noto Sans KR", sans-serif;
-
-            font-size: 13px;
 
             cursor: pointer;
 
             outline: none;
 
-            transition: 0.25s;
         }
 
-
-        .language-select:hover {
-            border-color: #1d72e8;
-
-            box-shadow: 0 0 10px rgba(29, 114, 232, 0.15);
-        }
-
-
-        /* 로그인 버튼 */
 
         .login-btn {
+
+            padding: 11px 20px;
+
             border: none;
 
-            border-radius: 8px;
+            border-radius: 10px;
 
-            padding: 10px 20px;
-
-            background: #1d72e8;
+            background: #2d6cc0;
 
             color: white;
 
-            font-family: "Noto Sans KR", sans-serif;
-
-            font-size: 14px;
             font-weight: 700;
 
             cursor: pointer;
 
-            transition: all 0.25s ease;
+            transition: 0.25s;
+
         }
 
 
         .login-btn:hover {
-            transform: translateY(-2px);
 
-            box-shadow: 0 7px 18px rgba(29, 114, 232, 0.3);
+            transform:
+                translateY(-2px);
 
-            background: #125fc5;
+            background: #1f579f;
+
         }
 
 
-        /* =========================
-           메인 영역
-        ========================= */
+        /* ======================
+           MAIN
+        ====================== */
 
         .hero {
-            min-height: calc(100vh - 85px);
 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            padding: 70px 20px 100px;
-
-            background:
-                linear-gradient(
-                    rgba(255, 255, 255, 0.82),
-                    rgba(255, 255, 255, 0.92)
-                ),
-                url("https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1920&q=85");
-
-            background-size: cover;
-            background-position: center;
+            padding:
+                75px 7%
+                100px;
 
             text-align: center;
+
         }
 
 
-        /* =========================
-           메인 제목
-        ========================= */
-
         .hero h1 {
-            font-family: "Montserrat", "Noto Sans KR", sans-serif;
 
-            font-size: 52px;
-            font-weight: 800;
+            font-size: 42px;
 
-            color: #163969;
+            color: #2d62ae;
 
             margin-bottom: 18px;
 
-            letter-spacing: -1px;
         }
 
 
-        .hero h1 span {
-            color: #1d72e8;
-        }
+        .hero p {
 
+            color: #666;
 
-        .hero-description {
             font-size: 17px;
 
             line-height: 1.8;
 
-            color: #555;
-
-            margin-bottom: 55px;
         }
 
+/* ======================
+   COUNTRY CARDS
+====================== */
 
-        /* =========================
-           국가 카드 영역
-        ========================= */
+.country-container {
 
-        .country-list {
-            width: 100%;
-            max-width: 1150px;
+    width: 100%;
 
-            display: grid;
+    max-width: 1200px;
 
-            grid-template-columns: repeat(3, 1fr);
+    margin: 60px auto 0;
 
-            gap: 28px;
-        }
+    padding: 0 20px;
 
+    display: grid;
 
-        /* =========================
-           국가 카드
-        ========================= */
+    /* 한국 · 일본 · 베트남 좌우 배치 */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 
-        .country-card {
-            height: 370px;
+    gap: 24px;
 
-            position: relative;
+    align-items: stretch;
 
-            border-radius: 20px;
+}
 
-            overflow: hidden;
 
-            cursor: pointer;
+/* 국가 카드 */
 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+.country-card {
 
-            transition:
-                transform 0.35s ease,
-                box-shadow 0.35s ease;
-        }
+    width: 100%;
 
+    /* 모든 카드를 세로형으로 고정 */
+    height: 500px;
 
-        /* 카드 확대 효과 */
+    min-width: 0;
 
-        .country-card:hover {
-            transform: translateY(-10px) scale(1.03);
+    border-radius: 20px;
 
-            box-shadow:
-                0 20px 45px rgba(0, 0, 0, 0.22),
-                0 0 30px rgba(29, 114, 232, 0.18);
-        }
+    overflow: hidden;
 
+    position: relative;
 
-        /* 카드 이미지 */
+    cursor: pointer;
 
-        .country-card::before {
-            content: "";
+    background-size: cover;
 
-            position: absolute;
+    background-position: center;
 
-            inset: 0;
+    background-repeat: no-repeat;
 
-            background-size: cover;
+    color: white;
 
-            background-position: center;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 
-            transition: transform 0.5s ease;
-        }
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.15);
 
+}
 
-        .country-card:hover::before {
-            transform: scale(1.1);
-        }
 
+/* 대한민국 */
 
-        /* 국가별 이미지 */
+.korea-card {
 
-        .korea::before {
-            background-image:
-                linear-gradient(
-                    rgba(0, 50, 120, 0.20),
-                    rgba(0, 30, 80, 0.60)
-                ),
-                url("https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?auto=format&fit=crop&w=900&q=85");
-        }
+    background-image:
+        linear-gradient(
+            to top,
+            rgba(0, 40, 100, 0.75),
+            rgba(0, 40, 100, 0.1)
+        ),
+        url("images/korea.jpg");
 
+}
 
-        .japan::before {
-            background-image:
-                linear-gradient(
-                    rgba(180, 40, 100, 0.10),
-                    rgba(120, 10, 60, 0.60)
-                ),
-                url("https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=85");
-        }
 
+/* 일본 */
 
-        .vietnam::before {
-            background-image:
-                linear-gradient(
-                    rgba(100, 60, 30, 0.10),
-                    rgba(70, 40, 20, 0.65)
-                ),
-                url("https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=900&q=85");
-        }
+.japan-card {
 
+    background-image:
+        linear-gradient(
+            to top,
+            rgba(100, 20, 60, 0.75),
+            rgba(100, 20, 60, 0.1)
+        ),
+        url("images/japan.jpg");
 
-        /* =========================
-           카드 내용
-        ========================= */
+}
 
-        .card-content {
-            position: absolute;
 
-            bottom: 0;
+/* 베트남 */
 
-            width: 100%;
+.vietnam-card {
 
-            padding: 35px 30px;
+    background-image:
+        linear-gradient(
+            to top,
+            rgba(80, 50, 20, 0.75),
+            rgba(80, 50, 20, 0.1)
+        ),
+        url("images/vietnam.jpg");
 
-            text-align: left;
+}
 
-            color: white;
 
-            z-index: 2;
-        }
+/* 카드 마우스 효과 */
 
+.country-card:hover {
 
-        .country-card h2 {
-            font-family: "Montserrat", sans-serif;
+    transform:
+        translateY(-10px)
+        scale(1.03);
 
-            font-size: 30px;
+    box-shadow:
+        0 20px 40px
+        rgba(0, 0, 0, 0.25);
 
-            font-weight: 800;
+}
 
-            margin-bottom: 10px;
 
-            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
-        }
+/* 어두운 효과 */
 
+.country-card::before {
 
-        .country-card p {
-            font-size: 15px;
+    content: "";
 
-            color: #eeeeee;
+    position: absolute;
 
-            line-height: 1.6;
+    inset: 0;
 
-            margin-bottom: 18px;
-        }
+    background:
+        linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.75),
+            rgba(0, 0, 0, 0.05)
+        );
 
+    z-index: 1;
 
-        /* 이동 버튼 */
+}
 
-        .country-button {
-            display: inline-block;
 
-            padding: 9px 18px;
+/* 카드 내부 글자 */
 
-            border-radius: 25px;
+.country-content {
 
-            background: rgba(255, 255, 255, 0.92);
+    position: absolute;
 
-            color: #222;
+    left: 30px;
 
-            font-size: 13px;
-            font-weight: 700;
+    bottom: 30px;
 
-            transition: 0.25s;
-        }
+    z-index: 2;
 
+    color: white;
 
-        .country-card:hover .country-button {
-            background: #1d72e8;
+}
 
-            color: white;
 
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-        }
+.country-content h2 {
 
+    font-size: 28px;
 
-        /* =========================
-           푸터
-        ========================= */
+    margin-bottom: 12px;
+
+}
+
+
+.country-content p {
+
+    font-size: 14px;
+
+    color: white;
+
+    line-height: 1.6;
+
+    margin-bottom: 20px;
+
+}
+
+
+.country-link {
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+}}
+
+
 
         footer {
-            padding: 30px 20px;
+
+            padding: 35px;
 
             text-align: center;
 
-            background: #f7f8fa;
+            background: white;
 
-            border-top: 1px solid #eeeeee;
+            border-top:
+                1px solid #e8e8e8;
 
             color: #777;
 
             font-size: 13px;
 
-            line-height: 1.8;
         }
 
 
-        /* =========================
-           반응형
-        ========================= */
+        @media
+        (max-width: 900px) {
 
-        @media (max-width: 1000px) {
+            .country-container {
 
-            .country-list {
-                grid-template-columns: 1fr;
-                max-width: 500px;
+
             }
 
 
-            .country-card {
-                height: 300px;
-            }
+            .site-title {
 
-
-            .hero h1 {
-                font-size: 40px;
-            }
-
-        }
-
-
-        @media (max-width: 700px) {
-
-            header {
-                height: auto;
-
-                padding: 20px;
-
-                flex-wrap: wrap;
-
-                gap: 20px;
-            }
-
-
-            .main-title {
-                position: relative;
-
-                left: auto;
+                position: static;
 
                 transform: none;
 
-                order: -1;
+                font-size: 18px;
 
-                width: 100%;
-
-                text-align: center;
             }
 
 
-            .logo {
-                font-size: 12px;
-            }
+            header {
 
+                padding: 0 20px;
 
-            .header-right {
-                margin-left: auto;
-            }
-
-
-            .hero {
-                min-height: auto;
-
-                padding: 70px 20px;
-            }
-
-
-            .hero h1 {
-                font-size: 32px;
-            }
-
-
-            .hero-description {
-                font-size: 15px;
             }
 
         }
@@ -546,289 +472,182 @@
 <body>
 
 
-<!-- =========================
-     헤더
-========================= -->
-
 <header>
 
-
-    <!-- 왼쪽 로고 -->
-
-    <div class="logo"
-         onclick="location.href='index.html'">
+    <div class="logo">
 
         <div class="logo-mark">
             ✓
         </div>
 
-        GLOBAL SAFETY
+        <span data-i18n="globalSafety">
+            GLOBAL SAFETY
+        </span>
 
     </div>
 
 
-    <!-- 가운데 제목 -->
-
-    <div class="main-title">
+    <div
+        class="site-title"
+        data-i18n="siteTitle">
 
         Tourist Emergency Button
 
     </div>
 
 
-    <!-- 오른쪽 메뉴 -->
+<div class="header-right">
 
-    <div class="header-right">
+    <!-- 언어 선택 -->
+    <select
+        class="language-select"
+        onchange="changeLanguage(this.value)">
 
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+        <option value="zh">中文</option>
 
-        <!-- 언어 선택 -->
-
-        <select class="language-select"
-                onchange="changeLanguage(this.value)">
-
-            <option value="ko">
-                한국어
-            </option>
-
-            <option value="zh">
-                中文
-            </option>
-
-            <option value="ja">
-                日本語
-            </option>
-
-            <option value="en">
-                English
-            </option>
-
-        </select>
+    </select>
 
 
-        <!-- 로그인 -->
+    <!-- 관심 국가 -->
+    <button
+        class="favorite-btn"
+        onclick="goFavoriteCountry()"
+        data-i18n="favoriteCountry">
 
-        <button class="login-btn"
-                onclick="location.href='login.html'">
+        관심 국가
 
-            로그인
-
-        </button>
+    </button>
 
 
-    </div>
+    <!-- 로그인 -->
+    <button
+        class="login-btn"
+        onclick="location.href='login.html'"
+        data-i18n="login">
 
+        로그인
+
+    </button>
+
+</div>
 
 </header>
 
 
 
-<!-- =========================
-     메인 화면
-========================= -->
-
 <main class="hero">
 
 
-    <h1>
+    <h1 data-i18n="mainTitle">
 
-        <span>Tourist Emergency Button</span>
+        Tourist Emergency Button
 
     </h1>
 
 
-    <p class="hero-description">
+    <p data-i18n="mainDescription">
 
         여행지의 안전정보를 한눈에 확인하세요.<br>
-
         국가별 긴급 연락처와 안전시설 정보를 제공합니다.
 
     </p>
 
 
 
-    <!-- =========================
-         국가 선택 카드
-    ========================= -->
-
-    <div class="country-list">
+    <div class="country-container">
 
 
-        <!-- =====================
-             한국
-        ====================== -->
+        <!-- KOREA -->
 
-        <div class="country-card korea"
-             onclick="location.href='korea.html'">
+	<div class="country-card korea-card"
+     		onclick="location.href='korea.html'">
 
+    		<div class="country-content">
 
-            <div class="card-content">
+        	<h2 data-i18n="korea">
+            	KOREA
+        	</h2>
 
+        	<p data-i18n="koreaDesc">
+           	 대한민국 여행 안전정보와 긴급 연락처를 확인하세요.
+        	</p>
 
-                <h2>
-
-                    KOREA
-
-                </h2>
-
-
-                <p>
-
-                    대한민국 여행 안전정보와
-                    긴급 연락처를 확인하세요.
-
-                </p>
-
-
-                <div class="country-button">
-
-                    안전정보 확인 →
-
-                </div>
-
-
-            </div>
-
+        	<span data-i18n="checkSafety">
+            	안전정보 확인 →
+            </span>
 
         </div>
-
-
-
-        <!-- =====================
-             일본
-        ====================== -->
-
-        <div class="country-card japan"
-             onclick="location.href='japan.html'">
-
-
-            <div class="card-content">
-
-
-                <h2>
-
-                    JAPAN
-
-                </h2>
-
-
-                <p>
-
-                    일본 여행 안전정보와
-                    긴급 연락처를 확인하세요.
-
-                </p>
-
-
-                <div class="country-button">
-
-                    안전정보 확인 →
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- =====================
-             베트남
-        ====================== -->
-
-        <div class="country-card vietnam"
-             onclick="location.href='vietnam.html'">
-
-
-            <div class="card-content">
-
-
-                <h2>
-
-                    VIETNAM
-
-                </h2>
-
-
-                <p>
-
-                    베트남 여행 안전정보와
-                    긴급 연락처를 확인하세요.
-
-                </p>
-
-
-                <div class="country-button">
-
-                    안전정보 확인 →
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
 
     </div>
+
+
+
+
+<!-- JAPAN -->
+    <div class="country-card japan-card"
+         onclick="location.href='japan.html'">
+
+        <div class="country-content">
+
+            <h2 data-i18n="japan">
+                JAPAN
+            </h2>
+
+            <p data-i18n="japanDesc">
+                일본 여행 안전정보와 긴급 연락처를 확인하세요.
+            </p>
+
+            <span class="country-link"
+                  data-i18n="checkSafety">
+                안전정보 확인 →
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- VIETNAM -->
+    <div class="country-card vietnam-card"
+         onclick="location.href='vietnam.html'">
+
+        <div class="country-content">
+
+            <h2 data-i18n="vietnam">
+                VIETNAM
+            </h2>
+
+            <p data-i18n="vietnamDesc">
+                베트남 여행 안전정보와 긴급 연락처를 확인하세요.
+            </p>
+
+            <span class="country-link"
+                  data-i18n="checkSafety">
+                안전정보 확인 →
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 </main>
 
 
 
-<!-- =========================
-     푸터
-========================= -->
-
 <footer>
 
-    © 2026 Tourist Emergency Button<br>
-
-    Global Travel Safety Information Service
+    © 2026 Tourist Emergency Button
 
 </footer>
 
 
-
-<script>
-
-    /* =========================
-       언어 선택
-    ========================= */
-
-    function changeLanguage(language) {
-
-        if (language === "ko") {
-
-            alert("한국어가 선택되었습니다.");
-
-        }
-
-        else if (language === "zh") {
-
-            alert("中文이 선택되었습니다.");
-
-        }
-
-        else if (language === "ja") {
-
-            alert("日本語가 선택되었습니다.");
-
-        }
-
-        else if (language === "en") {
-
-            alert("English가 선택되었습니다.");
-
-        }
-
-    }
-
-</script>
-
+<script src="js/language.js"></script>
 
 </body>
 
