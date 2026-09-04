@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from db.connection import get_db_connection
+from soc_reporter import report_login
 import re
 import time
 
@@ -249,6 +250,9 @@ def login():
 
                 login_attempts[email]["count"] += 1
 
+            # SOC에 로그인 실패 보고
+            report_login(request, email, success=False)
+            
             return jsonify({
                 "success": False,
                 "message": "이메일 또는 비밀번호가 올바르지 않습니다."
@@ -271,7 +275,10 @@ def login():
             else:
 
                 login_attempts[email]["count"] += 1
-
+            
+            # SOC에 로그인 실패 보고
+            report_login(request, email, success=False)
+            
             return jsonify({
                 "success": False,
                 "message": "이메일 또는 비밀번호가 올바르지 않습니다."
@@ -290,6 +297,9 @@ def login():
         session["name"] = user["name"]
         session["email"] = user["email"]
         session["role"] = user["role"]
+
+        #SOC에 로그인 성공 보고
+        report_login(request, email, success=True)
 
         return jsonify({
             "success": True,
