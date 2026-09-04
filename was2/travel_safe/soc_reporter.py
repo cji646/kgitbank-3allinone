@@ -96,3 +96,6 @@ def report_logout(ip, username, user_agent=None):
 
     except Exception as e:
         logger.warning("SOC logout event 전송 오류: %s", e)
+
+
+
