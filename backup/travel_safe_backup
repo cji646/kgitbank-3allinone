@@ -1,0 +1,1 @@
+0 13 * * * backup /usr/local/bin/backup_travel_safe.sh >> /home/backup/backup_travel_safe.log 2>&1
