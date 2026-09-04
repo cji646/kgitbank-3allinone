@@ -17,6 +17,15 @@ const translations = {
         interestCountry:
             "♡ 관심 국가",
 
+	pageIntro:
+	    "페이지 소개",
+
+    	favoriteRegister:
+            "♡ 관심 국가",
+
+    	siteTitle:
+            "Tourist Emergency Button",
+
         korea: "KOREA",
         japan: "JAPAN",
         vietnam: "VIETNAM",
@@ -193,6 +202,9 @@ mapDescription:
 googleMapPlaceholder:
     "Google Maps 연동 예정",
 
+placeSearch: "장소 검색",
+searchButton: "검색",
+
 qa:
     "Q&A",
 
@@ -238,6 +250,12 @@ japanHeroDescription:
 
         interestCountry:
             "♡ Favorite Country",
+
+	siteTitle: "Tourist Emergency Button",
+
+	pageIntro: "Page Info",
+	
+	favoriteRegister: "♡ Favorites",
 
         korea: "KOREA",
         japan: "JAPAN",
@@ -417,6 +435,9 @@ mapDescription:
 googleMapPlaceholder:
     "Google Maps Integration Coming Soon",
 
+placeSearch: "Search for a place",
+searchButton: "Search",
+
 qa:
     "Q&A",
 
@@ -467,6 +488,12 @@ japanHeroDescription:
 
         interestCountry:
             "♡ 関心のある国",
+
+	siteTitle: "Tourist Emergency Button",
+
+	pageIntro: "ページ紹介",
+
+	favoriteRegister: "♡ お気に入り",
 
         korea:
             "韓国",
@@ -653,6 +680,9 @@ mapDescription:
 googleMapPlaceholder:
     "Google Maps連携予定",
 
+placeSearch: "場所を検索",
+searchButton: "検索",
+
 qa:
     "Q&A",
 
@@ -703,6 +733,12 @@ japanHeroDescription:
 
         interestCountry:
             "♡ 关注国家",
+
+	siteTitle: "Tourist Emergency Button",
+
+	pageIntro: "页面介绍",
+
+	favoriteRegister: "♡ 收藏国家",
 
         korea:
             "韩国",
@@ -889,6 +925,9 @@ mapDescription:
 googleMapPlaceholder:
     "即将支持 Google Maps",
 
+placeSearch: "搜索地点",
+searchButton: "搜索",
+
 qa:
     "问答",
 
@@ -964,7 +1003,6 @@ function changeLanguage(language) {
                 getTranslation(key);
 
         });
-
 
     /* Input placeholder 번역 */
 

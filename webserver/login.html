@@ -308,23 +308,26 @@ English
 </label>
 
 <input
-    type="text"
-    data-i18n-placeholder="loginIdPlaceholder"
-    placeholder="아이디를 입력하세요">
-
+    id="email"
+    type="email"
+    placeholder="이메일을 입력하세요">
 
 <label data-i18n="password">
     비밀번호
 </label>
 
 <input
+    id="password"
     type="password"
     data-i18n-placeholder="passwordPlaceholder"
     placeholder="비밀번호를 입력하세요">
 
 <button
-class="login-button"
-data-i18n="loginButton">
+    id="loginButton"
+    type="button"
+    class="login-button"
+    data-i18n="loginButton">
+
 
 로그인
 
@@ -376,6 +379,60 @@ data-i18n="signup">
 
 
 <script src="js/language.js"></script>
+
+
+<script>
+document.getElementById("loginButton").addEventListener("click", function() {
+
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+
+    if (!email || !password) {
+        alert("이메일과 비밀번호를 입력하세요.");
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.open("POST", "/login", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.withCredentials = true;
+
+    xhr.onreadystatechange = function() {
+
+        if (xhr.readyState !== 4) {
+            return;
+        }
+
+        var data;
+
+        try {
+            data = JSON.parse(xhr.responseText);
+        } catch (e) {
+            alert("서버 응답을 처리할 수 없습니다.");
+            return;
+        }
+
+        if (xhr.status === 200 && data.success) {
+
+            alert("로그인되었습니다.");
+
+            location.href = "index.html";
+
+        } else {
+
+            alert(data.message || "로그인에 실패했습니다.");
+
+        }
+    };
+
+    xhr.send(JSON.stringify({
+        email: email,
+        password: password
+    }));
+
+});
+</script>
 
 </body>
 

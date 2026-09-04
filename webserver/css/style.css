@@ -11,3 +11,78 @@ header {
     background: #1d72e8;
     color: white;
 }
+
+
+/* 관심 국가 버튼 - 기본 상태 */
+.country-favorite-btn {
+    padding: 11px 18px;
+    margin-left: 10px;
+
+    border: 1px solid #2d6cc0;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #2d6cc0;
+
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+
+    transition: 0.25s;
+}
+
+
+/* 마우스를 올렸을 때 */
+.country-favorite-btn:hover {
+    background: #eef5ff;
+}
+
+
+/* 관심 국가로 선택된 상태 */
+.country-favorite-btn.favorite-active {
+    background: #2d6cc0;
+    color: #ffffff;
+    border-color: #2d6cc0;
+}
+
+.account-bar {
+    padding: 14px 7% 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: #ffffff;
+}
+
+.account-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.user-info {
+    padding: 10px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #333333;
+    font-weight: 700;
+}
+
+.account-btn {
+    padding: 11px 18px;
+    margin-left: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.primary-btn {
+    border: none;
+    background: #2d6cc0;
+    color: #ffffff;
+}
+
+.primary-btn:hover {
+    background: #1f579f;
+}

@@ -50,117 +50,251 @@
         }
 
 
-        header {
+header {
 
-            height: 78px;
+    height: 78px;
 
-            display: flex;
+    display: flex;
 
-            align-items: center;
+    align-items: center;
 
-            justify-content: space-between;
+    justify-content: space-between;
 
-            padding: 0 7%;
+    padding: 0 7%;
 
-            background: white;
+    background: white;
 
-        }
+    border-bottom: 1px solid #e8e8e8;
 
-
-        .site-title {
-
-            font-size: 22px;
-
-            font-weight: 800;
-
-            color: #31557a;
-
-            cursor: pointer;
-
-        }
+    position: relative;
+}
 
 
-        .header-menu {
+.logo {
 
-            display: flex;
+    display: flex;
 
-            gap: 10px;
+    align-items: center;
 
-            align-items: center;
+    gap: 10px;
 
-        }
+    font-weight: 800;
 
-
-        .language-select {
-
-            padding: 10px;
-
-            border:
-                1px solid #d8dfe8;
-
-            border-radius: 9px;
-
-            background: white;
-
-        }
+    color: #26456c;
+}
 
 
-        .header-button {
+.logo-mark {
 
-            border: none;
+    width: 38px;
 
-            padding: 10px 16px;
+    height: 38px;
 
-            border-radius: 9px;
+    display: flex;
 
-            cursor: pointer;
+    align-items: center;
 
-            background: #e9f1fa;
+    justify-content: center;
 
-            color: #31557a;
+    border-radius: 11px;
 
-            font-weight: 700;
+    background: #2d6cc0;
 
-        }
+    color: white;
 
+    font-size: 22px;
 
-        .login-btn {
-
-            background: #315f95;
-
-            color: white;
-
-        }
+    box-shadow:
+        0 5px 15px
+        rgba(45,108,192,0.3);
+}
 
 
-        nav {
+.site-title {
 
-            display: flex;
+    position: absolute;
 
-            justify-content: center;
+    left: 50%;
 
-            gap: 55px;
+    transform: translateX(-50%);
 
-            padding: 20px;
+    font-size: 24px;
 
-            background: white;
+    font-weight: 800;
 
-            border-top:
-                1px solid #eeeeee;
+    color: #294366;
 
-        }
+    cursor: pointer;
+}
 
 
-        nav a {
+.header-right {
 
-            text-decoration: none;
+    display: flex;
 
-            color: #33485c;
+    align-items: center;
 
-            font-weight: 600;
+    gap: 10px;
 
-        }
+    margin-left: auto;
+}
 
+
+.language-select {
+
+    padding: 10px 15px;
+
+    border-radius: 10px;
+
+    border: 1px solid #dddddd;
+
+    background: white;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+
+.account-bar {
+
+    padding: 18px 7% 0;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    background: #f4f8fc;
+}
+
+
+.account-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+}
+
+
+.user-info {
+
+    padding: 10px 16px;
+
+    border: 1px solid #dddddd;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #333333;
+
+    font-weight: 700;
+
+    line-height: 20px;
+}
+
+
+.account-btn {
+
+    padding: 11px 20px;
+
+    margin-left: 10px;
+
+    border-radius: 10px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+
+    font-family: inherit;
+}
+
+
+.primary-btn {
+
+    border: none;
+
+    background: #2d6cc0;
+
+    color: white;
+}
+
+
+.secondary-btn {
+
+    border: 1px solid #2d6cc0;
+
+    background: white;
+
+    color: #2d6cc0;
+}
+
+
+.favorite-active {
+
+    background: #2d6cc0 !important;
+
+    color: white !important;
+
+    border-color: #2d6cc0 !important;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 0;
+
+    padding: 22px 20px;
+
+    background: white;
+
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+}
+
+nav a {
+    position: relative;
+
+    padding: 0 34px;
+
+    text-decoration: none;
+
+    color: #111111;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+nav a:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    right: 0;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 3px;
+    height: 24px;
+
+    /* 한국 페이지 포인트 컬러 */
+    background: #315f95;
+}
+
+nav a:hover {
+    color: #315f95;
+}
 
         .hero {
 
@@ -351,25 +485,30 @@
         }
 
 
-        @media (max-width: 800px) {
+	@media (max-width: 800px) {
 
-            .level-grid,
-            .info-grid,
-            .emergency-grid {
+    	.level-grid,
+    	.info-grid,
+    	.emergency-grid {
+        	grid-template-columns: 1fr;
+    	}
 
-                grid-template-columns: 1fr;
+    	nav {
+        	flex-wrap: wrap;
+        	row-gap: 14px;
+        	padding: 16px 10px;
+    	}
 
-            }
+    	nav a {
+        	padding: 0 18px;
+        	font-size: 15px;
+    	}
 
-
-            nav {
-
-                gap: 15px;
-
-                flex-wrap: wrap;
-
-            }
-
+    	nav a:not(:last-child)::after {
+        	height: 20px;
+        	width: 2px;
+    	}
+}
 
             .hero h1 {
 
@@ -481,66 +620,71 @@
 
 <header>
 
-
     <div
         class="site-title"
         onclick="location.href='index.html'"
         data-i18n="siteTitle">
-
         Tourist Emergency Button
-
     </div>
 
-
-    <div class="header-menu">
-
+    <div class="header-right">
 
         <select
             class="language-select"
             onchange="changeLanguage(this.value)">
 
-            <option value="ko">
-                한국어
-            </option>
-
-            <option value="en">
-                English
-            </option>
-
-            <option value="ja">
-                日本語
-            </option>
-
-            <option value="zh">
-                中文
-            </option>
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="zh">中文</option>
 
         </select>
 
+    </div>
 
-	<button
-	class="header-button"
-	onclick="setFavoriteCountry('korea.html')"
-	data-i18n="favoriteRegister">
+</header>
 
-	♡ 관심 국가 등록
 
-</button>
+<!-- 로그인 사용자 메뉴 -->
+<div class="account-bar">
+
+    <div id="authArea" class="account-actions">
 
         <button
-            class="header-button login-btn"
-            onclick="location.href='login.html'"
-            data-i18n="login">
-
+            id="loginBtn"
+            type="button"
+            class="account-btn primary-btn"
+            onclick="location.href='login.html'">
             로그인
-
         </button>
 
+        <span
+            id="userInfo"
+            class="user-info"
+            style="display:none;">
+        </span>
+
+        <button
+            id="favoriteBtn"
+            type="button"
+            class="country-favorite-btn account-btn secondary-btn"
+	    data-country="korea"
+            onclick="toggleFavoriteCountry('korea')"
+            style="display:none;">
+            ♥ 관심 국가
+        </button>
+
+        <button
+            id="logoutBtn"
+            type="button"
+            class="account-btn primary-btn"
+            style="display:none;">
+            로그아웃
+        </button>
 
     </div>
 
-
-</header>
+</div>
 
 
 
@@ -809,10 +953,14 @@
         id="search-input"
         type="text"
         placeholder="장소 검색"
+        data-i18n-placeholder="placeSearch"
     >
 
-    <button id="search-btn" type="button">
-        검색
+    <button
+        id="search-btn"
+        type="button"
+        data-i18n="searchButton">
+	 검색
     </button>
 </div>
 
@@ -1066,6 +1214,96 @@ document.getElementById("search-input")
             searchPlace();
         }
     });
+
+</script>
+
+<script src="js/favorite.js"></script>
+
+<script>
+(function() {
+
+    var loginBtn = document.getElementById("loginBtn");
+    var logoutBtn = document.getElementById("logoutBtn");
+    var userInfo = document.getElementById("userInfo");
+    var favoriteBtn = document.getElementById("favoriteBtn");
+
+    function checkLogin() {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("GET", "/me", true);
+        xhr.withCredentials = true;
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status === 200) {
+
+                var data;
+
+                try {
+                    data = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    return;
+                }
+
+                loginBtn.style.display = "none";
+                userInfo.style.display = "inline-block";
+                favoriteBtn.style.display = "inline-block";
+                logoutBtn.style.display = "inline-block";
+
+                if (data.user && data.user.name) {
+                    userInfo.innerHTML = data.user.name + "님";
+                } else if (data.name) {
+                    userInfo.innerHTML = data.name + "님";
+                } else {
+                    userInfo.innerHTML = "로그인 중";
+                }
+
+            } else {
+
+                loginBtn.style.display = "inline-block";
+                userInfo.style.display = "none";
+                favoriteBtn.style.display = "none";
+                logoutBtn.style.display = "none";
+            }
+        };
+
+        xhr.send();
+    }
+
+
+    logoutBtn.addEventListener("click", function() {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "/logout", true);
+        xhr.withCredentials = true;
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status === 200) {
+                alert("로그아웃되었습니다.");
+                location.href = "index.html";
+            } else {
+                alert("로그아웃에 실패했습니다.");
+            }
+        };
+
+        xhr.send();
+    });
+
+
+    checkLogin();
+
+})();
 
 </script>
 

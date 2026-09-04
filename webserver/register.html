@@ -609,111 +609,71 @@ function checkDuplicate() {
 
 }
 
-
-
 function registerUser(event) {
-
 
     event.preventDefault();
 
+    var username =
+        document.getElementById("username").value;
 
-    const lang =
+    var password =
+        document.getElementById("password").value;
 
-    localStorage.getItem(
-        "selectedLanguage"
-    ) || "ko";
+    var email =
+        document.getElementById("email").value;
 
-
-    if (!idChecked) {
-
-
-        alert(
-
-            translations[lang]
-            .duplicateRequired
-
-        );
-
-
+    if (!username || !password || !email) {
+        alert("필수 항목을 입력해주세요.");
         return;
-
     }
 
+    var xhr = new XMLHttpRequest();
 
-    const username =
+    xhr.open("POST", "/register", true);
 
-    document
-    .getElementById("username")
-    .value;
-
-
-    const password =
-
-    document
-    .getElementById("password")
-    .value;
-
-
-    const email =
-
-    document
-    .getElementById("email")
-    .value;
-
-
-    const nationality =
-
-    document
-    .getElementById("nationality")
-    .value;
-
-
-    const users =
-
-    JSON.parse(
-        localStorage.getItem("users")
-    ) || [];
-
-
-    users.push({
-
-        username:
-        username,
-
-        password:
-        password,
-
-        email:
-        email,
-
-        nationality:
-        nationality
-
-    });
-
-
-    localStorage.setItem(
-
-        "users",
-
-        JSON.stringify(users)
-
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/json"
     );
 
+    xhr.onreadystatechange = function() {
 
-    alert(
+        if (xhr.readyState !== 4) {
+            return;
+        }
 
-        translations[lang]
-        .registerComplete
+        var data;
 
-    );
+        try {
+            data = JSON.parse(xhr.responseText);
+        } catch (e) {
+            alert("서버 응답을 처리할 수 없습니다.");
+            return;
+        }
 
+        if (xhr.status === 200 && data.success) {
 
-    location.href =
-    "login.html";
+            alert(
+                data.message || "회원가입이 완료되었습니다."
+            );
 
+            location.href = "login.html";
 
+        } else {
+
+            alert(
+                data.message || "회원가입에 실패했습니다."
+            );
+        }
+    };
+
+    xhr.send(JSON.stringify({
+        email: email,
+        password: password,
+        name: username
+    }));
 }
+
 
 </script>
 

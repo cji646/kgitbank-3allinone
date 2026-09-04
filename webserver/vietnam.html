@@ -18,8 +18,8 @@
 
     <!-- Leaflet 지도 CSS -->
     <link
-    rel="stylesheet"
-    href="/css/leaflet.css">
+        rel="stylesheet"
+        href="/css/leaflet.css">
 
     <style>
 
@@ -39,64 +39,144 @@
             color: #4f4138;
         }
 
-        header {
-            height: 78px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 7%;
-            background: white;
-        }
+header {
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    background: white;
+    border-bottom: 1px solid #e8e8e8;
+    position: relative;
+}
 
-        .site-title {
-            font-size: 22px;
-            font-weight: 800;
-            color: #9a704e;
-            cursor: pointer;
-        }
+.site-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    font-weight: 800;
+    color: #9a704e;
+    cursor: pointer;
+}
 
-        .header-menu {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
 
-        .language-select {
-            padding: 10px;
-            border: 1px solid #e4d5c7;
-            border-radius: 9px;
-            background: white;
-        }
+.language-select {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+    background: white;
+    cursor: pointer;
+    outline: none;
+}
 
-        .header-button {
-            border: none;
-            padding: 10px 16px;
-            border-radius: 9px;
-            cursor: pointer;
-            background: #f2e7dc;
-            color: #8c6648;
-            font-weight: 700;
-        }
+.account-bar {
+    padding: 18px 7% 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: #f8f4ef;
+}
 
-        .login-btn {
-            background: #9b7355;
-            color: white;
-        }
+.account-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
 
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 55px;
-            padding: 20px;
-            background: white;
-            border-top: 1px solid #eeeeee;
-        }
+.user-info {
+    padding: 10px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #333333;
+    font-weight: 700;
+    line-height: 20px;
+}
 
-        nav a {
-            text-decoration: none;
-            color: #5a4a3e;
-            font-weight: 600;
-        }
+.account-btn {
+    padding: 11px 20px;
+    margin-left: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s;
+    font-family: inherit;
+}
+
+.primary-btn {
+    border: none;
+    background: #9b7355;
+    color: white;
+}
+
+.secondary-btn {
+    border: 1px solid #9b7355;
+    background: white;
+    color: #9b7355;
+}
+
+.favorite-active {
+    background: #9b7355 !important;
+    color: white !important;
+    border-color: #9b7355 !important;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 0;
+
+    padding: 22px 20px;
+
+    background: white;
+
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+}
+
+nav a {
+    position: relative;
+
+    padding: 0 34px;
+
+    text-decoration: none;
+
+    color: #111111;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+nav a:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    right: 0;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 3px;
+    height: 24px;
+
+    background: #9c704e;
+}
+
+nav a:hover {
+    color: #666666;
+}
 
         .hero {
             padding: 110px 20px;
@@ -115,7 +195,7 @@
             background-position: center;
         }
 
-        .hero h1 {
+       .hero h1 {
             font-size: 44px;
             margin-bottom: 20px;
         }
@@ -191,11 +271,118 @@
                 grid-template-columns: 1fr;
             }
 
-            nav {
-                gap: 15px;
-                flex-wrap: wrap;
-            }
+	nav {
+        	flex-wrap: wrap;
+        	row-gap: 14px;
+        	padding: 16px 10px;
+    	}
 
+    	nav a {
+        	padding: 0 18px;
+        	font-size: 15px;
+    	}
+
+    	nav a:not(:last-child)::after {
+        	height: 20px;
+        	width: 2px;
+    	}
+
+}
+        }
+
+        /* 지도 확대 */
+        #map-wrapper.map-expanded {
+            position: fixed !important;
+            top: 20px !important;
+            left: 20px !important;
+            right: 20px !important;
+            bottom: 20px !important;
+
+            width: auto !important;
+            height: auto !important;
+
+            z-index: 99999 !important;
+
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        #map-wrapper.map-expanded #map {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        #gps-btn {
+            position: absolute !important;
+            right: 12px !important;
+            bottom: 12px !important;
+
+            width: 42px !important;
+            height: 42px !important;
+
+            display: block !important;
+
+            background: white !important;
+            color: #222 !important;
+
+            border: 1px solid #999 !important;
+            border-radius: 8px !important;
+
+            font-size: 24px !important;
+            line-height: 38px !important;
+
+            cursor: pointer !important;
+            z-index: 10000 !important;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        }
+
+        #gps-btn:hover {
+            background: #f5f5f5;
+        }
+
+        #map-search {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            display: flex;
+
+            width: 70%;
+            max-width: 450px;
+
+            z-index: 10000;
+        }
+
+        #search-input {
+            flex: 1;
+            height: 42px;
+
+            padding: 0 12px;
+
+            border: 1px solid #aaa;
+            border-right: none;
+
+            border-radius: 8px 0 0 8px;
+
+            background: white;
+
+            font-size: 14px;
+        }
+
+        #search-btn {
+            width: 65px;
+            height: 42px;
+
+            border: 1px solid #aaa;
+
+            border-radius: 0 8px 8px 0;
+
+            background: white;
+
+            cursor: pointer;
         }
 
     </style>
@@ -205,20 +392,16 @@
 
 <body>
 
-
 <header>
 
     <div
         class="site-title"
         onclick="location.href='index.html'"
         data-i18n="siteTitle">
-
         Tourist Emergency Button
-
     </div>
 
-
-    <div class="header-menu">
+    <div class="header-right">
 
         <select
             class="language-select"
@@ -231,28 +414,51 @@
 
         </select>
 
+    </div>
 
-	<button
-	class="header-button"
-	onclick="setFavoriteCountry('vietnam.html')"
-	data-i18n="favoriteRegister">
+</header>
 
-	♡ 관심 국가 등록
 
-</button>
+<!-- 로그인 사용자 메뉴 -->
+<div class="account-bar">
+
+    <div id="authArea" class="account-actions">
 
         <button
-            class="header-button login-btn"
-            onclick="location.href='login.html'"
-            data-i18n="login">
-
+            id="loginBtn"
+            type="button"
+            class="account-btn primary-btn"
+            onclick="location.href='login.html'">
             로그인
+        </button>
 
+        <span
+            id="userInfo"
+            class="user-info"
+            style="display:none;">
+        </span>
+
+        <button
+            id="favoriteBtn"
+            type="button"
+            class="country-favorite-btn account-btn secondary-btn"
+            data-country="vietnam"
+            onclick="toggleFavoriteCountry('vietnam')" return false;"
+            style="display:none;">
+            ♡ 관심 국가
+        </button>
+
+        <button
+            id="logoutBtn"
+            type="button"
+            class="account-btn primary-btn"
+            style="display:none;">
+            로그아웃
         </button>
 
     </div>
 
-</header>
+</div>
 
 
 
@@ -399,21 +605,53 @@
         class="section-description"
         data-i18n="mapDescription">
 
-	지도를 통해 주변 병원, 경찰서, 대사관 등의 정보를 제공합니다.
+        지도를 통해 주변 병원, 경찰서, 대사관 등의 정보를 제공합니다.
 
     </p>
 
 
     <div
-        id="map"
+        id="map-wrapper"
         style="
-                height:300px;
-                border-radius:20px;
-                overflow:hidden;
-        ">
+            position:relative;
+            height:300px;
+            border-radius:20px;
+            overflow:hidden;
+            cursor:pointer;
+        "
+    >
+        <!-- 실제 지도 -->
+        <div
+            id="map"
+            style="
+                width:100%;
+                height:100%;
+            ">
+        </div>
+
+    <!-- 지도 위 검색창 -->
+<div id="map-search">
+
+    <input
+        id="search-input"
+        type="text"
+        placeholder="장소 검색"
+        data-i18n-placeholder="placeSearch"
+    >
+
+    <button
+        id="search-btn"
+        type="button"
+        data-i18n="searchButton">
+         검색
+    </button>
+</div>
+
+
+        <!-- GPS 버튼 -->
+        <button id="gps-btn" type="button">⌖</button>
 
     </div>
-
 
 </section>
 
@@ -496,19 +734,256 @@ const map = L.map("map", {
     minZoom: 2,
     maxZoom: 19,
     preferCanvas: true,
-    zoomControl: true
+    zoomControl: true,
+    doubleClickZoom: false
 });
 
 L.tileLayer(
-  "/tile.php?z={z}&x={x}&y={y}",
+    "/tile.php?z={z}&x={x}&y={y}",
     {
         maxZoom: 19,
         attribution: "&copy; OpenStreetMap contributors"
     }
 ).addTo(map);
 
+
+/* =========================
+   GPS 현재 위치
+========================= */
+
+document.getElementById("gps-btn").addEventListener("click", function (e) {
+
+    e.stopPropagation();
+
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            map.setView([lat, lon], 16);
+
+            L.marker([lat, lon])
+                .addTo(map)
+                .bindPopup("현재 위치")
+                .openPopup();
+        },
+
+        function () {
+            alert("현재 위치를 가져올 수 없습니다.");
+        }
+    );
+
+});
+
+
+/* =========================
+   지도 확대/축소
+========================= */
+
+const mapWrapper = document.getElementById("map-wrapper");
+
+mapWrapper.addEventListener("dblclick", function () {
+
+    if (!mapWrapper.classList.contains("map-expanded")) {
+
+        mapWrapper.classList.add("map-expanded");
+
+        mapWrapper.style.position = "fixed";
+        mapWrapper.style.top = "20px";
+        mapWrapper.style.left = "20px";
+        mapWrapper.style.right = "20px";
+        mapWrapper.style.bottom = "20px";
+        mapWrapper.style.width = "auto";
+        mapWrapper.style.height = "auto";
+        mapWrapper.style.zIndex = "999999";
+        mapWrapper.style.background = "white";
+
+    } else {
+
+        mapWrapper.classList.remove("map-expanded");
+
+        mapWrapper.style.position = "relative";
+        mapWrapper.style.top = "";
+        mapWrapper.style.left = "";
+        mapWrapper.style.right = "";
+        mapWrapper.style.bottom = "";
+        mapWrapper.style.width = "100%";
+        mapWrapper.style.height = "300px";
+        mapWrapper.style.zIndex = "";
+        mapWrapper.style.background = "";
+
+    }
+
+    setTimeout(function () {
+        map.invalidateSize();
+    }, 100);
+
+});
+
+
+/* =========================
+   장소 검색
+========================= */
+
+let searchMarker = null;
+
+function searchPlace() {
+
+    const input = document.getElementById("search-input");
+    const query = input.value.trim();
+
+    if (!query) {
+        alert("검색어를 입력해주세요.");
+        return;
+    }
+
+    fetch("/search.php?q=" + encodeURIComponent(query))
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+
+            if (!data || data.length === 0) {
+                alert("검색 결과가 없습니다.");
+                return;
+            }
+
+            const result = data[0];
+
+            const lat = parseFloat(result.lat);
+            const lon = parseFloat(result.lon);
+
+            map.setView([lat, lon], 16);
+
+            if (searchMarker) {
+                map.removeLayer(searchMarker);
+            }
+
+            searchMarker = L.marker([lat, lon])
+                .addTo(map)
+                .bindPopup(result.display_name)
+                .openPopup();
+        })
+        .catch(function (error) {
+
+            console.log(error);
+
+            alert("검색 중 오류가 발생했습니다.");
+        });
+}
+
+document.getElementById("search-btn")
+    .addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+        searchPlace();
+    });
+
+document.getElementById("search-input")
+    .addEventListener("keydown", function (e) {
+
+        e.stopPropagation();
+
+        if (e.key === "Enter") {
+            searchPlace();
+        }
+    });
+
+</script>
+
+<script src="/js/favorite.js?v=4"></script>
+
+<script>
+(function() {
+
+    var loginBtn = document.getElementById("loginBtn");
+    var logoutBtn = document.getElementById("logoutBtn");
+    var userInfo = document.getElementById("userInfo");
+    var favoriteBtn = document.getElementById("favoriteBtn");
+
+    function checkLogin() {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("GET", "/me", true);
+        xhr.withCredentials = true;
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status === 200) {
+
+                var data;
+
+                try {
+                    data = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    return;
+                }
+
+                loginBtn.style.display = "none";
+                userInfo.style.display = "inline-block";
+                favoriteBtn.style.display = "inline-block";
+                logoutBtn.style.display = "inline-block";
+
+                if (data.user && data.user.name) {
+                    userInfo.innerHTML = data.user.name + "님";
+                } else if (data.name) {
+                    userInfo.innerHTML = data.name + "님";
+                } else {
+                    userInfo.innerHTML = "로그인 중";
+                }
+
+            } else {
+
+                loginBtn.style.display = "inline-block";
+                userInfo.style.display = "none";
+                favoriteBtn.style.display = "none";
+                logoutBtn.style.display = "none";
+            }
+        };
+
+        xhr.send();
+    }
+
+
+    logoutBtn.addEventListener("click", function() {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "/logout", true);
+        xhr.withCredentials = true;
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status === 200) {
+                alert("로그아웃되었습니다.");
+                location.href = "index.html";
+            } else {
+                alert("로그아웃에 실패했습니다.");
+            }
+        };
+
+        xhr.send();
+    });
+
+
+    checkLogin();
+
+})();
+
 </script>
 
 </body>
 
 </html>
+
