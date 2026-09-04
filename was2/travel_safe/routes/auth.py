@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from db.connection import get_db_connection
-from soc_reporter import report_login
+from soc_reporter import report_login, report_logout
 import re
 import time
 
@@ -250,8 +250,13 @@ def login():
 
                 login_attempts[email]["count"] += 1
 
-            # SOC에 로그인 실패 보고
-            report_login(request, email, success=False)
+            #SOC 로그인 실패 보고
+            report_login(
+                ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+                username=email,
+                success=False,
+                user_agent=request.headers.get("User-Agent")
+            )
             
             return jsonify({
                 "success": False,
@@ -277,8 +282,13 @@ def login():
                 login_attempts[email]["count"] += 1
             
             # SOC에 로그인 실패 보고
-            report_login(request, email, success=False)
-            
+            report_login(
+                ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+                username=email,
+                success=False,
+                user_agent=request.headers.get("User-Agent")
+            )
+ 
             return jsonify({
                 "success": False,
                 "message": "이메일 또는 비밀번호가 올바르지 않습니다."
@@ -298,8 +308,13 @@ def login():
         session["email"] = user["email"]
         session["role"] = user["role"]
 
-        #SOC에 로그인 성공 보고
-        report_login(request, email, success=True)
+        #SOC에 로그인 보고
+        report_login(
+            ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+            username=email,
+            success=True,
+            user_agent=request.headers.get("User-Agent")
+        )
 
         return jsonify({
             "success": True,
@@ -331,13 +346,40 @@ def login():
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
 
+    # 로그아웃 전에 현재 로그인한 사용자 정보 가져오기
+    user_id = session.get("user_id")
+    email = session.get("email")
+
+    # 로그인된 사용자라면 SOC에 로그아웃 이벤트 전송
+    if user_id is not None:
+
+        # 실제 클라이언트 IP 확인
+        ip = request.headers.get(
+            "X-Forwarded-For",
+            request.remote_addr
+        )
+
+        # X-Forwarded-For에 IP가 여러 개 있으면 첫 번째 IP 사용
+        if ip and "," in ip:
+            ip = ip.split(",")[0].strip()
+
+        # 사용자 브라우저 정보
+        user_agent = request.headers.get("User-Agent")
+
+        # SOC 로그아웃 이벤트 전송
+        report_logout(
+            ip=ip,
+            username=email,
+            user_agent=user_agent
+        )
+
+    # 세션 삭제
     session.clear()
 
     return jsonify({
         "success": True,
         "message": "로그아웃 되었습니다."
     }), 200
-
 
 # =========================
 # 세션 확인용
