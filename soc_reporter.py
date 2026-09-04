@@ -1,96 +1,98 @@
-"""
-SOC 연동 모듈 - Flask 로그인 라우트에 붙여서 쓰는 헬퍼.
-
-사용법 (로그인 처리하는 뷰 함수 안에서):
-
-    from soc_reporter import report_login, report_logout
-
-    @app.route("/login", methods=["POST"])
-    def login():
-        username = request.form["username"]
-        password = request.form["password"]
-        user = User.query.filter_by(username=username).first()
-
-        if user and check_password_hash(user.password_hash, password):
-            report_login(request, username, success=True)
-            # ... 로그인 성공 처리 (세션 생성 등)
-            return redirect(url_for("home"))
-        else:
-            report_login(request, username, success=False)
-            # ... 로그인 실패 처리
-            return "로그인 실패", 401
-
-    @app.route("/logout", methods=["POST"])
-    def logout():
-        username = session.get("username")
-        report_logout(request, username)
-        # ... 세션 종료 처리
-        return redirect(url_for("login"))
-
-환경변수 설정 (WAS 서버에서):
-    export SOC_INGEST_URL="http://SOC서버IP/ingest/login"
-    export SOC_INGEST_TOKEN="SOC 서버의 SOC_INGEST_TOKEN과 동일한 값"
-
-필요 패키지: pip install requests
-"""
 import os
 import logging
-
 import requests
 
 logger = logging.getLogger("soc_reporter")
 
-SOC_INGEST_URL = os.environ.get("SOC_INGEST_URL", "http://SOC서버IP/ingest/login")
-SOC_INGEST_TOKEN = os.environ.get("SOC_INGEST_TOKEN", "")
+# SOC 서버 주소
+SOC_INGEST_URL = os.environ.get(
+    "SOC_INGEST_URL",
+    "http://SOC_SERVER_IP/ingest/login"
+)
 
-# SOC가 느리거나 죽어있어도 사이트 로그인 자체가 느려지거나 막히면 안 되므로
-# 아주 짧은 타임아웃을 쓰고, 실패해도 예외를 절대 밖으로 던지지 않는다 (fail-open).
-SOC_TIMEOUT_SEC = 1.5
-
-
-def get_client_ip(request) -> str:
-    """리버스 프록시(Nginx 등) 뒤에 있으면 request.remote_addr는 프록시
-    IP가 잡히므로, X-Forwarded-For 헤더의 첫 IP를 우선 사용한다."""
-    forwarded = request.headers.get("X-Forwarded-For", "")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    return request.remote_addr or "unknown"
+# SOC 서버와 약속한 인증 토큰
+SOC_INGEST_TOKEN = os.environ.get(
+    "SOC_INGEST_TOKEN",
+    ""
+)
 
 
-def report_login(request, username: str, success: bool) -> None:
-    """로그인 성공/실패를 SOC로 보고한다. 비밀번호 원문은 절대 보내지 않는다."""
-    if not SOC_INGEST_TOKEN:
-        logger.debug("SOC_INGEST_TOKEN 미설정 - 보고를 건너뜁니다.")
-        return
+def report_login(ip, username, success, user_agent=None):
+    """
+    WAS에서 로그인 성공/실패가 발생했을 때
+    SOC 서버의 /ingest/login으로 이벤트를 전달합니다.
+    """
+
+    payload = {
+        "ip": ip,
+        "username": username,
+        "success": success,
+        "user_agent": user_agent
+    }
+
+    headers = {
+        "X-SOC-Token": SOC_INGEST_TOKEN
+    }
 
     try:
-        requests.post(
+        response = requests.post(
             SOC_INGEST_URL,
-            json={
-                "ip": get_client_ip(request),
-                "username": username,
-                "success": success,
-            },
-            headers={"X-SOC-Token": SOC_INGEST_TOKEN},
-            timeout=SOC_TIMEOUT_SEC,
+            json=payload,
+            headers=headers,
+            timeout=3
         )
-    except requests.RequestException:
-        # SOC 연동 실패는 로그인 자체를 막는 이유가 되면 안 되므로 조용히 무시.
-        logger.warning("SOC 로그인 이벤트 보고 실패 (무시하고 계속 진행)", exc_info=True)
+
+        print("SOC 전송 시도:", SOC_INGEST_URL)
+        print("SOC 응답:", response.status_code, response.text)
+
+        if response.status_code != 200:
+            logger.warning(
+                "SOC login event 전송 실패: %s %s",
+                response.status_code,
+                response.text
+            )
+
+    except Exception as e:
+        # SOC 서버가 죽어 있어도
+        # 사용자 로그인 자체는 실패하지 않도록 합니다.
+        logger.warning("SOC login event 전송 오류: %s", e)
 
 
-def report_logout(request, username: str) -> None:
-    """로그아웃을 SOC로 보고한다. 일반 사용자·관리자 구분 없이 전부 보고한다."""
-    if not SOC_INGEST_TOKEN:
-        return
+def report_logout(ip, username, user_agent=None):
+    """
+    WAS에서 로그아웃이 발생했을 때
+    SOC 서버의 /ingest/logout으로 이벤트를 전달합니다.
+    """
 
-    logout_url = SOC_INGEST_URL.replace("/ingest/login", "/ingest/logout")
+    logout_url = SOC_INGEST_URL.replace(
+        "/ingest/login",
+        "/ingest/logout"
+    )
+
+    payload = {
+        "ip": ip,
+        "username": username,
+        "user_agent": user_agent
+    }
+
+    headers = {
+        "X-SOC-Token": SOC_INGEST_TOKEN
+    }
+
     try:
-        requests.post(
+        response = requests.post(
             logout_url,
-            json={"ip": get_client_ip(request), "username": username},
-            headers={"X-SOC-Token": SOC_INGEST_TOKEN},
-            timeout=SOC_TIMEOUT_SEC,
+            json=payload,
+            headers=headers,
+            timeout=3
         )
-    except requests.RequestException:
-        logger.warning("SOC 로그아웃 이벤트 보고 실패 (무시하고 계속 진행)", exc_info=True)
+
+        if response.status_code != 200:
+            logger.warning(
+                "SOC logout event 전송 실패: %s %s",
+                response.status_code,
+                response.text
+            )
+
+    except Exception as e:
+        logger.warning("SOC logout event 전송 오류: %s", e)
