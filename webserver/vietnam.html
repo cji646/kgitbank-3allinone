@@ -647,9 +647,21 @@ nav a:hover {
     </button>
 </div>
 
-
-        <!-- GPS 버튼 -->
-        <button id="gps-btn" type="button">⌖</button>
+<iframe
+    id="global-map-frame"
+    src="/map/index.html?country=vietnam"
+    title="Global Map"
+    style="
+        display:none;
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        border:0;
+        z-index:1000;
+    "
+></iframe>
 
     </div>
 
@@ -748,40 +760,11 @@ L.tileLayer(
 
 
 /* =========================
-   GPS 현재 위치
-========================= */
-
-document.getElementById("gps-btn").addEventListener("click", function (e) {
-
-    e.stopPropagation();
-
-    navigator.geolocation.getCurrentPosition(
-        function (position) {
-
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-
-            map.setView([lat, lon], 16);
-
-            L.marker([lat, lon])
-                .addTo(map)
-                .bindPopup("현재 위치")
-                .openPopup();
-        },
-
-        function () {
-            alert("현재 위치를 가져올 수 없습니다.");
-        }
-    );
-
-});
-
-
-/* =========================
    지도 확대/축소
 ========================= */
 
 const mapWrapper = document.getElementById("map-wrapper");
+const globalMapFrame = document.getElementById("global-map-frame");
 
 mapWrapper.addEventListener("dblclick", function () {
 
@@ -799,7 +782,13 @@ mapWrapper.addEventListener("dblclick", function () {
         mapWrapper.style.zIndex = "999999";
         mapWrapper.style.background = "white";
 
+        globalMapFrame.style.display = "block";
+	document.getElementById("map-search").style.display = "none";
+
     } else {
+
+        globalMapFrame.style.display = "none";
+	document.getElementById("map-search").style.display = "";
 
         mapWrapper.classList.remove("map-expanded");
 
@@ -813,14 +802,39 @@ mapWrapper.addEventListener("dblclick", function () {
         mapWrapper.style.zIndex = "";
         mapWrapper.style.background = "";
 
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 100);
     }
+
+});
+
+window.addEventListener("message", function (event) {
+
+    if (event.data !== "close-global-map") {
+        return;
+    }
+
+    globalMapFrame.style.display = "none";
+    document.getElementById("map-search").style.display = "";
+
+    mapWrapper.classList.remove("map-expanded");
+
+    mapWrapper.style.position = "relative";
+    mapWrapper.style.top = "";
+    mapWrapper.style.left = "";
+    mapWrapper.style.right = "";
+    mapWrapper.style.bottom = "";
+    mapWrapper.style.width = "100%";
+    mapWrapper.style.height = "300px";
+    mapWrapper.style.zIndex = "";
+    mapWrapper.style.background = "";
 
     setTimeout(function () {
         map.invalidateSize();
     }, 100);
 
 });
-
 
 /* =========================
    장소 검색

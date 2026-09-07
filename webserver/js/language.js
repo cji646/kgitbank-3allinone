@@ -230,7 +230,106 @@ japanPageTitle:
     "일본 여행 안전정보",
 
 japanHeroDescription:
-    "안전한 일본 여행을 위한 국가별 안전정보와 긴급 정보를 제공합니다."
+    "안전한 일본 여행을 위한 국가별 안전정보와 긴급 정보를 제공합니다.",
+
+mapGlobalTitle:
+    "글로벌 지도 서비스",
+
+mapGlobalDescription:
+    "주변 시설 검색 및 현재 위치 확인",
+
+mapPlaceSearch:
+    "장소 검색",
+
+mapSearch:
+    "검색",
+
+mapTransport:
+    "이동 수단",
+
+mapDriving:
+    "자동차",
+
+mapWalking:
+    "도보",
+
+mapBike:
+    "자전거",
+
+mapDistance:
+    "거리",
+
+mapDuration:
+    "시간",
+
+mapReady:
+    "지도 준비 완료",
+
+mapClear:
+    "경로·검색 초기화",
+
+mapMyLocation:
+    "내 위치",
+
+mapHospital: "병원",
+	
+	mapPolice: "경찰",
+
+	mapFireStation: "소방",
+
+	mapPharmacy: "약국",
+
+	mapLoadError: "정보를 불러오지 못했습니다.",
+
+	mapClickStart: "1번째 클릭 → 출발지",
+
+	mapClickEnd: "2번째 클릭 → 도착지",
+
+	mapClickReset: "3번째 클릭 → 경로 초기화",
+
+	mapOsmSupport: "OSM 국가별 태그 차이 대응",
+
+	mapFacilitySupport: "병원·의원·치과·약국·경찰·파출소·소방·역·학교 등 지원",
+
+	mapLanguageSupport: "한국어·영어·현지 언어 검색 지원",
+
+	mapSearchResults: "검색 결과",
+
+	mapSearchCenter: "검색 기준 위치: 지도 중심",
+
+mapHour: "시간",
+mapMinute: "분",
+mapNoName: "이름 없음",
+mapPlace: "장소",
+mapWebsite: "웹사이트",
+mapNoSearchResults: "검색 결과가 없습니다.",
+mapEnterSearch: "검색어를 입력해 주세요.",
+mapSearching: "검색 중...",
+mapSearchComplete: "검색 완료",
+mapSearchFailed: "검색 실패. 잠시 후 다시 시도해 주세요.",
+mapCalculating: "계산 중...",
+mapRouteComplete: "실제 도로 기준 경로 안내 완료",
+mapRouteFallback: "도로 경로 서버 실패 → 직선거리로 표시합니다.",
+mapGpsUnsupported: "이 브라우저는 GPS를 지원하지 않습니다.",
+mapGpsLocating: "현재 위치 확인 중...",
+mapGpsLocation: "현재 GPS 위치",
+mapLatitude: "위도",
+mapLongitude: "경도",
+mapGpsSearchBase: "GPS 위치를 검색 기준으로 사용합니다.",
+mapGpsComplete: "GPS 위치 확인 완료",
+mapGpsFailed: "GPS 위치를 확인하지 못했습니다. 지도 클릭 위치를 사용할 수 있습니다.",
+mapRouteResetDone: "경로가 초기화되었습니다. 출발지를 다시 클릭하세요.",
+mapStartPoint: "출발지",
+mapEndPoint: "도착지",
+mapStartSearchBase: "출발지를 검색 기준으로 사용합니다.",
+mapStartComplete: "출발지 설정 완료",
+mapClickDestination: "도착지를 클릭하세요.",
+mapRouteCalculating: "실제 도로 경로 계산 중...",
+mapInfoLoadFailed: "정보를 불러오지 못했습니다.",
+mapReadySearch: "지도 준비 완료 · 검색어를 입력하세요.",
+
+	mapSearchPlaceholder: "장소를 입력하세요"
+
     },
 
     /* =========================
@@ -463,10 +562,114 @@ japanPageTitle:
     "Japan Travel Safety Information",
 
 japanHeroDescription:
-    "We provide safety and emergency information for a safe trip to Japan."
+    "We provide safety and emergency information for a safe trip to Japan.",
+
+mapGlobalTitle:
+    "Global Map Service",
+
+mapGlobalDescription:
+    "Search nearby facilities and check your current location",
+
+mapPlaceSearch:
+    "Place Search",
+
+mapSearch:
+    "Search",
+
+mapTransport:
+    "Transport",
+
+mapDriving:
+    "Driving",
+
+mapWalking:
+    "Walking",
+
+mapBike:
+    "Bicycle",
+
+mapDistance:
+    "Distance",
+
+mapDuration:
+    "Duration",
+
+mapReady:
+    "Map ready",
+
+mapClear:
+    "Clear route and search",
+
+mapMyLocation:
+    "My Location",
+
+mapHospital:
+    "Hospital",
+
+mapPolice:
+    "Police",
+
+mapFireStation:
+    "Fire Station",
+
+mapPharmacy:
+    "Pharmacy",
+
+mapLoadError:
+    "Unable to load information.",
+
+	mapClickStart: "1st click → Start",
+
+	mapClickEnd: "2nd click → Destination",
+
+	mapClickReset: "3rd click → Reset route",
+
+	mapOsmSupport: "Supports country-specific OSM tag differences",
+
+	mapFacilitySupport: "Supports hospitals, clinics, dentists, pharmacies, police, fire stations, stations, schools, and more",
+
+	mapLanguageSupport: "Supports Korean, English, and local-language searches",
+
+	mapSearchResults: "Search Results",
+
+	mapSearchCenter: "Search reference: Map center",
+
+mapSearchPlaceholder: "Enter a place",
+
+mapHour: "hr",
+mapMinute: "min",
+mapNoName: "No name",
+mapPlace: "Place",
+mapWebsite: "Website",
+mapNoSearchResults: "No search results found.",
+mapEnterSearch: "Please enter a search term.",
+mapSearching: "Searching...",
+mapSearchComplete: "Search complete",
+mapSearchFailed: "Search failed. Please try again later.",
+mapCalculating: "Calculating...",
+mapRouteComplete: "Route guidance based on actual roads is complete",
+mapRouteFallback: "Road routing server failed → showing straight-line distance.",
+mapGpsUnsupported: "This browser does not support GPS.",
+mapGpsLocating: "Checking current location...",
+mapGpsLocation: "Current GPS Location",
+mapLatitude: "Latitude",
+mapLongitude: "Longitude",
+mapGpsSearchBase: "Using GPS location as the search reference.",
+mapGpsComplete: "GPS location confirmed",
+mapGpsFailed: "Unable to determine GPS location. You can use a location clicked on the map.",
+mapRouteResetDone: "The route has been reset. Click the start point again.",
+mapStartPoint: "Start",
+mapEndPoint: "Destination",
+mapStartSearchBase: "Using the start point as the search reference.",
+mapStartComplete: "Start point set",
+mapClickDestination: "Click the destination.",
+mapRouteCalculating: "Calculating route using actual roads...",
+mapInfoLoadFailed: "Unable to load information.",
+mapReadySearch: "Map ready · Enter a search term.",
+
+	mapSearchPlaceholder: "Enter a place"
 
     },
-
 
     /* =========================
        日本語
@@ -708,10 +911,115 @@ japanPageTitle:
     "日本旅行の安全情報",
 
 japanHeroDescription:
-    "安全な日本旅行のための安全情報と緊急情報を提供します。"
+    "安全な日本旅行のための安全情報と緊急情報を提供します。",
+
+mapGlobalTitle:
+    "グローバル地図サービス",
+
+mapGlobalDescription:
+    "周辺施設の検索と現在地の確認",
+
+mapPlaceSearch:
+    "場所検索",
+
+mapSearch:
+    "検索",
+
+mapTransport:
+    "移動手段",
+
+mapDriving:
+    "車",
+
+mapWalking:
+    "徒歩",
+
+mapBike:
+    "自転車",
+
+mapDistance:
+    "距離",
+
+mapDuration:
+    "時間",
+
+mapReady:
+    "地図の準備が完了しました",
+
+mapClear:
+    "ルート・検索をリセット",
+
+mapMyLocation:
+    "現在地",
+
+mapHospital:
+    "病院",
+
+mapPolice:
+    "警察",
+
+mapFireStation:
+    "消防署",
+
+mapPharmacy:
+    "薬局",
+
+mapLoadError:
+    "情報を読み込めませんでした。",
+
+	mapClickStart: "1回目のクリック → 出発地",
+
+	mapClickEnd: "2回目のクリック → 目的地",
+
+	mapClickReset: "3回目のクリック → ルート初期化",
+
+	mapOsmSupport: "国ごとのOSMタグの違いに対応",
+
+	mapFacilitySupport: "病院・診療所・歯科・薬局・警察・消防署・駅・学校などに対応",
+
+	mapLanguageSupport: "韓国語・英語・現地言語での検索に対応",
+
+	mapSearchResults: "検索結果",
+
+	mapSearchCenter: "検索基準位置: 地図の中心",
+
+
+mapSearchPlaceholder: "場所を入力してください",
+
+mapHour: "時間",
+mapMinute: "分",
+mapNoName: "名前なし",
+mapPlace: "場所",
+mapWebsite: "ウェブサイト",
+mapNoSearchResults: "検索結果がありません。",
+mapEnterSearch: "検索語を入力してください。",
+mapSearching: "検索中...",
+mapSearchComplete: "検索完了",
+mapSearchFailed: "検索に失敗しました。しばらくしてからもう一度お試しください。",
+mapCalculating: "計算中...",
+mapRouteComplete: "実際の道路に基づくルート案内が完了しました",
+mapRouteFallback: "道路ルートサーバーに接続できないため、直線距離で表示します。",
+mapGpsUnsupported: "このブラウザはGPSをサポートしていません。",
+mapGpsLocating: "現在地を確認中...",
+mapGpsLocation: "現在のGPS位置",
+mapLatitude: "緯度",
+mapLongitude: "経度",
+mapGpsSearchBase: "GPS位置を検索基準として使用します。",
+mapGpsComplete: "GPS位置の確認が完了しました",
+mapGpsFailed: "GPS位置を確認できませんでした。地図上でクリックした位置を使用できます。",
+mapRouteResetDone: "ルートを初期化しました。出発地をもう一度クリックしてください。",
+mapStartPoint: "出発地",
+mapEndPoint: "目的地",
+mapStartSearchBase: "出発地を検索基準として使用します。",
+mapStartComplete: "出発地を設定しました",
+mapClickDestination: "目的地をクリックしてください。",
+mapRouteCalculating: "実際の道路ルートを計算中...",
+mapInfoLoadFailed: "情報を読み込めませんでした。",
+mapReadySearch: "地図の準備が完了しました · 検索語を入力してください。",
+
+	mapSearchPlaceholder: "場所を入力してください"
 
     },
-
 
     /* =========================
        中文
@@ -953,11 +1261,117 @@ japanPageTitle:
     "日本旅行安全信息",
 
 japanHeroDescription:
-    "为您提供安全前往日本旅行所需的安全信息和紧急信息。"
+    "为您提供安全前往日本旅行所需的安全信息和紧急信息。",
+
+mapGlobalTitle:
+    "全球地图服务",
+
+mapGlobalDescription:
+    "搜索周边设施并查看当前位置",
+
+mapPlaceSearch:
+    "地点搜索",
+
+mapSearch:
+    "搜索",
+
+mapTransport:
+    "交通方式",
+
+mapDriving:
+    "驾车",
+
+mapWalking:
+    "步行",
+
+mapBike:
+    "自行车",
+
+mapDistance:
+    "距离",
+
+mapDuration:
+    "时间",
+
+mapReady:
+    "地图已准备就绪",
+
+mapClear:
+    "清除路线和搜索",
+
+mapMyLocation:
+    "我的位置",
+
+mapHospital:
+    "医院",
+
+mapPolice:
+    "警察",
+
+mapFireStation:
+    "消防站",
+
+mapPharmacy:
+    "药店",
+
+mapLoadError:
+    "无法加载信息。",
+
+	mapClickStart: "第1次点击 → 出发地",
+
+	mapClickEnd: "第2次点击 → 目的地",
+
+	mapClickReset: "第3次点击 → 重置路线",
+
+	mapOsmSupport: "支持不同国家的OSM标签差异",
+
+	mapFacilitySupport: "支持医院、诊所、牙科、药店、警察、消防站、车站、学校等",
+
+	mapLanguageSupport: "支持韩语、英语及当地语言搜索",
+
+	mapSearchResults: "搜索结果",
+
+	mapSearchCenter: "搜索基准位置：地图中心",
+
+mapSearchPlaceholder: "場所を入力してください",
+
+
+mapHour: "小时",
+mapMinute: "分钟",
+mapNoName: "无名称",
+mapPlace: "地点",
+mapWebsite: "网站",
+mapNoSearchResults: "没有搜索结果。",
+mapEnterSearch: "请输入搜索内容。",
+mapSearching: "正在搜索...",
+mapSearchComplete: "搜索完成",
+mapSearchFailed: "搜索失败，请稍后重试。",
+mapCalculating: "正在计算...",
+mapRouteComplete: "基于实际道路的路线导航已完成",
+mapRouteFallback: "道路路线服务器失败 → 将显示直线距离。",
+mapGpsUnsupported: "此浏览器不支持GPS。",
+mapGpsLocating: "正在确认当前位置...",
+mapGpsLocation: "当前GPS位置",
+mapLatitude: "纬度",
+mapLongitude: "经度",
+mapGpsSearchBase: "将GPS位置作为搜索基准。",
+mapGpsComplete: "GPS位置确认完成",
+mapGpsFailed: "无法确认GPS位置。您可以使用在地图上点击的位置。",
+mapRouteResetDone: "路线已重置。请重新点击出发地。",
+mapStartPoint: "出发地",
+mapEndPoint: "目的地",
+mapStartSearchBase: "将出发地作为搜索基准。",
+mapStartComplete: "出发地设置完成",
+mapClickDestination: "请点击目的地。",
+mapRouteCalculating: "正在计算实际道路路线...",
+mapInfoLoadFailed: "无法加载信息。",
+mapReadySearch: "地图已准备就绪 · 请输入搜索内容。",
+
+	mapSearchPlaceholder: "请输入地点"
 
     }
-};
 
+};
 
 /* =========================
    번역 함수
