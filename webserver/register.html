@@ -328,9 +328,8 @@ onsubmit="registerUser(event)">
 
 <div class="form-group">
 
-<label data-i18n="username">
-
-아이디
+<label data-i18n="usernameEmail">
+아이디(이메일)
 
 </label>
 
@@ -341,8 +340,7 @@ onsubmit="registerUser(event)">
 <input
 type="text"
 id="username"
-data-i18n-placeholder="usernamePlaceholder"
-placeholder="아이디를 입력하세요"
+placeholder="이메일을 입력하세요"
 required>
 
 
@@ -384,7 +382,6 @@ class="message">
 <input
 type="password"
 id="password"
-data-i18n-placeholder="passwordPlaceholder"
 placeholder="비밀번호를 입력하세요"
 required>
 
@@ -395,19 +392,17 @@ required>
 
 <div class="form-group">
 
+<label data-i18n="name">
 
-<label data-i18n="email">
-
-이메일
+이름
 
 </label>
 
 
 <input
-type="email"
+type="text"
 id="email"
-data-i18n-placeholder="emailPlaceholder"
-placeholder="이메일을 입력하세요"
+placeholder="이름을 입력하세요"
 required>
 
 
@@ -668,9 +663,9 @@ function registerUser(event) {
     };
 
     xhr.send(JSON.stringify({
-        email: email,
+        email: username,
         password: password,
-        name: username
+        name: email
     }));
 }
 

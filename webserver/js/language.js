@@ -29,6 +29,9 @@ const translations = {
         korea: "KOREA",
         japan: "JAPAN",
         vietnam: "VIETNAM",
+	usa: "USA",
+        china: "CHINA",
+        other: "OTHER",
 
         koreaDesc:
             "대한민국 여행 안전정보와 긴급 연락처를 확인하세요.",
@@ -72,6 +75,8 @@ const translations = {
             "아이디 또는 비밀번호가 올바르지 않습니다.",
 
 
+	resetPassword: "비밀번호 재설정",
+
         /* 회원가입 */
 
         signup:
@@ -97,6 +102,10 @@ const translations = {
         fillAllFields:
             "모든 정보를 입력해주세요.",
 
+
+        usernameEmail: "아이디(이메일)",
+
+        name: "이름",
 
         /* 아이디 찾기 */
 
@@ -327,6 +336,14 @@ mapClickDestination: "도착지를 클릭하세요.",
 mapRouteCalculating: "실제 도로 경로 계산 중...",
 mapInfoLoadFailed: "정보를 불러오지 못했습니다.",
 mapReadySearch: "지도 준비 완료 · 검색어를 입력하세요.",
+mapClinic: "의원·진료소",
+mapDentist: "치과",
+mapStation: "역·터미널",
+mapSchool: "학교",
+mapAirport: "공항",
+mapHotel: "호텔",
+mapShopping: "쇼핑",
+mapRestaurant: "식당",
 
 	mapSearchPlaceholder: "장소를 입력하세요"
 
@@ -359,6 +376,9 @@ mapReadySearch: "지도 준비 완료 · 검색어를 입력하세요.",
         korea: "KOREA",
         japan: "JAPAN",
         vietnam: "VIETNAM",
+        usa: "USA",
+        china: "CHINA",
+        other: "OTHER",
 
         koreaDesc:
             "Check travel safety information and emergency contacts for Korea.",
@@ -405,6 +425,7 @@ mapReadySearch: "지도 준비 완료 · 검색어를 입력하세요.",
         loginFail:
             "Incorrect ID or password.",
 
+	resetPassword: "Reset Password",
 
         /* Sign Up */
 
@@ -431,6 +452,9 @@ mapReadySearch: "지도 준비 완료 · 검색어를 입력하세요.",
         fillAllFields:
             "Please fill in all fields.",
 
+    	usernameEmail: "ID (Email)",
+
+	name: "Name",
 
         /* Find ID */
 
@@ -666,6 +690,14 @@ mapClickDestination: "Click the destination.",
 mapRouteCalculating: "Calculating route using actual roads...",
 mapInfoLoadFailed: "Unable to load information.",
 mapReadySearch: "Map ready · Enter a search term.",
+mapClinic: "Clinic",
+mapDentist: "Dentist",
+mapStation: "Station",
+mapSchool: "School",
+mapAirport: "Airport",
+mapHotel: "Hotel",
+mapShopping: "Shopping",
+mapRestaurant: "Restaurant",
 
 	mapSearchPlaceholder: "Enter a place"
 
@@ -706,6 +738,12 @@ mapReadySearch: "Map ready · Enter a search term.",
 
         vietnam:
             "ベトナム",
+
+        usa: "アメリカ",
+
+        china: "中国",
+
+        other: "その他",
 
         koreaDesc:
             "韓国の旅行安全情報と緊急連絡先を確認できます。",
@@ -752,6 +790,7 @@ mapReadySearch: "Map ready · Enter a search term.",
         loginFail:
             "IDまたはパスワードが正しくありません。",
 
+	resetPassword: "パスワードを再設定",
 
         /* 会員登録 */
 
@@ -778,6 +817,9 @@ mapReadySearch: "Map ready · Enter a search term.",
         fillAllFields:
             "すべての情報を入力してください。",
 
+	usernameEmail: "ID（メールアドレス）",
+
+	name: "名前",
 
         /* IDを探す */
 
@@ -1016,7 +1058,14 @@ mapClickDestination: "目的地をクリックしてください。",
 mapRouteCalculating: "実際の道路ルートを計算中...",
 mapInfoLoadFailed: "情報を読み込めませんでした。",
 mapReadySearch: "地図の準備が完了しました · 検索語を入力してください。",
-
+mapClinic: "診療所",
+mapDentist: "歯科",
+mapStation: "駅・ターミナル",
+mapSchool: "学校",
+mapAirport: "空港",
+mapHotel: "ホテル",
+mapShopping: "ショッピング",
+mapRestaurant: "レストラン",
 	mapSearchPlaceholder: "場所を入力してください"
 
     },
@@ -1056,6 +1105,12 @@ mapReadySearch: "地図の準備が完了しました · 検索語を入力し�
 
         vietnam:
             "越南",
+
+        usa: "美国",
+
+        china: "中国",
+
+        other: "其他",
 
         koreaDesc:
             "查看韩国旅行安全信息和紧急联系方式。",
@@ -1102,6 +1157,7 @@ mapReadySearch: "地図の準備が完了しました · 検索語を入力し�
         loginFail:
             "账号或密码不正确。",
 
+	resetPassword: "重置密码",
 
         /* 注册 */
 
@@ -1128,6 +1184,9 @@ mapReadySearch: "地図の準備が完了しました · 検索語を入力し�
         fillAllFields:
             "请填写所有信息。",
 
+	usernameEmail: "账号（邮箱）",
+
+	name: "姓名",
 
         /* 找回账号 */
 
@@ -1366,7 +1425,14 @@ mapClickDestination: "请点击目的地。",
 mapRouteCalculating: "正在计算实际道路路线...",
 mapInfoLoadFailed: "无法加载信息。",
 mapReadySearch: "地图已准备就绪 · 请输入搜索内容。",
-
+mapClinic: "诊所",
+mapDentist: "牙科",
+mapStation: "车站·客运站",
+mapSchool: "学校",
+mapAirport: "机场",
+mapHotel: "酒店",
+mapShopping: "购物",
+mapRestaurant: "餐厅",
 	mapSearchPlaceholder: "请输入地点"
 
     }

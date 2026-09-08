@@ -233,6 +233,17 @@ nav a:hover {
                 rgba(0,0,0,0.07);
         }
 
+.active-safety-level {
+    background: #8a623d;
+    border: none;
+    box-shadow: 0 10px 25px rgba(138, 98, 61, 0.30);
+}
+
+.level-card.active-safety-level h3,
+.level-card.active-safety-level p {
+    color: white;
+}
+
         .level-card h3 {
             color: #9c704e;
             margin-bottom: 15px;
@@ -518,22 +529,22 @@ nav a:hover {
 
     <div class="level-grid">
 
-        <div class="level-card">
+	    <div class="level-card" data-level="1">
             <h3 data-i18n="level1">1단계</h3>
             <p data-i18n="level1Text">여행유의</p>
         </div>
 
-        <div class="level-card">
+	    <div class="level-card" data-level="2">
             <h3 data-i18n="level2">2단계</h3>
             <p data-i18n="level2Text">여행자제</p>
         </div>
 
-        <div class="level-card">
+	    <div class="level-card" data-level="3">
             <h3 data-i18n="level3">3단계</h3>
             <p data-i18n="level3Text">출국권고</p>
         </div>
 
-        <div class="level-card">
+	    <div class="level-card" data-level="4">
             <h3 data-i18n="level4">4단계</h3>
             <p data-i18n="level4Text">여행금지</p>
         </div>
@@ -995,6 +1006,45 @@ document.getElementById("search-input")
 
 })();
 
+</script>
+
+<script>
+fetch("/safety")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+
+        var vietnam = data.countries.find(function(country) {
+            return country.country_name === "베트남";
+        });
+
+        if (!vietnam) {
+            return;
+        }
+
+        var levelMatch =
+            vietnam.safety_level.match(/([1-4])단계/);
+
+        if (levelMatch) {
+            var currentLevel = levelMatch[1];
+
+            document
+                .querySelectorAll(".level-card")
+                .forEach(function(card) {
+                    card.classList.remove("active-safety-level");
+
+                    if (card.getAttribute("data-level") === currentLevel) {
+                        card.classList.add("active-safety-level");
+                    }
+                });
+        }
+
+        console.log("Vietnam Safety DB Data:", vietnam);
+    })
+    .catch(function(error) {
+        console.error("Safety API Error:", error);
+    });
 </script>
 
 </body>

@@ -338,6 +338,7 @@ English
 <div class="login-links">
 
 
+<!-- 기존 아이디 찾기 / 비밀번호 찾기 비활성화
 <button
     type="button"
     onclick="location.href='find-id.html'"
@@ -359,6 +360,16 @@ English
     비밀번호 찾기
 </button>
 
+
+<span>|</span>
+-->
+
+<button
+    type="button"
+    onclick="location.href='reset-password.html'"
+    data-i18n="resetPassword">
+    비밀번호 재설정
+</button>
 
 <span>|</span>
 
@@ -432,6 +443,14 @@ document.getElementById("loginButton").addEventListener("click", function() {
     }));
 
 });
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("loginButton").click();
+    }
+});
+
 </script>
 
 </body>

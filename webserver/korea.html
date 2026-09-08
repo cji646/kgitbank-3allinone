@@ -395,6 +395,17 @@ nav a:hover {
 
         }
 
+	.active-safety-level {
+    background: #376fa9;
+    border: none;
+    box-shadow: 0 10px 25px rgba(55, 111, 169, 0.30);
+}
+
+.level-card.active-safety-level h3,
+.level-card.active-safety-level p {
+    color: white;
+}
+
 
         .level-card h3 {
 
@@ -487,7 +498,6 @@ nav a:hover {
 
 	@media (max-width: 800px) {
 
-    	.level-grid,
     	.info-grid,
     	.emergency-grid {
         	grid-template-columns: 1fr;
@@ -746,7 +756,7 @@ nav a:hover {
     <div class="level-grid">
 
 
-        <div class="level-card">
+	    <div class="level-card" data-level="1">
 
             <h3 data-i18n="level1">
 
@@ -763,7 +773,7 @@ nav a:hover {
         </div>
 
 
-        <div class="level-card">
+	    <div class="level-card" data-level="2">
 
             <h3 data-i18n="level2">
 
@@ -780,7 +790,7 @@ nav a:hover {
         </div>
 
 
-        <div class="level-card">
+	    <div class="level-card" data-level="3">
 
             <h3 data-i18n="level3">
 
@@ -797,7 +807,7 @@ nav a:hover {
         </div>
 
 
-        <div class="level-card">
+	    <div class="level-card" data-level="4">
 
             <h3 data-i18n="level4">
 
@@ -843,7 +853,7 @@ nav a:hover {
 
             </h3>
 
-            <p>112</p>
+		<p id="police-number">112</p>
 
         </div>
 
@@ -856,7 +866,7 @@ nav a:hover {
 
             </h3>
 
-            <p>119</p>
+		<p id="fire-number">119</p>
 
         </div>
 
@@ -1304,6 +1314,71 @@ document.getElementById("search-input")
 
 </script>
 
+<script>
+fetch("/safety")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+
+        var korea = data.countries.find(function(country) {
+            return country.country_name === "대한민국";
+        });
+
+        if (!korea) {
+            return;
+        }
+
+        /* 현재 안전등급 */
+
+var levelMatch =
+    korea.safety_level.match(/([1-4])단계/);
+
+if (levelMatch) {
+
+    var currentLevel = levelMatch[1];
+
+    document
+        .querySelectorAll(".level-card")
+        .forEach(function(card) {
+
+            card.classList.remove(
+                "active-safety-level"
+            );
+
+            if (
+                card.getAttribute("data-level") ===
+                currentLevel
+            ) {
+                card.classList.add(
+                    "active-safety-level"
+                );
+            }
+        });
+}
+
+        /* 긴급 연락처 */
+        var emergency = korea.emergency_number;
+
+        var policeMatch = emergency.match(/경찰\s*(\d+)/);
+        var fireMatch = emergency.match(/소방[^0-9]*(\d+)/);
+
+        if (policeMatch) {
+            document.getElementById("police-number").textContent =
+                policeMatch[1];
+        }
+
+        if (fireMatch) {
+            document.getElementById("fire-number").textContent =
+                fireMatch[1];
+        }
+
+        console.log("Safety DB Data:", korea);
+    })
+    .catch(function(error) {
+        console.error("Safety API Error:", error);
+    });
+</script>
 
 </body>
 
