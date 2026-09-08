@@ -407,3 +407,120 @@ def me():
         "role": session["role"]
     }), 200
 
+
+# =========================
+# 비밀번호 찾기 / 재설정
+# =========================
+@auth_bp.route("/find-password", methods=["POST"])
+def find_password():
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({
+            "success": False,
+            "message": "요청 데이터가 없습니다."
+        }), 400
+
+    email = data.get("email")
+    name = data.get("name")
+    new_password = data.get("new_password")
+
+    # 필수값 확인
+    if not email or not name or not new_password:
+        return jsonify({
+            "success": False,
+            "message": "이메일, 이름, 새 비밀번호를 입력해주세요."
+        }), 400
+
+    # =========================
+    # 새 비밀번호 검사
+    # =========================
+
+    if len(new_password) < 8:
+        return jsonify({
+            "success": False,
+            "message": "비밀번호는 최소 8자 이상이어야 합니다."
+        }), 400
+
+    if not re.search(r'[A-Za-z]', new_password):
+        return jsonify({
+            "success": False,
+            "message": "비밀번호에는 영문자가 포함되어야 합니다."
+        }), 400
+
+    if not re.search(r'[0-9]', new_password):
+        return jsonify({
+            "success": False,
+            "message": "비밀번호에는 숫자가 포함되어야 합니다."
+        }), 400
+
+    if not re.search(r'[^A-Za-z0-9]', new_password):
+        return jsonify({
+            "success": False,
+            "message": "비밀번호에는 특수문자가 반드시 포함되어야 합니다."
+        }), 400
+
+    conn = None
+
+    try:
+        conn = get_db_connection()
+
+        with conn.cursor() as cursor:
+
+            # 이메일 + 이름으로 사용자 확인
+            sql = """
+            SELECT user_id
+            FROM users
+            WHERE email = %s
+              AND name = %s
+            """
+
+            cursor.execute(sql, (email, name))
+            user = cursor.fetchone()
+
+            # 사용자 정보 불일치
+            if not user:
+                return jsonify({
+                    "success": False,
+                    "message": "이메일 또는 이름이 일치하지 않습니다."
+                }), 404
+
+            # 새 비밀번호 Hash
+            hashed_password = generate_password_hash(new_password)
+
+            # 비밀번호 변경
+            sql = """
+            UPDATE users
+            SET password = %s
+            WHERE user_id = %s
+            """
+
+            cursor.execute(
+                sql,
+                (hashed_password, user["user_id"])
+            )
+
+            conn.commit()
+
+            return jsonify({
+                "success": True,
+                "message": "비밀번호가 변경되었습니다."
+            }), 200
+
+    except Exception as e:
+
+        if conn:
+            conn.rollback()
+
+        print("비밀번호 변경 오류:", e)
+
+        return jsonify({
+            "success": False,
+            "message": "비밀번호 변경 중 오류가 발생했습니다."
+        }), 500
+
+    finally:
+
+        if conn:
+            conn.close()
