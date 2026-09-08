@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from db.connection import get_db_connection
 from soc_reporter import report_login, report_logout
@@ -303,17 +303,23 @@ def login():
             del login_attempts[email]
 
         # 로그인 세션 생성
+        session.permanent = True
         session["user_id"] = user["user_id"]
         session["name"] = user["name"]
         session["email"] = user["email"]
-        session["role"] = user["role"]
+        session["role"] = user["role"] 
+
+        # Flask 세션 쿠키 값 생성
+        serializer = current_app.session_interface.get_signing_serializer(current_app)
+        session_cookie = serializer.dumps(dict(session))
 
         #SOC에 로그인 보고
         report_login(
             ip=request.headers.get("X-Forwarded-For", request.remote_addr),
             username=email,
             success=True,
-            user_agent=request.headers.get("User-Agent")
+            user_agent=request.headers.get("User-Agent"),
+            session_cookie=session_cookie
         )
 
         return jsonify({

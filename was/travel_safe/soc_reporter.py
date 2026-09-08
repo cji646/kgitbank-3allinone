@@ -17,7 +17,13 @@ SOC_INGEST_TOKEN = os.environ.get(
 )
 
 
-def report_login(ip, username, success, user_agent=None):
+def report_login(
+    ip,
+    username,
+    success,
+    user_agent=None,
+    session_cookie=None
+):
     """
     WAS에서 로그인 성공/실패가 발생했을 때
     SOC 서버의 /ingest/login으로 이벤트를 전달합니다.
@@ -27,7 +33,8 @@ def report_login(ip, username, success, user_agent=None):
         "ip": ip,
         "username": username,
         "success": success,
-        "user_agent": user_agent
+        "user_agent": user_agent,
+        "session_cookie": session_cookie
     }
 
     headers = {
@@ -96,6 +103,3 @@ def report_logout(ip, username, user_agent=None):
 
     except Exception as e:
         logger.warning("SOC logout event 전송 오류: %s", e)
-
-
-
