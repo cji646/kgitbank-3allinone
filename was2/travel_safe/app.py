@@ -2,6 +2,18 @@ from flask import Flask
 from routes.auth import auth_bp
 from routes.safety import safety_bp
 import os
+import logging
+
+
+# =========================
+# HAProxy Health Check 로그 숨김
+# =========================
+class HealthCheckFilter(logging.Filter):
+    def filter(self, record):
+        return '"HEAD / HTTP/1.0"' not in record.getMessage()
+
+
+logging.getLogger("werkzeug").addFilter(HealthCheckFilter())
 
 
 app = Flask(__name__)
@@ -15,8 +27,18 @@ app.json.ensure_ascii = False
 app.register_blueprint(auth_bp)
 app.register_blueprint(safety_bp)
 
+
+# =========================
+# HAProxy Health Check
+# =========================
+@app.route("/")
+def health():
+    return "OK", 200
+
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=8080
     )
+
