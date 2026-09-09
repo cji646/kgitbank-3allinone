@@ -16,8 +16,10 @@ class HealthCheckFilter(logging.Filter):
 
 logging.getLogger("werkzeug").addFilter(HealthCheckFilter())
 
-
 app = Flask(__name__)
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.permanent_session_lifetime = timedelta(minutes=10)
