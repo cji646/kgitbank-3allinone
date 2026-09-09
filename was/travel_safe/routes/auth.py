@@ -18,6 +18,60 @@ LOGIN_BLOCK_TIME = 300  # 5분
 # 로그인 실패 기록
 login_attempts = {}
 
+# 이메일 형식 검사 패턴
+EMAIL_PATTERN = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+
+
+# =========================
+# 공통 유틸 함수
+# =========================
+
+def is_valid_email(email):
+    """이메일 형식 검사"""
+    return re.match(EMAIL_PATTERN, email) is not None
+
+
+def validate_password_strength(password):
+    """
+    비밀번호 강도 검사
+    최소 8자 + 영문 + 숫자 + 특수문자
+    통과하면 None, 실패하면 에러 메시지 반환
+    """
+    if len(password) < 8:
+        return "비밀번호는 최소 8자 이상이어야 합니다."
+
+    if not re.search(r'[A-Za-z]', password):
+        return "비밀번호에는 영문자가 포함되어야 합니다."
+
+    if not re.search(r'[0-9]', password):
+        return "비밀번호에는 숫자가 포함되어야 합니다."
+
+    if not re.search(r'[^A-Za-z0-9]', password):
+        return "비밀번호에는 특수문자가 반드시 포함되어야 합니다."
+
+    return None
+
+
+def record_login_failure(email, current_time):
+    """
+    로그인 실패 기록 갱신 + SOC 로그인 실패 보고
+    """
+    if email not in login_attempts:
+        login_attempts[email] = {
+            "count": 1,
+            "time": current_time
+        }
+    else:
+        login_attempts[email]["count"] += 1
+
+    # SOC 로그인 실패 보고
+    report_login(
+        ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+        username=email,
+        success=False,
+        user_agent=request.headers.get("User-Agent")
+    )
+
 
 # =========================
 # 회원가입
@@ -47,9 +101,7 @@ def register():
     # 이메일 형식 검사
     # =========================
 
-    email_pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
-
-    if not re.match(email_pattern, email):
+    if not is_valid_email(email):
         return jsonify({
             "success": False,
             "message": "올바른 이메일 형식이 아닙니다."
@@ -61,28 +113,12 @@ def register():
     # 영문 + 숫자 + 특수문자
     # =========================
 
-    if len(password) < 8:
-        return jsonify({
-            "success": False,
-            "message": "비밀번호는 최소 8자 이상이어야 합니다."
-        }), 400
+    password_error = validate_password_strength(password)
 
-    if not re.search(r'[A-Za-z]', password):
+    if password_error:
         return jsonify({
             "success": False,
-            "message": "비밀번호에는 영문자가 포함되어야 합니다."
-        }), 400
-
-    if not re.search(r'[0-9]', password):
-        return jsonify({
-            "success": False,
-            "message": "비밀번호에는 숫자가 포함되어야 합니다."
-        }), 400
-
-    if not re.search(r'[^A-Za-z0-9]', password):
-        return jsonify({
-            "success": False,
-            "message": "비밀번호에는 특수문자가 반드시 포함되어야 합니다."
+            "message": password_error
         }), 400
 
     # =========================
@@ -188,9 +224,7 @@ def login():
     # 이메일 형식 검사
     # =========================
 
-    email_pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
-
-    if not re.match(email_pattern, email):
+    if not is_valid_email(email):
         return jsonify({
             "success": False,
             "message": "올바른 이메일 형식이 아닙니다."
@@ -238,26 +272,9 @@ def login():
 
         if not user:
 
-            # 로그인 실패 기록
-            if email not in login_attempts:
+            # 로그인 실패 기록 + SOC 보고
+            record_login_failure(email, current_time)
 
-                login_attempts[email] = {
-                    "count": 1,
-                    "time": current_time
-                }
-
-            else:
-
-                login_attempts[email]["count"] += 1
-
-            #SOC 로그인 실패 보고
-            report_login(
-                ip=request.headers.get("X-Forwarded-For", request.remote_addr),
-                username=email,
-                success=False,
-                user_agent=request.headers.get("User-Agent")
-            )
-            
             return jsonify({
                 "success": False,
                 "message": "이메일 또는 비밀번호가 올바르지 않습니다."
@@ -269,26 +286,9 @@ def login():
 
         if not check_password_hash(user["password"], password):
 
-            # 로그인 실패 기록
-            if email not in login_attempts:
+            # 로그인 실패 기록 + SOC 보고
+            record_login_failure(email, current_time)
 
-                login_attempts[email] = {
-                    "count": 1,
-                    "time": current_time
-                }
-
-            else:
-
-                login_attempts[email]["count"] += 1
-            
-            # SOC에 로그인 실패 보고
-            report_login(
-                ip=request.headers.get("X-Forwarded-For", request.remote_addr),
-                username=email,
-                success=False,
-                user_agent=request.headers.get("User-Agent")
-            )
- 
             return jsonify({
                 "success": False,
                 "message": "이메일 또는 비밀번호가 올바르지 않습니다."
@@ -437,28 +437,12 @@ def find_password():
     # 새 비밀번호 검사
     # =========================
 
-    if len(new_password) < 8:
-        return jsonify({
-            "success": False,
-            "message": "비밀번호는 최소 8자 이상이어야 합니다."
-        }), 400
+    password_error = validate_password_strength(new_password)
 
-    if not re.search(r'[A-Za-z]', new_password):
+    if password_error:
         return jsonify({
             "success": False,
-            "message": "비밀번호에는 영문자가 포함되어야 합니다."
-        }), 400
-
-    if not re.search(r'[0-9]', new_password):
-        return jsonify({
-            "success": False,
-            "message": "비밀번호에는 숫자가 포함되어야 합니다."
-        }), 400
-
-    if not re.search(r'[^A-Za-z0-9]', new_password):
-        return jsonify({
-            "success": False,
-            "message": "비밀번호에는 특수문자가 반드시 포함되어야 합니다."
+            "message": password_error
         }), 400
 
     conn = None
@@ -524,3 +508,4 @@ def find_password():
 
         if conn:
             conn.close()
+
