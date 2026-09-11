@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Japan Travel Safety</title>
+
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="/css/leaflet.css">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family:
+                "Montserrat",
+                "Noto Sans KR",
+                sans-serif;
+
+            background: #fff7fa;
+            color: #493c43;
+        }
+
+header {
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    background: white;
+    border-bottom: 1px solid #e8e8e8;
+    position: relative;
+}
+
+.site-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px;
+    font-weight: 800;
+    color: #d85a78;
+    cursor: pointer;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.language-select {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+    background: white;
+    cursor: pointer;
+    outline: none;
+}
+
+.account-bar {
+    padding: 10px 7%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: #fff7fa;
+}
+
+.account-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.user-info {
+    padding: 10px 16px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #333333;
+    font-weight: 700;
+    line-height: 20px;
+}
+
+.account-btn {
+    padding: 11px 20px;
+    margin-left: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s;
+    font-family: inherit;
+}
+
+.primary-btn {
+    border: none;
+    background: #d86a86;
+    color: white;
+}
+
+.secondary-btn {
+    border: 1px solid #d86a86;
+    background: white;
+    color: #d86a86;
+}
+
+.favorite-active {
+    background: #d86a86 !important;
+    color: white !important;
+    border-color: #d86a86 !important;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 0;
+
+    padding: 22px 20px;
+
+    background: white;
+
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+}
+
+nav a {
+    position: relative;
+
+    padding: 0 34px;
+
+    text-decoration: none;
+
+    color: #111111;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+nav a:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    right: 0;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 3px;
+    height: 24px;
+
+    /* 일본 페이지 포인트 컬러 */
+    background: #d86a86;
+}
+
+nav a:hover {
+    color: #d86a86;
+}
+
+
+.hero {
+    padding: 110px 0;
+    text-align: center;
+    color: white;
+
+    background-image: url("/images/japan2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-text {
+    width: 100%;
+    padding: 24px 20px;
+    box-sizing: border-box;
+
+    background: rgba(255, 255, 255, 0.40);
+}
+
+.hero h1 {
+    font-size: 54px;
+    margin-bottom: 12px;
+    color: #1f2933;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.hero p {
+    font-size: 20px;
+    line-height: 1.8;
+
+    color: #1f2933;
+    font-weight: 600;
+
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.section {
+    max-width: 1100px;
+    margin: auto;
+    padding: 90px 25px;
+    text-align: center;
+}
+
+.section h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+    color: #bc4f6c;
+}
+
+        .section-description {
+            color: #85727a;
+            margin-bottom: 45px;
+        }
+
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+        }
+
+        .level-card {
+            background: white;
+            padding: 35px 20px;
+            border-radius: 18px;
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,0.07);
+        }
+
+	.active-safety-level {
+    		background: #d85a78;
+    		border: none;
+    		box-shadow: 0 10px 25px rgba(216, 90, 120, 0.30);
+	}
+
+	.level-card.active-safety-level h3,
+	.level-card.active-safety-level p {
+    		color: white;
+	}
+
+        .level-card h3 {
+            color: #cf5876;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .emergency-grid,
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .emergency-card,
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,0.07);
+        }
+
+.privacy-notice {
+    padding: 0;
+    margin: 0 0 10px 0;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.privacy-notice strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.privacy-notice p {
+    margin: 0;
+    padding: 0;
+}
+
+footer {
+    padding: 18px 20px;
+    text-align: center;
+    background: #6b414d;
+    color: white;
+}
+
+	@media (max-width: 800px) {
+
+    	nav {
+        	flex-wrap: wrap;
+        	row-gap: 14px;
+        	padding: 16px 10px;
+    	}
+
+    	nav a {
+        	padding: 0 18px;
+        	font-size: 15px;
+    	}
+
+    	nav a:not(:last-child)::after {
+        	height: 20px;
+        	width: 2px;
+    	}
+}
+
+        }
+
+        /* 지도 확대 */
+        #map-wrapper.map-expanded {
+            position: fixed !important;
+            top: 20px !important;
+            left: 20px !important;
+            right: 20px !important;
+            bottom: 20px !important;
+
+            width: auto !important;
+            height: auto !important;
+
+            z-index: 99999 !important;
+
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        #map-wrapper.map-expanded #map {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        #gps-btn {
+            position: absolute !important;
+            right: 12px !important;
+            bottom: 12px !important;
+
+            width: 42px !important;
+            height: 42px !important;
+
+            display: block !important;
+
+            background: white !important;
+            color: #222 !important;
+
+            border: 1px solid #999 !important;
+            border-radius: 8px !important;
+
+            font-size: 24px !important;
+            line-height: 38px !important;
+
+            cursor: pointer !important;
+            z-index: 10000 !important;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        }
+
+        #gps-btn:hover {
+            background: #f5f5f5;
+        }
+
+        #map-search {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            display: flex;
+
+            width: 70%;
+            max-width: 450px;
+
+            z-index: 10000;
+        }
+
+        #search-input {
+            flex: 1;
+            height: 42px;
+
+            padding: 0 12px;
+
+            border: 1px solid #aaa;
+            border-right: none;
+
+            border-radius: 8px 0 0 8px;
+
+            background: white;
+
+            font-size: 14px;
+        }
+
+        #search-btn {
+            width: 65px;
+            height: 42px;
+
+            border: 1px solid #aaa;
+
+            border-radius: 0 8px 8px 0;
+
+            background: white;
+
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <div
+        class="site-title"
+        onclick="location.href='index.html'"
+        data-i18n="siteTitle">
+        Tourist Emergency Button
+    </div>
+
+    <div class="header-right">
+
+        <select
+            class="language-select"
+            onchange="changeLanguage(this.value)">
+
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="zh">中文</option>
+
+        </select>
+
+    </div>
+
+</header>
+
+
+<!-- 로그인 사용자 메뉴 -->
+<div class="account-bar">
+
+    <div id="authArea" class="account-actions">
+
+        <button
+            id="loginBtn"
+            type="button"
+            class="account-btn primary-btn"
+            onclick="location.href='login.html'">
+            로그인
+        </button>
+
+        <span
+            id="userInfo"
+            class="user-info"
+            style="display:none;">
+        </span>
+
+        <button
+            id="favoriteBtn"
+            type="button"
+            class="country-favorite-btn account-btn secondary-btn"
+            data-country="japan"
+            onclick="toggleFavoriteCountry('japan')"
+            style="display:none;">
+            ♡ 관심 국가
+        </button>
+
+        <button
+            id="logoutBtn"
+            type="button"
+            class="account-btn primary-btn"
+            style="display:none;">
+            로그아웃
+        </button>
+
+    </div>
+
+</div>
+
+<nav>
+
+    <a href="#intro" data-i18n="pageIntro">
+        페이지 소개
+    </a>
+
+    <a href="#emergency" data-i18n="emergencyContact">
+        국가 긴급 연락처
+    </a>
+
+    <a href="#map" data-i18n="safetyMap">
+        지역별 안전지도
+    </a>
+
+    <a href="#qa" data-i18n="qa">
+        Q&A
+    </a>
+
+</nav>
+
+
+
+<section class="hero">
+
+    <div class="hero-text">
+
+
+    <h1 data-i18n="japanPageTitle">
+        일본 여행 안전정보
+    </h1>
+
+    <p data-i18n="japanHeroDescription">
+        안전한 일본 여행을 위한<br>
+        국가별 안전정보와 긴급 정보를 제공합니다.
+    </p>
+
+</section>
+
+
+
+<section
+    class="section"
+    id="intro">
+
+    <h2 data-i18n="travelSafetyLevel">
+        여행경보 4단계 안전등급
+    </h2>
+
+    <p
+        class="section-description"
+        data-i18n="safetyLevelDescription">
+
+        외교부 여행경보 기준에 따라 국가 및 지역별 안전정보를 제공합니다.
+
+    </p>
+
+
+    <div class="level-grid">
+
+	<div class="level-card" data-level="0">
+    	<h3 data-i18n="level0">미발령</h3>
+    	<p data-i18n="level0Text">여행경보 없음</p>
+	</div>
+
+	    <div class="level-card" data-level="1">
+            <h3 data-i18n="level1">1단계</h3>
+            <p data-i18n="level1Text">여행유의</p>
+        </div>
+
+	    <div class="level-card" data-level="2">
+            <h3 data-i18n="level2">2단계</h3>
+            <p data-i18n="level2Text">여행자제</p>
+        </div>
+
+	    <div class="level-card" data-level="3">
+            <h3 data-i18n="level3">3단계</h3>
+            <p data-i18n="level3Text">출국권고</p>
+        </div>
+
+	    <div class="level-card" data-level="4">
+            <h3 data-i18n="level4">4단계</h3>
+            <p data-i18n="level4Text">여행금지</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section
+    class="section"
+    id="emergency">
+
+    <h2 data-i18n="emergencyContact">
+        국가 긴급 연락처
+    </h2>
+
+
+    <div class="emergency-grid">
+
+        <div class="emergency-card">
+
+            <h3 data-i18n="police">
+                경찰
+            </h3>
+
+            <p>110</p>
+
+        </div>
+
+
+        <div class="emergency-card">
+
+            <h3 data-i18n="fireEmergency">
+                화재 · 구급
+            </h3>
+
+            <p>119</p>
+
+        </div>
+
+
+        <div class="emergency-card">
+
+            <h3 data-i18n="touristHelp">
+                관광 안내
+            </h3>
+
+            <p>050-3816-2787</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section
+    class="section"
+    id="map-section">
+
+    <h2 data-i18n="safetyMap">
+        지역별 안전지도
+    </h2>
+
+    <p
+        class="section-description"
+        data-i18n="mapDescription">
+
+        Google Maps API를 연동하여 주변 병원, 경찰서, 대사관 등의 정보를 제공합니다.
+
+    </p>
+
+
+    <div
+        id="map-wrapper"
+        style="
+            position:relative;
+            height:300px;
+            border-radius:20px;
+            overflow:hidden;
+            cursor:pointer;
+        "
+    >
+        <!-- 실제 지도 -->
+        <div
+            id="map"
+            style="
+                width:100%;
+                height:100%;
+            ">
+        </div>
+
+
+    <!-- 지도 위 검색창 -->
+<div id="map-search">
+
+    <input
+        id="search-input"
+        type="text"
+        placeholder="장소 검색"
+        data-i18n-placeholder="placeSearch"
+    >
+
+    <button
+        id="search-btn"
+        type="button"
+        data-i18n="searchButton">
+         검색
+    </button>
+</div>
+
+<iframe
+    id="global-map-frame"
+    src="/map/index.html?country=japan"
+    title="Global Map"
+    style="
+        display:none;
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        border:0;
+        z-index:1000;
+    "
+></iframe>
+
+    </div>
+
+</section>
+
+
+
+<section
+    class="section"
+    id="qa">
+
+    <h2 data-i18n="qa">
+        Q&A
+    </h2>
+
+
+    <div class="info-grid">
+
+        <div class="info-card">
+
+            <h3 data-i18n="questionExample">
+                질문
+            </h3>
+
+            <p data-i18n="qaExampleText">
+                여행 전 어떤 안전정보를 확인해야 하나요?
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <h3 data-i18n="weather">
+                실시간 날씨
+            </h3>
+
+            <p data-i18n="weatherDescription">
+                날씨 API와 연동하여 실시간 정보를 제공합니다.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <h3 data-i18n="disaster">
+                재난 정보
+            </h3>
+
+            <p data-i18n="disasterDescription">
+                재난 및 안전 관련 공지를 확인할 수 있습니다.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<footer>
+
+<footer>
+
+
+<div class="privacy-notice">
+
+    <strong data-i18n="privacyTitle">
+        개인정보 처리 안내
+    </strong>
+
+    <p data-i18n="privacyInfo1">
+        서비스 이용 통계 및 보안을 위해 접속 IP, 방문 페이지, 이용 기록 등을 수집하며, 수집한 정보는 보안 및 통계 목적 외의 용도로 사용하지 않습니다.
+    </p>
+
+    <p data-i18n="privacyInfo2">
+        수집된 정보는 개인정보처리방침에 명시된 기간 동안 보관하며, 보관 기간이 지나면 파기합니다.
+    </p>
+
+</div>
+
+<footer>
+    © 2026 Tourist Emergency Button
+</footer>
+
+
+<script src="/js/language.js?v=20260910-1"></script>
+
+<!-- Leaflet JavaScript -->
+<script src="/js/leaflet.js"></script>
+
+<script>
+"use strict";
+
+const map = L.map("map", {
+    center: [35.6762, 139.6503],
+    zoom: 14,
+    minZoom: 2,
+    maxZoom: 19,
+    preferCanvas: true,
+    zoomControl: true,
+    doubleClickZoom: false
+});
+
+L.tileLayer(
+    "/tile.php?z={z}&x={x}&y={y}",
+    {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+    }
+).addTo(map);
+
+
+/* =========================
+   지도 확대/축소
+========================= */
+
+const mapWrapper = document.getElementById("map-wrapper");
+const globalMapFrame = document.getElementById("global-map-frame");
+
+mapWrapper.addEventListener("dblclick", function () {
+
+    if (!mapWrapper.classList.contains("map-expanded")) {
+
+        /* 전체화면 확대 */
+        mapWrapper.classList.add("map-expanded");
+
+        mapWrapper.style.position = "fixed";
+        mapWrapper.style.top = "20px";
+        mapWrapper.style.left = "20px";
+        mapWrapper.style.right = "20px";
+        mapWrapper.style.bottom = "20px";
+        mapWrapper.style.width = "auto";
+        mapWrapper.style.height = "auto";
+        mapWrapper.style.zIndex = "999999";
+        mapWrapper.style.background = "white";
+
+        /* 글로벌 지도 표시 */
+        globalMapFrame.style.display = "block";
+	document.getElementById("map-search").style.display = "none";
+
+    } else {
+
+        /* 글로벌 지도 숨김 */
+        globalMapFrame.style.display = "none";
+	document.getElementById("map-search").style.display = "";
+
+        /* 원래 300px 지도로 복귀 */
+        mapWrapper.classList.remove("map-expanded");
+
+        mapWrapper.style.position = "relative";
+        mapWrapper.style.top = "";
+        mapWrapper.style.left = "";
+        mapWrapper.style.right = "";
+        mapWrapper.style.bottom = "";
+        mapWrapper.style.width = "100%";
+        mapWrapper.style.height = "300px";
+        mapWrapper.style.zIndex = "";
+        mapWrapper.style.background = "";
+
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 100);
+    }
+
+});
+
+
+/* 글로벌 지도에서 더블클릭하면 원래 지도로 복귀 */
+window.addEventListener("message", function (event) {
+
+    if (event.data !== "close-global-map") {
+        return;
+    }
+
+    globalMapFrame.style.display = "none";
+    document.getElementById("map-search").style.display = "";
+
+    mapWrapper.classList.remove("map-expanded");
+
+    mapWrapper.style.position = "relative";
+    mapWrapper.style.top = "";
+    mapWrapper.style.left = "";
+    mapWrapper.style.right = "";
+    mapWrapper.style.bottom = "";
+    mapWrapper.style.width = "100%";
+    mapWrapper.style.height = "300px";
+    mapWrapper.style.zIndex = "";
+    mapWrapper.style.background = "";
+
+    setTimeout(function () {
+        map.invalidateSize();
+    }, 100);
+
+});
+
+
+
+/* =========================
+   장소 검색
+========================= */
+
+let searchMarker = null;
+
+function searchPlace() {
+
+    const input = document.getElementById("search-input");
+    const query = input.value.trim();
+
+    if (!query) {
+        alert("검색어를 입력해주세요.");
+        return;
+    }
+
+    fetch("/search.php?q=" + encodeURIComponent(query))
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+
+            if (!data || data.length === 0) {
+                alert("검색 결과가 없습니다.");
+                return;
+            }
+
+            const result = data[0];
+
+            const lat = parseFloat(result.lat);
+            const lon = parseFloat(result.lon);
+
+            map.setView([lat, lon], 16);
+
+            if (searchMarker) {
+                map.removeLayer(searchMarker);
+            }
+
+            searchMarker = L.marker([lat, lon])
+                .addTo(map)
+                .bindPopup(result.display_name)
+                .openPopup();
+        })
+        .catch(function (error) {
+
+            console.log(error);
+
+            alert("검색 중 오류가 발생했습니다.");
+        });
+}
+
+document.getElementById("search-btn")
+    .addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+        searchPlace();
+    });
+
+document.getElementById("search-input")
+    .addEventListener("keydown", function (e) {
+
+        e.stopPropagation();
+
+        if (e.key === "Enter") {
+            searchPlace();
+        }
+    });
+
+</script>
+
+<script src="js/favorite.js"></script>
+
+<script>
+(function() {
+
+    var loginBtn = document.getElementById("loginBtn");
+    var logoutBtn = document.getElementById("logoutBtn");
+    var userInfo = document.getElementById("userInfo");
+    var favoriteBtn = document.getElementById("favoriteBtn");
+
+    function checkLogin() {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("GET", "/me", true);
+        xhr.withCredentials = true;
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status === 200) {
+
+                var data;
+
+                try {
+                    data = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    return;
+                }
+
+                loginBtn.style.display = "none";
+                userInfo.style.display = "inline-block";
+                favoriteBtn.style.display = "inline-block";
+                logoutBtn.style.display = "inline-block";
+
+                if (data.user && data.user.name) {
+                    userInfo.innerHTML = data.user.name + "님";
+                } else if (data.name) {
+                    userInfo.innerHTML = data.name + "님";
+                } else {
+                    userInfo.innerHTML = "로그인 중";
+                }
+
+            } else {
+
+                loginBtn.style.display = "inline-block";
+                userInfo.style.display = "none";
+                favoriteBtn.style.display = "none";
+                logoutBtn.style.display = "none";
+            }
+        };
+
+        xhr.send();
+    }
+
+
+    logoutBtn.addEventListener("click", function() {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "/logout", true);
+        xhr.withCredentials = true;
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status === 200) {
+                alert("로그아웃되었습니다.");
+                location.href = "index.html";
+            } else {
+                alert("로그아웃에 실패했습니다.");
+            }
+        };
+
+        xhr.send();
+    });
+
+
+    checkLogin();
+
+})();
+
+</script>
+
+<script>
+fetch("/safety")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+
+        var japan = data.countries.find(function(country) {
+            return country.country_name === "일본";
+        });
+
+        if (!japan) {
+            return;
+        }
+
+
+var currentLevel = null;
+
+if (japan.safety_level === "미발령") {
+
+    currentLevel = "0";
+
+} else {
+
+    var levelMatch =
+        japan.safety_level.match(/([1-4])단계/);
+
+    if (levelMatch) {
+        currentLevel = levelMatch[1];
+    }
+}
+
+if (currentLevel !== null) {
+
+            document
+                .querySelectorAll(".level-card")
+                .forEach(function(card) {
+
+                    card.classList.remove("active-safety-level");
+
+                    if (card.getAttribute("data-level") === currentLevel) {
+                        card.classList.add("active-safety-level");
+                    }
+                });
+        }
+
+        console.log("Japan Safety DB Data:", japan);
+    })
+    .catch(function(error) {
+        console.error("Safety API Error:", error);
+    });
+</script>
+
+</body>
+
+</html>
+
