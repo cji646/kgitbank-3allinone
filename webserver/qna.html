@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>자주 묻는 Q&A</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/qna.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Montserrat", "Noto Sans KR", sans-serif;
+            background: #f4f8fc;
+            color: #25374a;
+        }
+
+        header {
+            height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            background: white;
+            border-bottom: 1px solid #e8e8e8;
+            position: relative;
+        }
+
+        .site-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            font-weight: 800;
+            color: #294366;
+            cursor: pointer;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .language-select {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid #dddddd;
+            background: white;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .account-bar {
+            padding: 10px 7%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background: #f4f8fc;
+        }
+
+        .account-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .user-info {
+            padding: 10px 16px;
+            border: 1px solid #dddddd;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #333333;
+            font-weight: 700;
+            line-height: 20px;
+        }
+
+        .account-btn {
+            padding: 11px 20px;
+            margin-left: 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            font-family: inherit;
+        }
+
+        .primary-btn {
+            border: none;
+            background: #2d6cc0;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            padding: 22px 20px;
+            background: white;
+            border-top: 1px solid #eeeeee;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        nav a {
+            position: relative;
+            padding: 0 34px;
+            text-decoration: none;
+            color: #111111;
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        nav a:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 24px;
+            background: #315f95;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #315f95;
+        }
+
+        @media (max-width: 768px) {
+            .site-title {
+                font-size: 24px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                padding: 15px 10px;
+            }
+
+            nav a {
+                padding: 8px 14px;
+                font-size: 14px;
+            }
+
+            nav a:not(:last-child)::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div
+        class="site-title"
+        onclick="location.href='index.html'">
+        Tourist Emergency Button
+    </div>
+
+    <div class="header-right">
+        <select
+            class="language-select">
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="zh">中文</option>
+        </select>
+    </div>
+</header>
+
+<div class="account-bar">
+    <div id="authArea" class="account-actions">
+
+        <button
+            id="loginBtn"
+            type="button"
+            class="account-btn primary-btn"
+            onclick="location.href='login.html'">
+            로그인
+        </button>
+
+        <span
+            id="userInfo"
+            class="user-info"
+            style="display:none;">
+        </span>
+
+        <button
+            id="logoutBtn"
+            type="button"
+            class="account-btn primary-btn"
+            style="display:none;">
+            로그아웃
+        </button>
+
+    </div>
+</div>
+
+<nav>
+    <a href="/korea.html#intro">페이지 소개</a>
+    <a href="/korea.html#emergency">국가 긴급 연락처</a>
+    <a href="/korea.html#map">지역별 안전지도</a>
+    <a href="/qna.html" class="active">Q&A</a>
+</nav>
+
+<main class="qna-container">
+
+    <section class="qna-title">
+        <h2>자주 묻는 Q&A</h2>
+        <p>
+            여행 안전, 긴급상황, 안전지도 및 서비스 이용에 관한
+            자주 묻는 질문을 확인할 수 있습니다.
+        </p>
+    </section>
+
+    <!-- 카테고리 + 검색 -->
+    <section class="qna-toolbar">
+
+        <div class="qna-categories">
+            <button class="category-btn active" data-category="all">전체</button>
+            <button class="category-btn" data-category="emergency">긴급상황</button>
+            <button class="category-btn" data-category="map">안전지도</button>
+            <button class="category-btn" data-category="service">서비스</button>
+        </div>
+
+        <div class="qna-search">
+            <input
+                type="text"
+                id="qnaSearchInput"
+                placeholder="검색어를 입력해 주세요.">
+
+            <button type="button" id="qnaSearchBtn">
+                검색
+            </button>
+        </div>
+
+    </section>
+
+
+    <!-- 게시판 -->
+    <section class="qna-board">
+
+        <div class="qna-board-head">
+            <span class="col-number">번호</span>
+            <span class="col-category">분류</span>
+            <span class="col-title">제목</span>
+            <span class="col-date">등록일</span>
+        </div>
+
+
+        <div class="qna-item" data-category="emergency">
+
+            <button class="qna-question">
+                <span class="col-number">5</span>
+                <span class="col-category">긴급상황</span>
+
+                <span class="col-title">
+                    여행 중 긴급상황이 발생하면 어떻게 해야 하나요?
+                </span>
+
+                <span class="col-date">2026-09-14</span>
+                <span class="arrow">▼</span>
+            </button>
+
+            <div class="qna-answer">
+                <p>
+                    현재 위치의 경찰, 소방 또는 의료 긴급번호로 연락하고,
+                    필요한 경우 가까운 대사관 또는 영사관에 도움을 요청하세요.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="qna-item" data-category="emergency">
+
+            <button class="qna-question">
+                <span class="col-number">4</span>
+                <span class="col-category">긴급연락</span>
+
+                <span class="col-title">
+                    한국에서 경찰에 신고하려면 어디로 전화하나요?
+                </span>
+
+                <span class="col-date">2026-09-14</span>
+                <span class="arrow">▼</span>
+            </button>
+
+            <div class="qna-answer">
+                <p>
+                    한국에서 경찰 신고는 112번을 이용할 수 있습니다.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="qna-item" data-category="emergency">
+
+            <button class="qna-question">
+                <span class="col-number">3</span>
+                <span class="col-category">긴급연락</span>
+
+                <span class="col-title">
+                    응급환자가 발생하면 어디로 연락해야 하나요?
+                </span>
+
+                <span class="col-date">2026-09-14</span>
+                <span class="arrow">▼</span>
+            </button>
+
+            <div class="qna-answer">
+                <p>
+                    한국에서는 화재 및 구급 신고를 위해
+                    119번을 이용할 수 있습니다.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="qna-item" data-category="map">
+
+            <button class="qna-question">
+                <span class="col-number">2</span>
+                <span class="col-category">안전지도</span>
+
+                <span class="col-title">
+                    가까운 병원이나 경찰서는 어떻게 찾을 수 있나요?
+                </span>
+
+                <span class="col-date">2026-09-14</span>
+                <span class="arrow">▼</span>
+            </button>
+
+            <div class="qna-answer">
+                <p>
+                    국가별 페이지의 지역별 안전지도에서
+                    병원, 경찰서, 약국 등의 위치를 확인할 수 있습니다.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="qna-item" data-category="service">
+
+            <button class="qna-question">
+                <span class="col-number">1</span>
+                <span class="col-category">여행안전</span>
+
+                <span class="col-title">
+                    여행경보 단계는 무엇을 의미하나요?
+                </span>
+
+                <span class="col-date">2026-09-14</span>
+                <span class="arrow">▼</span>
+            </button>
+
+            <div class="qna-answer">
+                <p>
+                    여행경보는 국가 및 지역의 안전상황에 따라
+                    여행유의, 여행자제, 출국권고, 여행금지 등의 단계로 안내됩니다.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div id="qnaEmpty" class="qna-empty">
+        검색 결과가 없습니다.
+    </div>
+
+
+    <!-- 페이지 번호 + 새 글 -->
+    <div class="qna-bottom">
+
+        <div class="qna-pagination">
+            <button class="page-btn active">1</button>
+        </div>
+
+        <button
+            type="button"
+            id="writeBtn"
+            class="write-btn">
+            새 글 작성
+        </button>
+
+    </div>
+
+
+    <!-- 새 글 작성 -->
+    <section id="writePanel" class="write-panel">
+
+        <h3>Q&A 새 글 작성</h3>
+
+        <div class="write-row">
+            <label for="writeCategory">분류</label>
+
+            <select id="writeCategory">
+                <option value="emergency">긴급상황</option>
+                <option value="map">안전지도</option>
+                <option value="service">서비스</option>
+            </select>
+        </div>
+
+        <div class="write-row">
+            <label for="writeTitle">제목</label>
+
+            <input
+                type="text"
+                id="writeTitle"
+                placeholder="질문 제목을 입력해 주세요.">
+        </div>
+
+        <div class="write-row">
+            <label for="writeContent">내용</label>
+
+            <textarea
+                id="writeContent"
+                rows="6"
+                placeholder="질문 내용을 입력해 주세요."></textarea>
+        </div>
+
+        <div class="write-actions">
+
+            <button
+                type="button"
+                id="writeCancelBtn"
+                class="write-cancel-btn">
+                취소
+            </button>
+
+            <button
+                type="button"
+                id="writeSaveBtn"
+                class="write-save-btn">
+                등록
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+
+    <div class="privacy-notice">
+
+        <strong>
+            개인정보 처리 안내
+        </strong>
+
+        <p>
+            서비스 이용 통계 및 보안을 위해 접속 IP, 방문 페이지,
+            이용 기록 등을 수집하며, 수집한 정보는 보안 및 통계 목적 외의
+            용도로 사용하지 않습니다.
+        </p>
+
+        <p>
+            수집된 정보는 개인정보처리방침에 명시된 기간 동안 보관하며,
+            보관 기간이 지나면 파기합니다.
+        </p>
+
+    </div>
+
+    © 2026 Tourist Emergency Button
+
+</footer>
+
+<script src="/js/qna.js"></script>
+
+</body>
+</html>

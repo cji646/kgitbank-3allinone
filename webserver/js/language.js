@@ -77,6 +77,39 @@ const translations = {
 
 	resetPassword: "비밀번호 재설정",
 
+resetPasswordDescription:
+    "비밀번호 재설정을 위해 회원정보를 입력해주세요.",
+
+verifyInformation:
+    "정보 확인",
+
+backToLogin:
+    "로그인으로 돌아가기",
+
+newPasswordTitle:
+    "새 비밀번호 설정",
+
+newPasswordDescription:
+    "새로 사용할 비밀번호를 입력해주세요.",
+
+newPassword:
+    "새 비밀번호",
+
+confirmNewPassword:
+    "새 비밀번호 재입력",
+
+changePassword:
+    "비밀번호 변경",
+
+back:
+    "이전으로",
+
+newPasswordPlaceholder:
+    "새 비밀번호를 입력하세요",
+
+confirmNewPasswordPlaceholder:
+    "새 비밀번호를 다시 입력하세요",
+
         /* 회원가입 */
 
         signup:
@@ -127,6 +160,8 @@ const translations = {
         foundId:
             "가입된 아이디입니다.",
 
+	namePlaceholder:
+    	    "이름을 입력하세요",
 
         /* 비밀번호 찾기 */
 
@@ -165,6 +200,12 @@ travelSafetyLevel:
 
 safetyLevelDescription:
     "외교부 여행경보 기준에 따라 국가 및 지역별 안전정보를 제공합니다.",
+
+level0:
+    "미발령",
+
+level0Text:
+    "여행경보 없음",
 
 level1:
     "1단계",
@@ -240,6 +281,12 @@ japanPageTitle:
 
 japanHeroDescription:
     "안전한 일본 여행을 위한 국가별 안전정보와 긴급 정보를 제공합니다.",
+
+vietnamPageTitle:
+"베트남 여행 안전정보",
+
+vietnamHeroDescription:
+"안전한 베트남 여행을 위한 국가별 안전정보와 긴급 정보를 제공합니다.",
 
 mapGlobalTitle:
     "글로벌 지도 서비스",
@@ -344,6 +391,14 @@ mapAirport: "공항",
 mapHotel: "호텔",
 mapShopping: "쇼핑",
 mapRestaurant: "식당",
+privacyTitle:
+    "개인정보 처리 안내",
+
+privacyInfo1:
+    "서비스 이용 통계 및 보안을 위해 접속 IP, 방문 페이지, 이용 기록 등을 수집하며, 수집한 정보는 보안 및 통계 목적 외의 용도로 사용하지 않습니다.",
+
+privacyInfo2:
+    "수집된 정보는 개인정보처리방침에 명시된 기간 동안 보관하며, 보관 기간이 지나면 파기합니다.",
 
 	mapSearchPlaceholder: "장소를 입력하세요"
 
@@ -427,6 +482,39 @@ mapRestaurant: "식당",
 
 	resetPassword: "Reset Password",
 
+resetPasswordDescription:
+    "Enter your account information to reset your password.",
+
+verifyInformation:
+    "Verify Information",
+
+backToLogin:
+    "Back to Login",
+
+newPasswordTitle:
+    "Set New Password",
+
+newPasswordDescription:
+    "Enter the new password you would like to use.",
+
+newPassword:
+    "New Password",
+
+confirmNewPassword:
+    "Confirm New Password",
+
+changePassword:
+    "Change Password",
+
+back:
+    "Back",
+
+newPasswordPlaceholder:
+    "Enter your new password",
+
+confirmNewPasswordPlaceholder:
+    "Enter your new password again",
+
         /* Sign Up */
 
         signup:
@@ -476,6 +564,9 @@ mapRestaurant: "식당",
         foundId:
             "Your registered ID has been found.",
 
+	namePlaceholder:
+    	    "Enter your name",
+
 
         /* Find Password */
 
@@ -512,6 +603,12 @@ travelSafetyLevel:
 
 safetyLevelDescription:
     "We provide safety information by country and region based on the travel warning system.",
+
+level0:
+    "No Alert",
+
+level0Text:
+    "No Travel Advisory",
 
 level1:
     "Level 1",
@@ -587,6 +684,12 @@ japanPageTitle:
 
 japanHeroDescription:
     "We provide safety and emergency information for a safe trip to Japan.",
+
+vietnamPageTitle:
+"Vietnam Travel Safety Information",
+
+vietnamHeroDescription:
+"Provides travel safety information and emergency guidance for a safe trip to Vietnam.",
 
 mapGlobalTitle:
     "Global Map Service",
@@ -698,6 +801,14 @@ mapAirport: "Airport",
 mapHotel: "Hotel",
 mapShopping: "Shopping",
 mapRestaurant: "Restaurant",
+privacyTitle:
+    "Privacy Notice",
+
+privacyInfo1:
+    "We collect access IP addresses, visited pages, and usage records for service statistics and security, and use them only for security and statistical purposes.",
+
+privacyInfo2:
+    "Collected information is retained for the period specified in the Privacy Policy and is deleted after the retention period expires.",
 
 	mapSearchPlaceholder: "Enter a place"
 
@@ -792,12 +903,45 @@ mapRestaurant: "Restaurant",
 
 	resetPassword: "パスワードを再設定",
 
+resetPasswordDescription:
+    "パスワードを再設定するため、会員情報を入力してください。",
+
+verifyInformation:
+    "情報を確認",
+
+backToLogin:
+    "ログインに戻る",
+
+newPasswordTitle:
+    "新しいパスワードを設定",
+
+newPasswordDescription:
+    "新しく使用するパスワードを入力してください。",
+
+newPassword:
+    "新しいパスワード",
+
+confirmNewPassword:
+    "新しいパスワードを再入力",
+
+changePassword:
+    "パスワードを変更",
+
+back:
+    "戻る",
+
+newPasswordPlaceholder:
+    "新しいパスワードを入力してください",
+
+confirmNewPasswordPlaceholder:
+    "新しいパスワードをもう一度入力してください",
+
         /* 会員登録 */
 
         signup:
             "会員登録",
 
-	usernamePlaceholder: "ユーザーIDを入力してください",
+	usernamePlaceholder: "メールアドレスを入力してください",
 
         duplicateCheck:
             "重複確認",
@@ -817,7 +961,7 @@ mapRestaurant: "Restaurant",
         fillAllFields:
             "すべての情報を入力してください。",
 
-	usernameEmail: "ID（メールアドレス）",
+	usernameEmail: "メールアドレス",
 
 	name: "名前",
 
@@ -840,6 +984,9 @@ mapRestaurant: "Restaurant",
 
         foundId:
             "登録されたIDが見つかりました。",
+
+	namePlaceholder:
+     	    "名前を入力してください",
 
 
         /* パスワードを探す */
@@ -879,6 +1026,12 @@ travelSafetyLevel:
 
 safetyLevelDescription:
     "旅行警報の基準に基づき、国や地域別の安全情報を提供します。",
+
+level0:
+    "未発令",
+
+level0Text:
+    "旅行警報なし",
 
 level1:
     "レベル1",
@@ -954,6 +1107,12 @@ japanPageTitle:
 
 japanHeroDescription:
     "安全な日本旅行のための安全情報と緊急情報を提供します。",
+
+vietnamPageTitle:
+"ベトナム旅行安全情報",
+
+vietnamHeroDescription:
+"安全なベトナム旅行のための安全情報と緊急情報をご案内します。",
 
 mapGlobalTitle:
     "グローバル地図サービス",
@@ -1066,6 +1225,15 @@ mapAirport: "空港",
 mapHotel: "ホテル",
 mapShopping: "ショッピング",
 mapRestaurant: "レストラン",
+privacyTitle:
+    "個人情報の取扱いについて",
+
+privacyInfo1:
+    "サービス利用統計およびセキュリティのため、接続IPアドレス、閲覧ページ、利用履歴などを収集し、セキュリティおよび統計以外の目的には使用しません。",
+
+privacyInfo2:
+    "収集した情報はプライバシーポリシーに定める期間保管し、保管期間終了後に破棄します。",
+
 	mapSearchPlaceholder: "場所を入力してください"
 
     },
@@ -1159,6 +1327,39 @@ mapRestaurant: "レストラン",
 
 	resetPassword: "重置密码",
 
+resetPasswordDescription:
+    "请输入会员信息以重置密码。",
+
+verifyInformation:
+    "确认信息",
+
+backToLogin:
+    "返回登录",
+
+newPasswordTitle:
+    "设置新密码",
+
+newPasswordDescription:
+    "请输入您要使用的新密码。",
+
+newPassword:
+    "新密码",
+
+confirmNewPassword:
+    "再次输入新密码",
+
+changePassword:
+    "修改密码",
+
+back:
+    "返回",
+
+newPasswordPlaceholder:
+    "请输入新密码",
+
+confirmNewPasswordPlaceholder:
+    "请再次输入新密码",
+
         /* 注册 */
 
         signup:
@@ -1208,6 +1409,9 @@ mapRestaurant: "レストラン",
         foundId:
             "已找到您的账号。",
 
+	namePlaceholder:
+    	    "请输入姓名",
+
 
         /* 找回密码 */
 
@@ -1246,6 +1450,12 @@ travelSafetyLevel:
 
 safetyLevelDescription:
     "根据旅行警报标准，提供各国家和地区的安全信息。",
+
+level0:
+    "未发布",
+
+level0Text:
+    "无旅行警报",
 
 level1:
     "第1级",
@@ -1321,6 +1531,12 @@ japanPageTitle:
 
 japanHeroDescription:
     "为您提供安全前往日本旅行所需的安全信息和紧急信息。",
+
+vietnamPageTitle:
+"越南旅行安全信息",
+
+vietnamHeroDescription:
+"为安全的越南旅行提供安全信息和紧急信息。",
 
 mapGlobalTitle:
     "全球地图服务",
@@ -1433,6 +1649,15 @@ mapAirport: "机场",
 mapHotel: "酒店",
 mapShopping: "购物",
 mapRestaurant: "餐厅",
+privacyTitle:
+    "個人情報の取扱いについて",
+
+privacyInfo1:
+    "サービス利用統計およびセキュリティのため、接続IPアドレス、閲覧ページ、利用履歴などを収集し、セキュリティおよび統計以外の目的には使用しません。",
+
+privacyInfo2:
+    "収集した情報はプライバシーポリシーに定める期間保管し、保管期間終了後に破棄します。",
+
 	mapSearchPlaceholder: "请输入地点"
 
     }

@@ -62,29 +62,59 @@ body {
 }
 
 #control-panel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 2000;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2000;
 
-  width: 410px;
-  max-width: calc(100vw - 20px);
-  max-height: calc(100vh - 20px);
+    width: 410px;
+    max-width: calc(100vw - 20px);
+    max-height: calc(100vh - 20px);
 
-  overflow-y: auto;
+    overflow-y: auto;
 
-  padding: 14px 16px;
+    padding: 14px 16px;
 
-  background: rgba(255,255,255,.97);
+    background: rgba(255,255,255,.97);
+    border-radius: 10px;
 
-  border-radius: 10px;
+    box-shadow:
+        0 2px 10px rgba(0,0,0,.25);
 
-  box-shadow:
-    0 2px 10px rgba(0,0,0,.25);
+    font-size: 13px;
+}
 
-  font-size: 13px;
+.control-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-  backdrop-filter: blur(6px);
+#control-panel-toggle {
+    width: 28px;
+    height: 24px;
+    padding: 0;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    background: white;
+    color: #333;
+
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 20px;
+
+    cursor: pointer;
+}
+
+#control-panel.collapsed .control-panel-body {
+    display: none;
+}
+
+#control-panel.collapsed {
+    max-height: none;
+    overflow: hidden;
 }
 
 .title {
@@ -515,9 +545,21 @@ body {
 
 <div id="control-panel">
 
+  <div class="control-panel-header">
+
   <div class="title">
     📍 <span data-i18n="mapGlobalTitle">글로벌 지도 서비스</span>
   </div>
+
+<button
+      type="button"
+      id="control-panel-toggle"
+      title="패널 접기"
+  >▲</button>
+
+  </div>
+
+  <div class="control-panel-body">
 
   <span class="description">
   • <span data-i18n="mapClickStart">1번째 클릭 → 출발지</span><br>
@@ -623,6 +665,8 @@ body {
   </div>
 
 </div>
+</div>
+
 
 <div class="btn-group">
 
@@ -662,7 +706,7 @@ body {
 
 <div id="map"></div>
 
-<script src="/js/language.js?v=5"></script>
+<script src="/js/language.js?v=6"></script>
 <script src="/js/leaflet.js"></script>
 
 <script>
@@ -788,7 +832,7 @@ const CATEGORIES = {
 
     icon: "🏥",
 
-    name: "병원 | Hospital",
+    nameKey: "mapHospital",
 
     markerClass: "marker-hospital",
 
@@ -818,7 +862,7 @@ const CATEGORIES = {
 
     icon: "🏥",
 
-    name: "의원·진료소 | Clinic",
+    nameKey: "mapClinic",
 
     markerClass: "marker-clinic",
 
@@ -843,7 +887,7 @@ const CATEGORIES = {
 
     icon: "🦷",
 
-    name: "치과 | Dentist",
+    nameKey: "mapDentist",
 
     markerClass: "marker-dentist",
 
@@ -870,7 +914,7 @@ const CATEGORIES = {
 
     icon: "💊",
 
-    name: "약국 | Pharmacy",
+    nameKey: "mapPharmacy",
 
     markerClass: "marker-pharmacy",
 
@@ -897,7 +941,7 @@ const CATEGORIES = {
 
     icon: "🚔",
 
-    name: "경찰시설 | Police",
+    nameKey: "mapPolice",
 
     markerClass: "marker-police",
 
@@ -942,7 +986,7 @@ const CATEGORIES = {
 
     icon: "🚒",
 
-    name: "소방시설 | Fire",
+    nameKey: "mapFireStation",
 
     markerClass: "marker-fire",
 
@@ -965,7 +1009,7 @@ const CATEGORIES = {
 
     icon: "🚉",
 
-    name: "역·터미널 | Station",
+    nameKey: "mapStation",
 
     markerClass: "marker-station",
 
@@ -1000,7 +1044,7 @@ const CATEGORIES = {
 
     icon: "🏫",
 
-    name: "학교 | School",
+    nameKey: "mapSchool",
 
     markerClass: "marker-school",
 
@@ -1029,8 +1073,8 @@ const CATEGORIES = {
 
     icon: "✈️",
 
-    name: "공항 | Airport",
-
+    nameKey: "mapAirport",
+  
     markerClass: "marker-airport",
 
     keywords: [
@@ -1052,7 +1096,7 @@ const CATEGORIES = {
 
     icon: "🏨",
 
-    name: "호텔 | Hotel",
+    nameKey: "mapHotel",
 
     markerClass: "marker-hotel",
 
@@ -1075,7 +1119,7 @@ const CATEGORIES = {
 
     icon: "🛍️",
 
-    name: "쇼핑 | Shopping",
+    nameKey: "mapShopping",
 
     markerClass: "marker-mall",
 
@@ -1103,8 +1147,8 @@ const CATEGORIES = {
 
     icon: "🍽️",
 
-    name: "식당 | Restaurant",
-
+    nameKey: "mapRestaurant",
+  
     markerClass: "marker-restaurant",
 
     keywords: [
@@ -1336,8 +1380,8 @@ function formatDuration(seconds) {
     minutes % 60;
 
   return hours
-    ? `${hours}시간 ${remain}분`
-    : `${remain}분`;
+	? `${hours} ${getTranslation("mapHour")} ${remain} ${getTranslation("mapMinute")}`
+	: `${remain} ${getTranslation("mapMinute")}`;
 
 }
 
@@ -1814,8 +1858,7 @@ function normalizeOverpassElement(
     tags.int_name ||
     tags.operator ||
     tags.brand ||
-    "이름 없음";
-
+    getTranslation("mapNoName")
 
   return {
 
@@ -1940,7 +1983,7 @@ name:
   (item.display_name
     ? item.display_name.split(",")[0]
     : "") ||
-  "이름 없음",
+    getTranslation("mapNoName"),
 
     lat,
 
@@ -2047,7 +2090,7 @@ const coords =
       }`,
 
     name:
-      p.name || "이름 없음",
+    p.name || getTranslation("mapNoName"),
 
     lat,
 
@@ -2872,7 +2915,7 @@ function createMarker(place) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          웹사이트
+        ${getTranslation("mapWebsite")}
         </a>
       </div>
       `;
@@ -2911,7 +2954,7 @@ function createMarker(place) {
       >
         ${escapeHtml(
           place.typeName ||
-          "장소 | Place"
+          getTranslation("mapPlace")
         )}
       </div>
 
@@ -3009,7 +3052,7 @@ function renderSearchResults(
     list.innerHTML =
       `
       <div class="search-result-empty">
-        ❌ 검색 결과가 없습니다.
+      ❌ ${getTranslation("mapNoSearchResults")}
       </div>
       `;
 
@@ -3051,7 +3094,7 @@ function renderSearchResults(
 
         ${escapeHtml(
           place.typeName ||
-          "장소 | Place"
+          getTranslation("mapPlace")
         )}
 
         ·
@@ -3117,34 +3160,30 @@ function selectSearchResult(
   searchResultGroup.clearLayers();
 
 
-  const marker =
-    createMarker(place)
-      .addTo(
-        searchResultGroup
-      );
-
-
-  const start =
-    getNavigationStart();
-
-
-  const end =
-    L.latLng(
-      place.lat,
-      place.lon
+const marker =
+  createMarker(place)
+    .addTo(
+      searchResultGroup
     );
 
+const start =
+  getNavigationStart();
 
-  waypoints = [
-    start,
-    end
-  ];
-
-
-  setRouteMarkers(
-    start,
-    end
+const end =
+  L.latLng(
+    place.lat,
+    place.lon
   );
+
+waypoints = [
+  start,
+  end
+];
+
+setRouteMarkers(
+  start,
+  end
+);
 
 
   map.setView(
@@ -3264,7 +3303,7 @@ async function searchPlace() {
   if (!query) {
 
     showStatus(
-      "검색어를 입력해 주세요.",
+      getTranslation("mapEnterSearch"),
       "error"
     );
 
@@ -3326,7 +3365,7 @@ async function searchPlace() {
     <div class="search-result-empty">
       🔎
       "${escapeHtml(query)}"
-      검색 중...
+      ${getTranslation("mapSearching")}
     </div>
     `;
 
@@ -3337,13 +3376,13 @@ async function searchPlace() {
   if (category) {
 
     showStatus(
-      `🔎 ${CATEGORIES[category].name} 검색 중...`
+    `🔎 ${getTranslation(CATEGORIES[category].nameKey)} ${getTranslation("mapSearching")}`
     );
 
   } else {
 
     showStatus(
-      `🔎 "${query}" 검색 중...`
+    `🔎 "${query}" ${getTranslation("mapSearching")}`
     );
 
   }
@@ -3493,7 +3532,7 @@ async function searchPlace() {
             CATEGORIES.police.icon;
 
           place.typeName =
-            CATEGORIES.police.name;
+          getTranslation(CATEGORIES.police.nameKey);
 
           place.markerClass =
             CATEGORIES.police.markerClass;
@@ -3572,26 +3611,26 @@ async function searchPlace() {
       showPlaceStatus(
         `✅ ${
           category
-            ? CATEGORIES[category].name
+    	  ? getTranslation(CATEGORIES[category].nameKey)
             : "장소"
         } ${results.length}개`
       );
 
 
       showStatus(
-        `✅ 검색 완료: ${results.length}개`,
+      `✅ ${getTranslation("mapSearchComplete")}: ${results.length}`,
         "success"
       );
 
     } else {
 
       showPlaceStatus(
-        `⚠️ "${query}" · 검색 결과 없음`
+      `⚠️ "${query}" · ${getTranslation("mapNoSearchResults")}`
       );
 
 
       showStatus(
-        `❌ "${query}" 검색 결과가 없습니다.`,
+        `❌ "${query}" · ${getTranslation("mapNoSearchResults")}`,
         "error"
       );
 
@@ -3613,7 +3652,7 @@ async function searchPlace() {
       renderSearchResults([]);
 
       showStatus(
-        "❌ 검색 실패. 잠시 후 다시 시도해 주세요.",
+      "❌ " + getTranslation("mapSearchFailed"),
         "error"
       );
 
@@ -3754,13 +3793,13 @@ async function drawRoute(
   document.getElementById(
     "info-distance"
   ).textContent =
-    "계산 중...";
+    getTranslation("mapCalculating");
 
 
   document.getElementById(
     "info-duration"
   ).textContent =
-    "계산 중...";
+    getTranslation("mapCalculating");
 
 
   try {
@@ -3880,7 +3919,7 @@ async function drawRoute(
 
 
     showStatus(
-      "✅ 실제 도로 기준 경로 안내 완료",
+    "✅ " + getTranslation("mapRouteComplete"),
       "success"
     );
 
@@ -3989,7 +4028,7 @@ async function drawRoute(
 
 
     showStatus(
-      "⚠️ 도로 경로 서버 실패 → 직선거리로 표시합니다.",
+    "⚠️ " + getTranslation("mapRouteFallback"),
       "error"
     );
 
@@ -4095,35 +4134,26 @@ function locateUser() {
 
         .bindPopup(
 
-          `
-          <b>📍 현재 GPS 위치</b>
-
-          <br>
-
-          위도:
-          ${latitude.toFixed(6)}
-
-          <br>
-
-          경도:
-          ${longitude.toFixed(6)}
-
-          <br><br>
-
-          검색 반경:
-          20km
-          `
+`
+  	<b>📍 ${getTranslation("mapGpsLocation")}</b>
+  	<br>
+  	${getTranslation("mapLatitude")}:
+  	${latitude.toFixed(6)}
+  	<br>
+  	${getTranslation("mapLongitude")}:
+  	${longitude.toFixed(6)}
+`
 
         );
 
 
       showPlaceStatus(
-        "📍 GPS 위치를 검색 기준으로 사용합니다."
+      "📍 " + getTranslation("mapGpsSearchBase")
       );
 
 
       showStatus(
-        "✅ GPS 위치 확인 완료",
+      "✅ " + getTranslation("mapGpsComplete"),
         "success"
       );
 
@@ -4139,7 +4169,7 @@ function locateUser() {
 
 
       showStatus(
-        "⚠️ GPS 위치를 확인하지 못했습니다. 지도 클릭 위치를 사용할 수 있습니다.",
+        "⚠️ " + getTranslation("mapGpsFailed"),
         "error"
       );
 
@@ -4232,7 +4262,7 @@ function clearEverything() {
 
 
   showPlaceStatus(
-    "🔎 검색 기준 위치: 지도 중심"
+  getTranslation("mapSearchCenter")
   );
 
 }
@@ -4300,7 +4330,7 @@ function handleMapClick(
 
 
     showStatus(
-      "📍 경로가 초기화되었습니다. 출발지를 다시 클릭하세요.",
+      "📍 " + getTranslation("mapRouteResetDone"),
       "success"
     );
 
@@ -4365,25 +4395,15 @@ function handleMapClick(
 
       .bindPopup(
 
-        `
-        <b>📍 출발지</b>
-
-        <br>
-
-        위도:
-        ${event.latlng.lat.toFixed(6)}
-
-        <br>
-
-        경도:
-        ${event.latlng.lng.toFixed(6)}
-
-        <br><br>
-
-        검색 범위:
-        20km
-        `
-
+`
+ 	 <b>📍 ${getTranslation("mapStartPoint")}</b>
+  	<br>
+  	${getTranslation("mapLatitude")}:
+  	${event.latlng.lat.toFixed(6)}
+  	<br>
+  	${getTranslation("mapLongitude")}:
+ 	${event.latlng.lng.toFixed(6)}
+`
       )
 
       .openPopup();
@@ -4395,12 +4415,13 @@ function handleMapClick(
 
 
     showPlaceStatus(
-      "📍 출발지를 검색 기준으로 사용합니다."
+    "📍 " + getTranslation("mapStartSearchBase")
     );
 
 
     showStatus(
-      "✅ 출발지 설정 완료\n📍 도착지를 클릭하세요.",
+    "✅ " + getTranslation("mapStartComplete") +
+    "\n📍 " + getTranslation("mapClickDestination"),
       "success"
     );
 
@@ -4445,19 +4466,15 @@ function handleMapClick(
 
     .bindPopup(
 
-      `
-      <b>📍 도착지</b>
-
-      <br>
-
-      위도:
-      ${event.latlng.lat.toFixed(6)}
-
-      <br>
-
-      경도:
-      ${event.latlng.lng.toFixed(6)}
-      `
+`
+  	<b>📍 ${getTranslation("mapEndPoint")}</b>
+  	<br>
+  	${getTranslation("mapLatitude")}:
+       	${event.latlng.lat.toFixed(6)}
+  	<br>
+  	${getTranslation("mapLongitude")}:
+   	${event.latlng.lng.toFixed(6)}
+`
 
     )
 
@@ -4470,7 +4487,7 @@ function handleMapClick(
 
 
   showStatus(
-    "🧭 실제 도로 경로 계산 중..."
+    "🧭 " + getTranslation("mapRouteCalculating")
   );
 
 
@@ -4725,7 +4742,7 @@ map.on(
     ) {
 
       showPlaceStatus(
-        "🔎 검색 기준 위치: 지도 중심"
+      getTranslation("mapSearchCenter")
       );
 
     }
@@ -4743,7 +4760,7 @@ map.on(
     ) {
 
       showPlaceStatus(
-        "🔎 검색 기준 위치: 지도 중심"
+      getTranslation("mapSearchCenter")
       );
 
     }
@@ -4814,8 +4831,37 @@ document
    ========================================================= */
 
 showPlaceStatus(
-  "🔎 지도 준비 완료 · 검색어를 입력하세요."
+"🔎 " + getTranslation("mapReadySearch")
 );
+
+var controlPanel =
+    document.getElementById("control-panel");
+
+var controlPanelToggle =
+    document.getElementById("control-panel-toggle");
+
+controlPanelToggle.addEventListener(
+    "click",
+    function () {
+
+        var collapsed =
+            controlPanel.classList.toggle("collapsed");
+
+        if (collapsed) {
+
+            controlPanelToggle.textContent = "▼";
+            controlPanelToggle.title = "패널 펼치기";
+
+        } else {
+
+            controlPanelToggle.textContent = "▲";
+            controlPanelToggle.title = "패널 접기";
+
+        }
+
+    }
+);
+
 
 document.getElementById("global-map-close").addEventListener("click", function (e) {
 

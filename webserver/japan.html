@@ -53,9 +53,9 @@ header {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 24px;
+    font-size: 40px;
     font-weight: 800;
-    color: #294366;
+    color: #d85a78;
     cursor: pointer;
 }
 
@@ -76,7 +76,7 @@ header {
 }
 
 .account-bar {
-    padding: 18px 7% 0;
+    padding: 10px 7%;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -178,40 +178,220 @@ nav a:hover {
     color: #d86a86;
 }
 
-        .hero {
-            padding: 110px 20px;
-            text-align: center;
-            color: white;
 
-            background:
-                linear-gradient(
-                    rgba(170,80,110,0.65),
-                    rgba(210,130,150,0.6)
-                ),
+.hero {
+    padding: 110px 0;
+    text-align: center;
+    color: white;
 
-                url("https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1920&q=85");
+    background-image: url("/images/japan2.png");
+    background-size: cover;
+    background-position: center;
+}
 
-            background-size: cover;
-            background-position: center;
-        }
+.hero-text {
+    width: 100%;
+    padding: 24px 20px;
+    box-sizing: border-box;
 
-        .hero h1 {
-            font-size: 44px;
-            margin-bottom: 20px;
-        }
+    background: rgba(255, 255, 255, 0.40);
+}
 
-        .section {
-            max-width: 1100px;
-            margin: auto;
-            padding: 90px 25px;
-            text-align: center;
-        }
+.hero h1 {
+    font-size: 54px;
+    margin-bottom: 12px;
+    color: #1f2933;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+}
 
-        .section h2 {
-            font-size: 32px;
-            margin-bottom: 15px;
-            color: #bc4f6c;
-        }
+.hero p {
+    font-size: 20px;
+    line-height: 1.8;
+
+    color: #1f2933;
+    font-weight: 600;
+
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+/* =========================
+   페이지 소개
+========================= */
+
+.service-intro {
+    padding: 100px 7% 90px;
+    background: #ffffff;
+}
+
+.service-intro-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.service-intro-heading {
+    max-width: 850px;
+    margin-bottom: 55px;
+}
+
+.service-intro-label {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: #d85f7f;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.service-intro-heading h2 {
+    margin-bottom: 22px;
+    color: #1f2f40;
+    font-size: 34px;
+    line-height: 1.45;
+    font-weight: 800;
+}
+
+.service-intro-heading p {
+    margin-bottom: 10px;
+    color: #657484;
+    font-size: 16px;
+    line-height: 1.85;
+}
+
+.service-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.service-feature-card {
+    min-height: 235px;
+    padding: 34px 30px;
+    border: 1px solid #f0d6de;
+    border-radius: 16px;
+    background: ##f0d6de;
+    transition: all 0.25s ease;
+}
+
+.service-feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(216, 95, 127, 0.14);
+}
+
+.service-feature-number {
+    margin-bottom: 28px;
+    color: #d85f7f;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.service-feature-card h3 {
+    margin-bottom: 14px;
+    color: #24384b;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.service-feature-card p {
+    color: #68798a;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+
+/* =========================
+   페이지 소개 - 캐릭터 이미지
+========================= */
+
+.service-intro-top {
+    display: grid;
+
+    /* 왼쪽 글 / 오른쪽 이미지 */
+    grid-template-columns: 650px 300px;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 20px;
+
+    margin-bottom: 50px;
+}
+
+.service-intro-top .service-intro-heading {
+    max-width: 650px;
+    margin: 0;
+}
+
+.service-intro-visual {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    min-height: 280px;
+}
+
+.service-intro-character {
+    display: block;
+
+    width: 340px;
+    max-width: none;
+
+    height: auto;
+    object-fit: contain;
+
+    /* 글 쪽으로 살짝 이동 */
+    transform: translate(-10px, 15px);
+}
+
+/* 모바일 */
+@media (max-width: 800px) {
+
+    .service-intro {
+        padding: 65px 25px;
+    }
+
+    .service-intro-top {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .service-intro-top .service-intro-heading {
+        max-width: none;
+        margin: 0;
+    }
+
+    .service-intro-heading h2 {
+        font-size: 27px;
+    }
+
+    .service-intro-visual {
+        justify-content: center;
+        min-height: auto;
+    }
+
+    .service-intro-character {
+        width: 240px;
+        max-width: 100%;
+        transform: none;
+    }
+
+    .service-feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.section {
+    max-width: 1100px;
+    margin: auto;
+    padding: 90px 25px;
+    text-align: center;
+}
+
+.section h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+    color: #bc4f6c;
+}
 
         .section-description {
             color: #85727a;
@@ -220,7 +400,7 @@ nav a:hover {
 
         .level-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 18px;
         }
 
@@ -267,12 +447,34 @@ nav a:hover {
                 rgba(0,0,0,0.07);
         }
 
-        footer {
-            padding: 35px;
-            text-align: center;
-            background: #5e3c47;
-            color: white;
-        }
+.privacy-notice {
+    padding: 0;
+    margin: 0 0 10px 0;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.privacy-notice strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.privacy-notice p {
+    margin: 0;
+    padding: 0;
+}
+
+footer {
+    padding: 18px 20px;
+    text-align: center;
+    background: #6b414d;
+    color: white;
+}
 
 	@media (max-width: 800px) {
 
@@ -467,7 +669,7 @@ nav a:hover {
 
 <nav>
 
-    <a href="#intro" data-i18n="pageIntro">
+    <a href="#page-intro" data-i18n="pageIntro">
         페이지 소개
     </a>
 
@@ -489,6 +691,9 @@ nav a:hover {
 
 <section class="hero">
 
+    <div class="hero-text">
+
+
     <h1 data-i18n="japanPageTitle">
         일본 여행 안전정보
     </h1>
@@ -501,6 +706,113 @@ nav a:hover {
 </section>
 
 
+<section class="service-intro" id="page-intro">
+
+    <div class="service-intro-inner">
+
+
+        <div class="service-intro-top">
+
+            <!-- 왼쪽 소개 글 -->
+            <div class="service-intro-heading">
+
+                <span class="service-intro-label">
+                    ABOUT SERVICE
+                </span>
+
+                <h2>
+                    일본 여행 중 필요한 안전정보를<br>
+                    한 곳에서 확인할 수 있도록 만들었습니다.
+                </h2>
+
+                <p>
+                    Tourist Emergency Button은 일본을 방문하는 여행객이
+                    낯선 지역에서도 필요한 안전정보를 쉽고 빠르게 확인할 수 있도록
+                    제공하는 여행 안전지원 서비스입니다.
+                </p>
+
+                <p>
+                    여행경보와 긴급 연락처부터 주변 병원·경찰서·약국 등의 위치,
+                    자주 묻는 안전 질문까지 여행 중 필요한 정보를 한 화면에서
+                    확인할 수 있도록 구성했습니다.
+                </p>
+
+            </div>
+
+
+            <!-- 오른쪽 캐릭터 -->
+            <div class="service-intro-visual">
+
+                <img
+                    src="/images/Travel5.png"
+                    alt="일본 여행 안전정보 서비스 캐릭터"
+                    class="service-intro-character">
+
+            </div>
+
+        </div>
+
+
+        <div class="service-feature-grid">
+
+            <div class="service-feature-card">
+
+                <div class="service-feature-number">
+                    01
+                </div>
+
+                <h3>
+                    여행 안전정보
+                </h3>
+
+                <p>
+                    일본의 여행경보와 안전등급을 확인하여
+                    여행 전 현재 지역의 안전상황을 미리 확인할 수 있습니다.
+                </p>
+
+            </div>
+
+
+            <div class="service-feature-card">
+
+                <div class="service-feature-number">
+                    02
+                </div>
+
+                <h3>
+                    긴급상황 대응
+                </h3>
+
+                <p>
+                    경찰, 소방·구급 등 긴급상황 발생 시
+                    필요한 주요 연락처를 빠르게 확인할 수 있습니다.
+                </p>
+
+            </div>
+
+
+            <div class="service-feature-card">
+
+                <div class="service-feature-number">
+                    03
+                </div>
+
+                <h3>
+                    지역별 안전지도
+                </h3>
+
+                <p>
+                    주변 병원, 경찰서, 약국 등 여행 중 필요한
+                    안전시설의 위치를 지도에서 확인할 수 있습니다.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 <section
     class="section"
@@ -520,6 +832,11 @@ nav a:hover {
 
 
     <div class="level-grid">
+
+	<div class="level-card" data-level="0">
+    	<h3 data-i18n="level0">미발령</h3>
+    	<p data-i18n="level0Text">여행경보 없음</p>
+	</div>
 
 	    <div class="level-card" data-level="1">
             <h3 data-i18n="level1">1단계</h3>
@@ -730,12 +1047,31 @@ nav a:hover {
 
 <footer>
 
-    © 2026 Tourist Emergency Button
+<footer>
 
+
+<div class="privacy-notice">
+
+    <strong data-i18n="privacyTitle">
+        개인정보 처리 안내
+    </strong>
+
+    <p data-i18n="privacyInfo1">
+        서비스 이용 통계 및 보안을 위해 접속 IP, 방문 페이지, 이용 기록 등을 수집하며, 수집한 정보는 보안 및 통계 목적 외의 용도로 사용하지 않습니다.
+    </p>
+
+    <p data-i18n="privacyInfo2">
+        수집된 정보는 개인정보처리방침에 명시된 기간 동안 보관하며, 보관 기간이 지나면 파기합니다.
+    </p>
+
+</div>
+
+<footer>
+    © 2026 Tourist Emergency Button
 </footer>
 
 
-<script src="js/language.js"></script>
+<script src="/js/language.js?v=20260910-1"></script>
 
 <!-- Leaflet JavaScript -->
 <script src="/js/leaflet.js"></script>
@@ -1023,11 +1359,24 @@ fetch("/safety")
             return;
         }
 
-        var levelMatch =
-            japan.safety_level.match(/([1-4])단계/);
 
-        if (levelMatch) {
-            var currentLevel = levelMatch[1];
+var currentLevel = null;
+
+if (japan.safety_level === "미발령") {
+
+    currentLevel = "0";
+
+} else {
+
+    var levelMatch =
+        japan.safety_level.match(/([1-4])단계/);
+
+    if (levelMatch) {
+        currentLevel = levelMatch[1];
+    }
+}
+
+if (currentLevel !== null) {
 
             document
                 .querySelectorAll(".level-card")
