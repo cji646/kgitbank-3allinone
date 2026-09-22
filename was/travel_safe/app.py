@@ -42,8 +42,8 @@ app.register_blueprint(safety_bp)
 # =========================
 # HAProxy Health Check
 # =========================
-@app.route("/")
-def health():
+@app.route("/health",methods=["GET","HEAD"])
+def health_check():
     return "OK", 200
 
 
