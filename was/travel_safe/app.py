@@ -11,7 +11,7 @@ import logging
 # =========================
 class HealthCheckFilter(logging.Filter):
     def filter(self, record):
-        return '"HEAD / HTTP/1.0"' not in record.getMessage()
+        return '"HEAD /health HTTP/1.0"' not in record.getMessage()
 
 
 logging.getLogger("werkzeug").addFilter(HealthCheckFilter())
