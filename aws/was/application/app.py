@@ -1,0 +1,72 @@
+from flask import Flask
+from routes.auth import auth_bp
+from routes.safety import safety_bp
+from datetime import timedelta
+import os
+import logging
+
+
+# =========================
+# HAProxy Health Check 로그 숨김
+# =========================
+class HealthCheckFilter(logging.Filter):
+    def filter(self, record):
+        return '"HEAD /health HTTP/1.0"' not in record.getMessage()
+
+
+logging.getLogger("werkzeug").addFilter(HealthCheckFilter())
+
+app = Flask(__name__)
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
+app.permanent_session_lifetime = timedelta(minutes=10)
+
+# 세션 내용이 실제로 바뀌지 않는 한, 요청마다 세션 쿠키를 다시 서명해서
+# 값이 매번 바뀌는 것을 막는다. 이걸 안 하면(기본값 True) Flask가 매
+# 요청마다 만료시간을 갱신하며 쿠키 값을 새로 발급해서, SOC가 로그인
+# 시점의 세션 값과 이후 페이지 방문 시점의 세션 값을 서로 다른 값으로
+# 보게 되어 계정 단위 활동 추적(세션 기준 매칭)이 되지 않는다.
+app.config["SESSION_REFRESH_EACH_REQUEST"] = False
+
+# 한글 JSON 출력
+app.json.ensure_ascii = False
+
+# 인증 관련 API 등록
+app.register_blueprint(auth_bp)
+app.register_blueprint(safety_bp)
+
+
+# =========================
+# HAProxy Health Check
+# =========================
+@app.route("/health",methods=["GET","HEAD"])
+def health_check():
+    # DB 검사 비활성화 시 Flask 상태만 확인
+    if os.getenv("HEALTH_CHECK_DB", "0") != "1":
+        return "OK", 200
+
+    # DB 연결 성공 시 200, 실패 시 500
+    try:
+        from db.connection import get_db_connection
+
+        conn = get_db_connection()
+        try:
+            conn.ping(reconnect=False)
+        finally:
+            conn.close()
+
+        return "OK", 200
+
+    except Exception:
+        app.logger.error("DB health check failed")
+        return "DB UNAVAILABLE", 500
+
+
+if __name__ == "__main__":
+    app.run(
+        host="0.0.0.0",
+        port=8080
+    )

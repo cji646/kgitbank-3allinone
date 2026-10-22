@@ -1,0 +1,20 @@
+# Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfvars
+**/*.tfvars.json
+
+# Python
+**/__pycache__/
+**/*.pyc
+
+# Secrets
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+
+# Backup files
+**/*.bak*
+**/*.tar.gz
